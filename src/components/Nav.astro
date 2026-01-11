@@ -26,14 +26,14 @@ const { showCta = true } = Astro.props;
 
     <div class="flex items-center gap-4">
       <div class="hidden md:flex gap-4 border-[#27272A] border-r mr-1 pr-4 gap-x-4 gap-y-4 items-center">
-        <a href="#" aria-label="LinkedIn" class="text-[#A1A1AA] hover:text-white transition-colors">
+        <a href="https://www.linkedin.com/in/eivinasnorusaitis/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer" class="text-[#A1A1AA] hover:text-white transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="lucide lucide-linkedin w-[16px] h-[16px]">
             <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
             <rect width="4" height="12" x="2" y="9"></rect>
             <circle cx="4" cy="4" r="2"></circle>
           </svg>
         </a>
-        <a href="mailto:hello@example.com" aria-label="Send email" class="text-[#A1A1AA] hover:text-white transition-colors">
+        <a href="mailto:e.norusaitis@gmail.com" aria-label="Send email" class="text-[#A1A1AA] hover:text-white transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="lucide lucide-mail w-[16px] h-[16px]">
             <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path>
           </svg>
@@ -41,12 +41,12 @@ const { showCta = true } = Astro.props;
       </div>
 
       {showCta && (
-        <a href="/#contact" class="hidden md:flex hover:bg-[#1e40af] text-[11px] transition-colors font-semibold text-white bg-[#1d4ed8] rounded-full pt-1.5 pr-4 pb-1.5 pl-4 shadow-[0_0_15px_rgba(29,78,216,0.3)]">
+        <a href="https://calendar.app.google/EWYCBWvgG54Y7qp49" target="_blank" rel="noopener noreferrer" class="hidden md:flex hover:bg-[#1e40af] text-[11px] transition-colors font-semibold text-white bg-[#1d4ed8] rounded-full pt-1.5 pr-4 pb-1.5 pl-4 shadow-[0_0_15px_rgba(29,78,216,0.3)]">
           Book a call
         </a>
       )}
 
-      <a href="/#contact" class="md:hidden p-1 text-white hover:text-[#A1A1AA] transition-colors" aria-label="Contact">
+      <a href="mailto:e.norusaitis@gmail.com" class="md:hidden p-1 text-white hover:text-[#A1A1AA] transition-colors" aria-label="Contact">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail">
           <rect width="20" height="16" x="2" y="4" rx="2"></rect>
           <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>

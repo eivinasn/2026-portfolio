@@ -109,12 +109,12 @@ import Footer from '../components/Footer.astro';
         </p>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
           <div class="col-span-2 md:col-span-3 lg:col-span-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 w-full">
-            <img src="https://placehold.co/200x80/transparent/A1A1AA/png?text=ACME" alt="Acme Logo" class="h-10 w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
-            <img src="https://placehold.co/200x80/transparent/A1A1AA/png?text=VERTEX" alt="Vertex Logo" class="h-10 w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
-            <img src="https://placehold.co/200x80/transparent/A1A1AA/png?text=ORBIT" alt="Orbit Logo" class="h-10 w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
-            <img src="https://placehold.co/200x80/transparent/A1A1AA/png?text=NEXUS" alt="Nexus Logo" class="h-10 w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
-            <img src="https://placehold.co/200x80/transparent/A1A1AA/png?text=ECHO" alt="Echo Logo" class="h-10 w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
-            <img src="https://placehold.co/200x80/transparent/A1A1AA/png?text=PULSE" alt="Pulse Logo" class="h-10 w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
+            <img src="/public/logo-dexcom.svg" alt="Dexcom Logo" class="max-h-[24px] w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
+            <img src="/public/logo-nfq.svg" alt="NFQ Logo" class="max-h-[24px] w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
+            <img src="/public/logo-vinted.svg" alt="Vinted Logo" class="max-h-[24px] w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
+            <img src="/public/logo-tieto.svg" alt="Tieto Logo" class="max-h-[24px] w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
+            <img src="/public/logo-ba.svg" alt="Baltic Amadeus Logo" class="max-h-[24px] w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
+            <img src="/public/logo-pitchero.svg" alt="Pitchero Logo" class="max-h-[24px] w-full object-contain opacity-50 hover:opacity-100 transition-opacity cursor-pointer" />
           </div>
         </div>
       </div>
@@ -126,10 +126,10 @@ import Footer from '../components/Footer.astro';
           <SectionHeading overline="02 — Work" title="Leadership & Case Studies" />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <CaseStudyCard href="/work/dexcom" tag="Global Leadership" title="Dexcom — Team Building" description="Building and leading an EU-based design studio while aligning execution and decision-making across EU and US leadership." imageUrl="https://images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&q=80" />
-          <CaseStudyCard href="/work/nfq" tag="Business Unit" title="NFQ — Operational Design" description="Running design as a business unit, scaling revenue to ~0.5M within a year through operational ownership and commercial focus." imageUrl="https://images.unsplash.com/photo-1629946832022-c327f74956e0?w=2160&q=80" delay="delay-100" />
-          <CaseStudyCard href="/work/vmi" tag="Public Sector" title="VMI — Tax Declaration" description="Redesigning a national tax declaration system, increasing annual taxpayer participation by 500k+ users." imageUrl="https://images.unsplash.com/photo-1724525647065-f948fc102e68?w=2160&q=80" />
-          <CaseStudyCard href="/work/vinted" tag="Fintech" title="Vinted — Monetization" description="Designing monetization and payment flows for millions of users during market rollout." imageUrl="https://images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&q=80" delay="delay-100" />
+          <CaseStudyCard href="/work/dexcom" tag="Global Leadership" title="Dexcom — Team Building" description="Building and leading an EU-based design studio while aligning execution and decision-making across EU and US leadership." imageUrl="/public/thumb-dexcom.png" />
+          <CaseStudyCard href="/work/nfq" tag="Business Unit" title="NFQ — Operational Design" description="Running design as a business unit, scaling revenue to ~0.5M within a year through operational ownership and commercial focus." imageUrl="/public/thumb-nfq.png" delay="delay-100" />
+          <CaseStudyCard href="/work/vmi" tag="Public Sector" title="VMI — Tax Declaration" description="Redesigning a national tax declaration system, increasing annual taxpayer participation by 500k+ users." imageUrl="/public/thumb-vmi.png" />
+          <CaseStudyCard href="/work/vinted" tag="Fintech" title="Vinted — Monetization" description="Designing monetization and payment flows for millions of users during market rollout." imageUrl="/public/thumb-vinted.png" delay="delay-100" />
         </div>
       </div>
     </section>
@@ -355,6 +355,12 @@ import Footer from '../components/Footer.astro';
               </li>
               <li class="text-sm font-medium text-white border-[#27272A] border-l-2 pl-4">
                 Scholarship for Design Tools Hackaton<span class="text-[#71717A] text-xs font-normal block mt-1">Oct 2018 • Adobe Fund for Design</span>
+              </li>
+              <li class="text-sm font-medium text-white border-[#27272A] border-l-2 pl-4">
+                Golden Arrow Award<span class="text-[#71717A] text-xs font-normal block mt-1">Jun 2016 • ADrenalinas</span>
+              </li>
+              <li class="text-sm font-medium text-white border-[#27272A] border-l-2 pl-4">
+                Most Successful Mobile Solution<span class="text-[#71717A] text-xs font-normal block mt-1">May 2016 • Naujasis Knygnesys</span>
               </li>
             </ul>
           </div>

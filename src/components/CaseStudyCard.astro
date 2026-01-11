@@ -12,7 +12,7 @@ const { href, tag, title, description, imageUrl, delay } = Astro.props as Props;
 
 <div class={`group relative bg-[#0A0A0A] border border-[#27272A] p-6 rounded-2xl hover:border-[#3F3F46] transition-all reveal-on-scroll ${delay ?? ''}`}>
   <div class="aspect-video w-full bg-[#18181B] border-[#27272A] border rounded-lg mb-8 overflow-hidden relative isolate">
-    <img src={imageUrl} alt={`${title} preview`} class="transition-transform duration-500 ease-out group-hover:scale-105 group-hover:opacity-100 opacity-80 w-full h-full object-cover absolute inset-0" />
+    <img src={imageUrl} alt={`${title} preview`} class="transition-transform duration-500 ease-out group-hover:scale-105 w-full h-full object-cover absolute inset-0" />
     <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-lg pointer-events-none z-10"></div>
   </div>
   <div class="mb-6">
