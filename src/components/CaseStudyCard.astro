@@ -1,0 +1,32 @@
+---
+interface Props {
+  href: string;
+  tag: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  delay?: 'delay-100' | 'delay-200' | 'delay-300';
+}
+const { href, tag, title, description, imageUrl, delay } = Astro.props as Props;
+---
+
+<div class={`group relative bg-[#0A0A0A] border border-[#27272A] p-6 rounded-2xl hover:border-[#3F3F46] transition-all reveal-on-scroll ${delay ?? ''}`}>
+  <div class="aspect-video w-full bg-[#18181B] border-[#27272A] border rounded-lg mb-8 overflow-hidden relative isolate">
+    <img src={imageUrl} alt={`${title} preview`} class="transition-transform duration-500 ease-out group-hover:scale-105 group-hover:opacity-100 opacity-80 w-full h-full object-cover absolute inset-0" />
+    <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-lg pointer-events-none z-10"></div>
+  </div>
+  <div class="mb-6">
+    <span class="inline-block px-3 py-1 rounded-full text-[10px] font-semibold text-[#A1A1AA] uppercase tracking-wide shadow-sm bg-[#18181B] border border-[#27272A]">
+      {tag}
+    </span>
+  </div>
+  <h3 class="text-xl font-semibold text-white mb-3">{title}</h3>
+  <p class="text-sm text-[#A1A1AA] leading-relaxed mb-6">{description}</p>
+  <a href={href} class="inline-flex items-center uppercase hover:text-[#3b82f6] transition-colors text-xs font-semibold text-[#1d4ed8] tracking-wide">
+    Read More
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="14" height="14" viewBox="0 0 24 24" class="ml-1">
+      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7-7l7 7l-7 7"></path>
+    </svg>
+  </a>
+  </div>
+

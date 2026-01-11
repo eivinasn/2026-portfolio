@@ -1,0 +1,58 @@
+---
+const { showCta = true } = Astro.props;
+---
+
+<div class="fixed flex z-50 pt-4 pr-4 pl-4 top-0 right-0 left-0 justify-center">
+  <nav class="flex glass-panel transition-all duration-300 w-full max-w-5xl rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-2xl items-center justify-between">
+    <div class="flex items-center gap-4">
+      <button class="md:hidden p-1 text-white hover:text-[#A1A1AA] transition-colors" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu">
+          <line x1="4" x2="20" y1="12" y2="12"></line>
+          <line x1="4" x2="20" y1="6" y2="6"></line>
+          <line x1="4" x2="20" y1="18" y2="18"></line>
+        </svg>
+      </button>
+      <a href="/" class="flex items-center justify-center w-8 h-8 transition-opacity hover:opacity-80" aria-label="Home">
+        <img src="/favicon.svg" alt="Logo" class="w-full h-full object-contain" />
+      </a>
+    </div>
+
+    <div class="hidden md:flex -translate-x-1/2 -translate-y-1/2 gap-8 absolute top-1/2 left-1/2 gap-x-8 gap-y-8 items-center">
+      <a href="/#about" class="text-xs font-medium text-[#A1A1AA] hover:text-white transition-colors">About me</a>
+      <a href="/#work" class="text-xs font-medium text-[#A1A1AA] hover:text-white transition-colors">Case Studies</a>
+      <a href="/#timeline" class="text-xs font-medium text-[#A1A1AA] hover:text-white transition-colors">Timeline</a>
+      <a href="/#competencies" class="text-xs font-medium text-[#A1A1AA] hover:text-white transition-colors">Philosophy</a>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <div class="hidden md:flex gap-4 border-[#27272A] border-r mr-1 pr-4 gap-x-4 gap-y-4 items-center">
+        <a href="#" aria-label="LinkedIn" class="text-[#A1A1AA] hover:text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="lucide lucide-linkedin w-[16px] h-[16px]">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect width="4" height="12" x="2" y="9"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </a>
+        <a href="mailto:hello@example.com" aria-label="Send email" class="text-[#A1A1AA] hover:text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="lucide lucide-mail w-[16px] h-[16px]">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path>
+          </svg>
+        </a>
+      </div>
+
+      {showCta && (
+        <a href="/#contact" class="hidden md:flex hover:bg-[#1e40af] text-[11px] transition-colors font-semibold text-white bg-[#1d4ed8] rounded-full pt-1.5 pr-4 pb-1.5 pl-4 shadow-[0_0_15px_rgba(29,78,216,0.3)]">
+          Book a call
+        </a>
+      )}
+
+      <a href="/#contact" class="md:hidden p-1 text-white hover:text-[#A1A1AA] transition-colors" aria-label="Contact">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail">
+          <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+        </svg>
+      </a>
+    </div>
+  </nav>
+</div>
+

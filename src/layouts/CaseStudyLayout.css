@@ -1,0 +1,11 @@
+.fade-in { opacity: 1 !important; transform: none !important; animation: none !important; }
+.fade-in[style] { animation-delay: 0s !important; }
+@keyframes fadeIn { to { opacity: 1; transform: none; } }
+.bg-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, #ffffff05 1px, transparent 1px),
+    linear-gradient(to bottom, #ffffff05 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+}
+

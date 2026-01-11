@@ -1,0 +1,24 @@
+﻿# Dependencies
+node_modules/
+
+# Builds
+dist/
+.out/
+.cache/
+.vercel/
+.netlify/
+.turbo/
+
+# Env & logs
+.env
+.env.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

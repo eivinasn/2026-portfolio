@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html { scroll-behavior: smooth; }
+body {
+  @apply antialiased bg-background text-textPrimary;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-heading {
+  font-family: "Inter", sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.glass-panel {
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transform: translateZ(0);
+  will-change: transform;
+  isolation: isolate;
+}
+
+/* Animations disabled */
+.animate-fade-up { opacity: 1 !important; transform: none !important; animation: none !important; }
+.reveal-on-scroll { opacity: 1 !important; transform: none !important; transition: none !important; }
+.reveal-on-scroll.is-visible { opacity: 1 !important; transform: none !important; }
+.backdrop-blur-md { will-change: auto; transform: none; -webkit-transform: none; }
+
+/* Opacity-only reveal disabled */
+.reveal-opacity-only { opacity: 1 !important; transition: none !important; }
+.reveal-opacity-only.is-visible { opacity: 1 !important; }
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+
+::selection {
+  background: #1e40af;
+  color: #ffffff;
+}
+
