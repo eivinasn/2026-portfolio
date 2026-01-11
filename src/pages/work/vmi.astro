@@ -3,8 +3,8 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
 ---
 
 <CaseStudyLayout
-  title="VMI — Tax Declaration"
-  summary="Redesigning a national tax declaration system, increasing annual taxpayer participation by 500k+ users."
+  title="Redesigning Income Declaration for an Entire Country"
+  summary="From complex tax forms to a guided experience used by over 1.6 million citizens"
   role="Product Designer"
   timeline="2017—2018"
   platform="Web"
@@ -18,11 +18,25 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
       <div class="w-full space-y-8">
         <h2 class="text-2xl font-medium text-[#EDEDED] tracking-tight">Executive summary</h2>
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
-          Simplified a complex government flow with clearer language, progressive disclosure, and robust validation feedback.
+          In 2019, the Lithuanian State Tax Inspectorate (VMI) launched a new income declaration wizard that fundamentally
+          transformed how residents declare annual income. Replacing complex, table-based electronic forms with a
+          question-and-answer flow, the solution enabled citizens to complete declarations faster, with fewer errors, and
+          often without external help.
         </p>
-        <div class="pt-4">
-          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=2400&q=80" alt="Final Results" class="w-full rounded bg-[#111] border border-white/10 transition-all duration-700 hover:border-white/20" />
+        <div>
+          <h3 class="text-[15px] font-medium text-[#EDEDED]">Key results achieved after launch</h3>
+          <ul class="space-y-3 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B] mt-2">
+            <li>Income declarations increased from <strong class="text-[#EDEDED]">1.3 million (2018)</strong> to <strong class="text-[#EDEDED]">~1.6 million (2019)</strong></li>
+            <li><strong class="text-[#EDEDED]">74% of taxpayers</strong> whose income data was fully known to VMI could submit with a <strong class="text-[#EDEDED]">single click</strong></li>
+            <li>The wizard became accessible to <strong class="text-[#EDEDED]">over 2 million</strong> permanent residents</li>
+            <li>Reduced error rates and lower demand for VMI customer support</li>
+            <li>Awarded <em>Naujasis Knygnesys 2020</em>: <strong class="text-[#EDEDED]">Best Solution for Lithuania</strong> and <strong class="text-[#EDEDED]">People’s Choice</strong></li>
+          </ul>
         </div>
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
+          The project was delivered in collaboration with NRD Systems, with NFQ UX and design specialists responsible
+          for user experience and interface design.
+        </p>
       </div>
     </div>
   </section>
@@ -34,7 +48,22 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
       <div class="w-full space-y-8">
         <h2 class="text-2xl font-medium text-[#EDEDED] tracking-tight">Context & problem</h2>
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
-          Annual tax filing had high friction and error rates. Citizens needed clearer guidance and better validation with minimal terminology overhead.
+          For years, Lithuanian residents could declare income electronically, but the system was effectively a digital copy of paper tax
+          forms introduced in 2004. While functional, it no longer matched modern user expectations or behaviors.
+        </p>
+        <div>
+          <h3 class="text-[15px] font-medium text-[#EDEDED]">Key challenges in the existing system</h3>
+          <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B] mt-2">
+            <li>Long, technical, accounting-style forms that were difficult to understand</li>
+            <li>High error rates and frequent user confusion</li>
+            <li>Citizens often forgot to declare certain income types or didn’t know they were required to</li>
+            <li>Many users hired accountants solely due to system complexity</li>
+            <li>Poor accessibility for mobile users, non‑Lithuanian speakers, and people with special needs</li>
+          </ul>
+        </div>
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
+          Although more than 1 million declarations were submitted annually, the experience was time‑consuming and intimidating,
+          discouraging timely compliance.
         </p>
       </div>
     </div>
@@ -43,28 +72,103 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
   <!-- ACTION -->
   <section class="fade-in group border-t border-white/5 pt-12" style="animation-delay: 0.4s;">
     <div class="flex flex-col md:flex-row gap-8 md:gap-24">
+      <div class="md:w-48 flex-shrink-0 pt-1"><span class="text-xs font-medium text-[#52525B] uppercase tracking-wider">Task</span></div>
+      <div class="w-full space-y-8">
+        <h2 class="text-2xl font-medium text-[#EDEDED] tracking-tight">Goals & objectives</h2>
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
+          The primary task was to design a system that would allow an average Lithuanian resident to declare income as simply
+          and independently as possible.
+        </p>
+        <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
+          <li>Simplify income declaration without oversimplifying tax logic</li>
+          <li>Reduce errors and uncertainty during the process</li>
+          <li>Enable citizens to complete declarations quickly and confidently</li>
+          <li>Ensure accessibility across devices, languages, and abilities</li>
+          <li>Prepare the system for future changes in tax legislation</li>
+        </ul>
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
+          The solution needed to work within Lithuania’s complex and evolving tax framework, including different income classes
+          (A and B) and strict security and privacy requirements.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="fade-in group border-t border-white/5 pt-12" style="animation-delay: 0.5s;">
+    <div class="flex flex-col md:flex-row gap-8 md:gap-24">
       <div class="md:w-48 flex-shrink-0 pt-1"><span class="text-xs font-medium text-[#52525B] uppercase tracking-wider">Action</span></div>
       <div class="w-full space-y-8">
         <h2 class="text-2xl font-medium text-[#EDEDED] tracking-tight">Process & solution</h2>
-        <ol class="space-y-4 text-[16px] text-[#A1A1AA] list-decimal pl-5 marker:text-[#EDEDED]">
-          <li><span class="text-[#EDEDED] font-medium">Wizard redesign.</span> Progressive disclosure of steps and in-line validation.</li>
-          <li><span class="text-[#EDEDED] font-medium">Plain language.</span> Simplified copy and examples for common scenarios.</li>
-          <li><span class="text-[#EDEDED] font-medium">Accessibility.</span> Improved focus order and input hinting for assistive tech.</li>
-        </ol>
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
+          A human‑centered design approach was applied throughout, following ISO 9241:210 principles and involving continuous collaboration
+          between designers, developers, VMI specialists, and users.
+        </p>
+
+        <h3 class="text-[15px] font-medium text-[#EDEDED]">User research and analysis</h3>
+        <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
+          <li>Two large‑scale surveys: <strong class="text-[#EDEDED]">416 taxpayers</strong> and <strong class="text-[#EDEDED]">161 VMI specialists</strong></li>
+          <li>Reviewed historical research data from nearly <strong class="text-[#EDEDED]">10,000</strong> system users</li>
+          <li>12 moderated usability observations with real declarations</li>
+          <li>Identified seven core user groups (employees, freelancers, students, farmers, expatriates, tax professionals, etc.)</li>
+        </ul>
+
+        <h3 class="text-[15px] font-medium text-[#EDEDED] mt-4">Key insights — users expected</h3>
+        <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
+          <li>Plain, human language instead of legal/accounting terminology</li>
+          <li>Step‑by‑step guidance toward a clear goal</li>
+          <li>Minimal manual data entry and pre‑filled known data</li>
+          <li>Immediate visibility of payable or refundable amounts and ability to pay directly</li>
+          <li>Mobile access, multilingual support, accessibility features, and built‑in error prevention</li>
+        </ul>
+
+        <h3 class="text-[15px] font-medium text-[#EDEDED] mt-4">Design and iteration</h3>
+        <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
+          <li>Replaced static forms with a guided Q&A flow that adapts to answers</li>
+          <li>Automatically pre‑filled data already known to VMI</li>
+          <li>Developed and tested over <strong class="text-[#EDEDED]">40</strong> prototype iterations</li>
+          <li>Conducted usability testing with 12 participants representing core groups</li>
+          <li>Created a scalable design system and full UI specifications</li>
+        </ul>
+
+        <h3 class="text-[15px] font-medium text-[#EDEDED] mt-4">Content and collaboration</h3>
+        <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
+          <li>Co‑created plain‑language copy with VMI specialists for clarity</li>
+          <li>Balanced user needs with strict security and privacy requirements</li>
+          <li>Maintained close alignment with stakeholders who supported UX‑driven decisions</li>
+        </ul>
       </div>
     </div>
   </section>
 
   <!-- RESULT -->
-  <section class="fade-in group border-t border-white/5 pt-12" style="animation-delay: 0.5s;">
+  <section class="fade-in group border-t border-white/5 pt-12" style="animation-delay: 0.6s;">
     <div class="flex flex-col md:flex-row gap-8 md:gap-24">
       <div class="md:w-48 flex-shrink-0 pt-1"><span class="text-xs font-medium text-[#52525B] uppercase tracking-wider">Result</span></div>
       <div class="w-full space-y-8">
         <h2 class="text-2xl font-medium text-[#EDEDED] tracking-tight">Outcome & impact</h2>
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
+          The income declaration wizard replaced one of the most complex public digital services in Lithuania with a clear, accessible,
+          and user‑friendly experience.
+        </p>
         <ul class="space-y-3 text-[16px] text-[#A1A1AA]">
-          <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>500k+ additional annual submissions</span></li>
-          <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>Reduced help desk tickets related to flow confusion</span></li>
+          <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>Completion time reduced from hours to minutes in standard cases</span></li>
+          <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>Significantly fewer errors and incomplete submissions</span></li>
+          <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>Citizens gained confidence to declare income independently</span></li>
+          <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>Reduced VMI support load; staff focused on higher‑value consultations</span></li>
+          <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>Broader participation in income declaration</span></li>
         </ul>
+        <div>
+          <h3 class="text-[15px] font-medium text-[#EDEDED]">Broader contribution</h3>
+          <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
+            <li>More efficient tax collection and increased transparency</li>
+            <li>Improved accessibility and inclusion</li>
+            <li>Positive long‑term impact on economic competitiveness</li>
+          </ul>
+        </div>
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
+          The project showed how user‑centered design can transform a legally complex nationwide public service without compromising
+          accuracy, security, or trust.
+        </p>
       </div>
     </div>
   </section>
