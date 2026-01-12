@@ -18,10 +18,19 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
       <div class="w-full space-y-8">
         <h2 class="text-2xl font-medium text-[#EDEDED] tracking-tight">Executive summary</h2>
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
-            In 2019, Vinted prepared to launch escrow-based payments in Poland, a market that had previously relied on manual transactions. This required collecting users’ full legal names to meet payment compliance requirements - data that most Polish users had never been asked to provide.
+            In 2019, Vinted prepared to launch escrow-based payments in Poland, a market
+            that had previously relied on manual transactions. This required collecting
+            users’ full legal names to meet payment compliance requirements, data that
+            most Polish users had never been asked to provide.
         </p>
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
-            Over a two-month period, a phased, low-friction data collection strategy was designed and launched across new and existing users. The solution resulted in a significant increase in full-name submissions and confirmations, with no measurable negative impact on sign-up conversion. By the end of the grace period, the majority of active traders were successfully enabled to use escrow services, allowing Poland to transition into a monetized market with minimal disruption.
+            Over a two-month period, a phased, low-friction data collection strategy was
+            designed and launched across new and existing users. The solution resulted
+            in a significant increase in full-name submissions and confirmations, with
+            no measurable negative impact on sign-up conversion. By the end of the grace
+            period, the majority of active traders were enabled to use escrow services,
+            allowing Poland to transition into a monetized market with minimal
+            disruption.
         </p>
       </div>
     </div>
@@ -36,18 +45,22 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
             Before monetization, Polish users could trade only through manual agreements, handling payments and shipping independently and relying entirely on mutual trust. With the introduction of escrow services, Vinted’s payment provider was legally required to know users’ full legal names before enabling transactions.
         </p>
-                <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
-          However, there were issues:
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
+          However:
         </p>
-        <ol class="space-y-4 text-[16px] text-[#A1A1AA] list-decimal pl-5 marker:text-[#EDEDED]">
-          <li><span class="text-[#EDEDED] font-medium">New requirement.</span> Polish users were not previously required to provide full names.</li>
-          <li><span class="text-[#EDEDED] font-medium">Missing data.</span> Many existing users had incomplete, incorrect, or unverified names.</li>
-          <li><span class="text-[#EDEDED] font-medium">Invalid data.</span> Some users relied on social media sign-ups where names were not necessarily real.</li>
-            <li><span class="text-[#EDEDED] font-medium">Compliance.</span> Without compliant data, users would be blocked from trading after launch.</li>
-        </ol>
+        <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
+          <li>Polish users were not previously required to provide full names</li>
+          <li>Many existing users had incomplete, incorrect, or unverified names</li>
+          <li>Some users relied on social media sign-ups where names were not necessarily real</li>
+          <li>Without compliant data, users would be blocked from trading after launch</li>
+        </ul>
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
           The timeline was tight, and a failed rollout risked excluding a large portion of the user base from escrow-enabled trade.
         </p>
+
+        <div class="mt-8">
+          <img src="/public/case-image-vinted-01.png" alt="Vinted case study - Situation" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+        </div>
       </div>
     </div>
   </section>
@@ -61,15 +74,20 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
           The primary objective was to enable escrow-based trading for as many users as possible while minimizing friction and negative impact on user behavior.
         </p>
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">Key goals included:</p>
         <ul class="space-y-3 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
           <li>Collect compliant full names from both new and existing users</li>
-          <li>Maintain sign-up and trading conversion rates</li>
-          <li>Preserve user trust around privacy and data security</li>
-          <li>Support a time-bound, legally constrained launch</li>
+          <li>Maintaining sign-up and trading conversion rates</li>
+          <li>Preserving user trust around privacy and data security</li>
+          <li>Supporting a time-bound, legally constrained launch</li>
         </ul>
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
           I led the design of the full-name collection solution, working closely with product, engineering, analytics, research, legal, and communications teams.
         </p>
+
+        <div class="mt-8">
+          <img src="/public/case-image-vinted-02.png" alt="Vinted case study - Task" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+        </div>
       </div>
     </div>
   </section>
@@ -100,27 +118,32 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
 
         <h3 class="text-[15px] font-medium text-[#EDEDED] mt-4">Solutions for new users</h3>
         <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
-          <li>Added a “Full name” field to email sign-up forms with clear privacy reassurance</li>
-          <li>Introduced a confirmation step for Facebook and Google sign-ups to correct imported names</li>
+          <li>Added a Full name field to email sign-up forms with clear privacy reassurance</li>
+          <li>Introduced a confirmation step for Facebook and Google sign-ups, allowing users to correct imported names</li>
           <li>Tested changes incrementally with close monitoring of registration metrics</li>
         </ul>
 
         <h3 class="text-[15px] font-medium text-[#EDEDED] mt-4">Solutions for existing users</h3>
         <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
-          <li>Pre-launch communication explaining the value of escrow and upcoming requirements</li>
-          <li>Soft collection via banners and flexible modal prompts</li>
+          <li>Designed a multi-phase rollout</li>
+          <li>Pre-launch communication explaining the upcoming escrow service and its value</li>
+          <li>Soft collection via non-disruptive banners and flexible modal prompts</li>
           <li>Grace period collection during first escrow transactions</li>
           <li>Hard collection as a last resort, temporarily hiding items until compliance</li>
-          <li>Aligned product UI and messaging with the communications plan</li>
-          <li>Guerrilla usability testing to validate clarity and non-disruptiveness</li>
+          <li>Collaborated with communications to align product UI and messaging</li>
+          <li>Conducted guerrilla usability testing to validate clarity and non-disruptiveness</li>
         </ul>
 
         <h3 class="text-[15px] font-medium text-[#EDEDED] mt-4">Delivery and monitoring</h3>
         <ul class="space-y-2 text-[16px] text-[#A1A1AA] list-disc pl-5 marker:text-[#52525B]">
-          <li>Clear handoff and close collaboration with developers</li>
+          <li>Ensured clear design handoff and close collaboration with developers</li>
           <li>Tracked conversion, submission, and confirmation rates throughout rollout</li>
           <li>Adjusted copy and accessibility based on early feedback</li>
         </ul>
+
+        <div class="mt-8">
+          <img src="/public/case-image-vinted-03.png" alt="Vinted case study - Action" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+        </div>
       </div>
     </div>
   </section>
@@ -134,6 +157,7 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
           The phased approach successfully transitioned Poland into a monetized market with escrow-based trading.
         </p>
+        <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">Key outcomes:</p>
         <ul class="space-y-3 text-[16px] text-[#A1A1AA]">
           <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>Significant increase in full-name submissions and confirmations</span></li>
           <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>No significant drop in sign-up or engagement metrics</span></li>
@@ -141,8 +165,13 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
           <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-[#EDEDED]"></span><span>Minimal user backlash due to transparent communication and gradual enforcement</span></li>
         </ul>
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">
-          The project met its primary goal: enabling secure, compliant trade at scale while preserving user trust and platform stability.
+          The project met its primary goal of enabling secure, compliant trade at
+          scale while preserving user trust and platform stability.
         </p>
+
+        <div class="mt-8">
+          <img src="/public/case-image-vinted-04.png" alt="Vinted case study - Result" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+        </div>
       </div>
     </div>
   </section>
