@@ -1,5 +1,5 @@
 {
-  "name": "Eivinas Norušaitis — Portfolio",
+  "name": "Eivinas Norušaitis - Portfolio",
   "short_name": "Portfolio",
   "start_url": "/",
   "display": "standalone",
@@ -7,7 +7,7 @@
   "theme_color": "#050505",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/logo-eivinas.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
