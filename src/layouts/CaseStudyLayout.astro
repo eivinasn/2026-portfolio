@@ -4,6 +4,16 @@ import RevealScript from '../components/RevealScript.astro';
 import './CaseStudyLayout.css';
 import '../styles/global.css';
 const { title, summary, role, timeline, platform } = Astro.props;
+
+// Per-page share card, derived from the route rather than passed in — one more
+// prop is one more thing a new case study can forget. Four case studies sharing
+// one card means a link to any of them unfurls as the homepage, which defeats
+// the point of having a card at all. Falls back to the homepage card if a slug
+// ever has no generated image, so a missing file degrades rather than 404s.
+const slug = Astro.url.pathname.replace(/\/+$/, '').split('/').pop() ?? '';
+const ogImage = ['dexcom', 'nfq', 'vinted', 'vmi'].includes(slug)
+  ? `/og-${slug}.png`
+  : '/og-image.png';
 ---
 
 <html lang="en" class="scroll-smooth">
@@ -13,7 +23,7 @@ const { title, summary, role, timeline, platform } = Astro.props;
       past the ~55-60 char point where search results truncate. The <h1> is
       unchanged — a <title> is metadata and may legitimately differ from it. */
     }
-    <BaseHead title={title} description={summary} type="article" />
+    <BaseHead title={title} description={summary} image={ogImage} type="article" />
   </head>
   <body class="antialiased text-[#A1A1AA] bg-[#050505] selection:bg-white/20">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -22,7 +32,7 @@ const { title, summary, role, timeline, platform } = Astro.props;
     <header class="fixed z-50 top-6 left-0 right-0 flex justify-center px-4 fade-in">
       <nav
         class="flex items-center px-1.5 pl-1.5 pr-5 py-1.5 bg-[#0A0A0A]/80 backdrop-blur-md border border-white/5 rounded-full shadow-xl transition-all hover:border-white/10"
-        aria-label="Breadcrumb"
+        aria-label="Back to the portfolio"
       >
         <!-- The label lives inside the anchor. Previously it was a sibling
              <span>, which left this link with no accessible name at all — and

@@ -68,13 +68,17 @@ body {
   scrollbar-width: none;
 }
 
+/* No will-change here or on the reveal classes. It was declared permanently on
+   ~25 elements and never cleared, so every one held its own compositor layer
+   for the life of the page — on top of translate3d and backface-visibility
+   already asking for the same promotion. The animations are opacity and
+   transform, which composite anyway. */
 .glass-panel {
   background: rgba(20, 20, 20, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   transform: translateZ(0);
-  will-change: transform;
   isolation: isolate;
 }
 
@@ -93,7 +97,6 @@ body {
   animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   opacity: 0;
   backface-visibility: hidden;
-  will-change: opacity, transform;
 }
 .reveal-on-scroll {
   opacity: 0;
@@ -102,7 +105,6 @@ body {
     opacity 0.7s ease-out,
     transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
   backface-visibility: hidden;
-  will-change: opacity, transform;
   contain: paint;
 }
 .reveal-on-scroll.is-visible {
@@ -112,14 +114,12 @@ body {
 .backdrop-blur-md {
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
-  will-change: transform;
 }
 
 /* Opacity-only reveal disabled */
 .reveal-opacity-only {
   opacity: 0;
   transition: opacity 500ms ease-out;
-  will-change: opacity;
 }
 .reveal-opacity-only.is-visible {
   opacity: 1;

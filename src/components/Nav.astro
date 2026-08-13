@@ -291,6 +291,10 @@ const { showCta = false } = Astro.props;
     const setOpen = (open: boolean, returnFocus = false) => {
       mobilePanel.classList.toggle('hidden', !open);
       toggleButton.setAttribute('aria-expanded', String(open));
+      // aria-expanded carries the state, but the accessible NAME was stuck on
+      // "Open menu" while the panel was open, so the button announced the
+      // wrong action at the moment it would be used to close it.
+      toggleButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       if (open) {
         mobilePanel.querySelector<HTMLAnchorElement>('a')?.focus();
       } else if (returnFocus) {

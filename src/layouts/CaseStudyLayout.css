@@ -3,7 +3,6 @@
   opacity: 0;
   transform: translate3d(0, 12px, 0);
   backface-visibility: hidden;
-  will-change: opacity, transform;
 }
 @keyframes fadeIn {
   to {
