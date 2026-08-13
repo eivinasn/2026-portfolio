@@ -40,8 +40,14 @@ by `heshipstech`; local git had neither `user.name` nor `user.email` configured,
 which blocked the first commit.
 
 **Ruling — Founder, 2026-08-13: `heshipstech <e.norusaitis@gmail.com>`.** Set
-repo-locally, not globally. History before 2026-08-13 is not rewritten. This is
-also the account that will hold the deploy secrets in increment 9.
+repo-locally, not globally. This is also the account that holds the deploy
+secrets in increment 9.
+
+**Amended 2026-08-14: `heshipstech <46778788+heshipstech@users.noreply.github.com>`.**
+GitHub's _Block command line pushes that expose my email_ was enabled and
+correctly rejected the next push. The protection working is the point — the
+address is left in earlier commits, where it is the same address published
+deliberately on the site ([Q12](#q12)).
 
 <a id="q3"></a>
 
@@ -406,3 +412,53 @@ redeploy; the CSP widens automatically.
 
 Worth weighing: there is still no field data, so increment 7's 88% weight
 reduction is a lab measurement. That is the only argument for turning it on.
+
+<a id="q23"></a>
+
+## Q23 · Security audit across all three repositories
+
+Run 2026-08-13/14 across `blinklab` (public), `besight.io` and `2026-portfolio`,
+covering working trees and full git history — every blob, not just HEAD.
+
+**Headline: no credentials anywhere.** No API keys, tokens, passwords, private
+keys or connection strings were ever committed to any of the three repos, in any
+commit. No `.env`, `.npmrc`, `.netrc`, `.pem` or `id_rsa` has ever existed in any
+history. Nothing needed rotating. The three repos share no server, deploy key or
+deploy path, so the public one does not compromise the private two.
+
+Acted on:
+
+- **History purged and the repo published.** `git filter-repo` removed the SSH
+  username, server IP, the deleted case-study PDF and the seven unreferenced
+  images from all 34 commits, plus one commit message body — `--replace-text`
+  covers blobs only, so messages needed a second pass. Verified from a fresh
+  clone of the remote, not just locally.
+- **Third-party marks disclaimer** added under the logo strip.
+- **Secret scanning** added to CI over the full history, using the MIT gitleaks
+  binary rather than the NOASSERTION-licensed action.
+- **besight.io:** 22 deploy run logs deleted; deploy identifiers moved from
+  variables to secrets (PR #1).
+- **blinklab:** a private venture name neutralised in four documents (PR #231).
+
+Two recommendations were **withdrawn after checking them properly**, which is
+worth recording because both were mine:
+
+- _Strip the corpus-derived columns from blinklab's `eyeblink8_misses.csv`._
+  Withdrawn. The repo's own `DATASETS.md` classifies Eyeblink8 as GPL3, ungated
+  and "needs no permission from anyone", already cites the paper and keeps
+  subjects pseudonymous. And `breakdown.py` and `finalise.py` both read those
+  columns, so removing them breaks the analysis — the claim that it would keep
+  every referencing file working was simply wrong.
+- _Rewrite blinklab's history to remove the same name._ Withdrawn. It is public
+  with 119 pull requests; rewriting 151 commits breaks every clone, fork and PR
+  reference, and GitHub retains `refs/pull/*` objects regardless. The visible
+  tree is cleaned; that is the achievable part.
+
+Accepted by the founder, recorded rather than silently carried: roughly 36
+identifiable colleagues appear in case-study photographs with no consent record
+in the repo, and `work/nfq/` publishes a named former employer's internal
+revenue and utilisation figures. The disclaimer added above mitigates the
+framing but is not consent.
+
+Still open: `"Plyfaa"` was requested for removal but **appears in none of the
+three repositories** — it is somewhere else, or was never committed.
