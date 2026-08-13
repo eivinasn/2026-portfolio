@@ -13,7 +13,7 @@ Status: ✅ done · 🔄 in progress · ⏸ blocked · ⬜ not started
 | 2 | Process foundation | ✅ | `ce2bdd9` |
 | 3 | Accessibility pass | ✅ | `503ad52` *(swapped with CI — [Q15](QUESTIONS.md#q15))* |
 | 4 | SEO completion | ✅ | `35b4e35` |
-| 5 | Security hardening | ⏸ | blocked on [Q9](QUESTIONS.md#q9) |
+| 5 | Security hardening | ✅ | `ca2912e` · *deploy* gated on [Q9](QUESTIONS.md#q9) |
 | 6 | CI gates | ⬜ | *(swapped with accessibility)* |
 | 7 | Performance budgets | ⬜ | |
 | 8 | Analytics + monitoring | ⬜ | |
@@ -98,20 +98,39 @@ Still open here: `/work/` returns **403**, not 404 — server-side, so it belong
 to increment 5.
 
 
-## 5 · Security hardening ⏸
+## 5 · Security hardening ✅
 
-**Blocked on [Q9](QUESTIONS.md#q9)** — whether an `.htaccess` already exists on
-the server. Written defensively regardless.
+Built and verified. **Deploying it is still gated on [Q9](QUESTIONS.md#q9)** —
+whether an `.htaccess` already exists on the server — but nothing deploys before
+increment 9 anyway, so this was never a build-time blocker.
 
-- CSP. **Needs build-time hashes** — the reveal script is inline and a static
-  host cannot generate a nonce. A naive `script-src 'self'` blanks the homepage.
-- HSTS, `X-Content-Type-Options`, `X-Frame-Options`/`frame-ancestors 'none'`,
-  `Referrer-Policy`, `Permissions-Policy` — all currently absent.
-- `Cache-Control` on HTML documents — currently none at all, so browsers fall
-  back to heuristic freshness against a 7-month-old `Last-Modified`.
-- `/site.webmanifest` is served as `text/plain`.
-- **Do not replace what works** — brotli, gzip, `Vary`, static caching and the
-  TLS policy are all already correct. Extend.
+- `config/htaccess.template` → `dist/.htaccess`, generated at build time by
+  `npm run generate:htaccess` so the CSP hashes always match the build that was
+  produced. A hand-maintained hash list goes stale silently, and a stale
+  `style-src` hash ships the case studies unstyled.
+- CSP is strict: `default-src 'none'`, `script-src 'self'` with **no hashes and
+  no `unsafe-inline`** — hoisting the scripts in increment 3 removed every
+  inline script. `style-src` carries exactly 2 hashes plus Google Fonts.
+- HSTS (no `preload` — one-way door, founder's call), `nosniff`, `X-Frame-Options:
+  DENY` + `frame-ancestors 'none'`, `Referrer-Policy`, `Permissions-Policy`,
+  COOP/CORP.
+- `Cache-Control: no-cache` on HTML — documents previously had none at all — and
+  `immutable` on content-hashed `/_astro/`.
+- `application/manifest+json` for `.webmanifest`, which was served as
+  `text/plain`.
+- `/work/` 403 → 404 via rewrite.
+- **Compression and static caching deliberately omitted.** The host already does
+  brotli + gzip with correct `Vary` and leaves PNGs alone. Re-declaring it risks
+  replacing something that works.
+
+`npm run verify:csp` serves `dist/` with the real headers and asserts zero CSP
+violations, zero console errors, nothing stranded and styles applied. It caught
+a real failure: 25 inline `style="animation-delay: …"` attributes cannot be
+hashed, and would have forced `style-src-attr 'unsafe-inline'` site-wide. They
+are now CSS classes and the policy needs no relaxation. It also confirmed
+empirically that `<script type="application/ld+json">` is a data block and is
+not subject to `script-src`.
+
 
 ## 6 · CI gates ⬜
 

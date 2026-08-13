@@ -1,0 +1,76 @@
+# eivinasn.com — Apache/LiteSpeed configuration
+#
+# GENERATED FILE. Do not edit dist/.htaccess directly.
+# Source: config/htaccess.template — `npm run generate:htaccess` injects the CSP
+# hashes, which change whenever an inline style block changes.
+#
+# ---------------------------------------------------------------------------
+# BEFORE DEPLOYING THIS, READ QUESTIONS.md Q9.
+#
+# The live server already performs http->https and no-slash->slash redirects and
+# injects `content-security-policy: upgrade-insecure-requests`. None of that is
+# in this repo, so something is configured server-side that we cannot see — the
+# host returns 403 for the .htaccess filename whether or not the file exists, so
+# HTTP cannot tell us. Uploading this file blindly may replace working config.
+#
+# Check hPanel -> File Manager -> public_html with hidden files shown first. The
+# deploy step in increment 9 must refuse to overwrite an .htaccess it did not
+# create.
+# ---------------------------------------------------------------------------
+#
+# Deliberately NOT configured here: compression and static-asset caching. The
+# host already serves brotli and gzip with a correct `Vary: Accept-Encoding`,
+# correctly leaves PNGs uncompressed, and sets max-age on statics. Re-declaring
+# any of that risks replacing a working configuration with a worse one.
+
+<IfModule mod_headers.c>
+  # Force HTTPS for a year. No `preload` — that is a one-way door and belongs to
+  # the founder, not to this file.
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set Cross-Origin-Resource-Policy "same-origin"
+
+  # Nothing here uses any of these.
+  Header always set Permissions-Policy "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), usb=(), xr-spatial-tracking=()"
+
+  Header always set Content-Security-Policy "__CSP__"
+
+  # HTML must revalidate. Documents currently get no Cache-Control at all, so
+  # browsers fall back to heuristic freshness against a Last-Modified that is
+  # already months old — a deploy could go unseen for weeks.
+  <FilesMatch "\.html$">
+    Header always set Cache-Control "no-cache"
+  </FilesMatch>
+
+  # Content-hashed build output can be cached forever.
+  <FilesMatch "\.(js|css)$">
+    Header always set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# The manifest is served as text/plain by default, which browsers reject — and
+# LiteSpeed's cache rules key off content-type, so it also gets no caching.
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType image/svg+xml .svg
+  AddType image/avif .avif
+  AddType image/webp .webp
+</IfModule>
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # /work/ currently returns 403 because directory listing is off and there is
+  # no index there. A crawler or link checker walking the hierarchy upward hits
+  # a hard error; 404 is the truthful answer.
+  RewriteRule ^work/?$ - [R=404,L]
+</IfModule>
+
+# No directory listings anywhere.
+Options -Indexes

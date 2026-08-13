@@ -64,6 +64,17 @@ body {
 .delay-200 { transition-delay: 200ms; }
 .delay-300 { transition-delay: 300ms; }
 
+/* Entrance stagger. These replaced inline style="animation-delay: …" attributes
+   in increment 5: a CSP cannot hash a style attribute, so keeping them would
+   have forced style-src-attr 'unsafe-inline' across the whole site to stagger
+   six animations. */
+.anim-delay-1 { animation-delay: 0.1s; }
+.anim-delay-2 { animation-delay: 0.2s; }
+.anim-delay-3 { animation-delay: 0.3s; }
+.anim-delay-4 { animation-delay: 0.4s; }
+.anim-delay-5 { animation-delay: 0.5s; }
+.anim-delay-6 { animation-delay: 0.6s; }
+
 ::selection {
   background: #1e40af;
   color: #ffffff;

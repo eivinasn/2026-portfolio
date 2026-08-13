@@ -8,11 +8,13 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/generate-htaccess.mjs",
     "preview": "astro preview",
     "verify:a11y": "node scripts/verify-a11y.mjs",
     "generate:icons": "node scripts/generate-icons.mjs",
-    "generate:og": "node scripts/generate-og.mjs"
+    "generate:og": "node scripts/generate-og.mjs",
+    "generate:htaccess": "node scripts/generate-htaccess.mjs",
+    "verify:csp": "node scripts/verify-csp.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
