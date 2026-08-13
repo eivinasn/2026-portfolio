@@ -66,6 +66,14 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Canonical hostname. www.eivinasn.com and the apex both served HTTP 200 with
+  # byte-identical content and no redirect between them, so every inbound link
+  # and every crawl was split across two hostnames. The canonical tag already
+  # pointed at the apex, but a tag is a hint and a 301 is an instruction.
+  # Path and query string are preserved.
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
   # /work/ currently returns 403 because directory listing is off and there is
   # no index there. A crawler or link checker walking the hierarchy upward hits
   # a hard error; 404 is the truthful answer.

@@ -122,6 +122,18 @@ try {
 
   const workDir = await get('/work/');
   check('/work/ is 404, not 403', workDir.status === 404, `status=${workDir.status}`);
+
+  // www and the apex both served 200 with identical bytes until increment 11.
+  const host = new URL(BASE).host;
+  if (!host.startsWith('www.') && !host.startsWith('localhost')) {
+    const www = await fetch(`https://www.${host}/work/vmi/`, { redirect: 'manual' });
+    const target = www.headers.get('location') ?? '';
+    check(
+      'www 301s to the apex, preserving the path',
+      [301, 308].includes(www.status) && target === `https://${host}/work/vmi/`,
+      `status=${www.status} -> ${target || 'no Location'}`
+    );
+  }
 } catch (err) {
   check('behaviour checks', false, String(err));
 }
