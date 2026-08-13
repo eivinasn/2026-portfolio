@@ -28,6 +28,22 @@ for (const file of files) {
   for (const [, body] of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) styles.add(sha(body));
 }
 
+// Analytics is inert unless armed (QUESTIONS.md Q13). When it is armed the CSP
+// has to allow its origin, so the two are derived from the same env vars — a
+// hand-edited CSP would silently block the very script it was armed for.
+const ANALYTICS_ORIGINS = {
+  cloudflare: { script: ['https://static.cloudflareinsights.com'], connect: ['https://cloudflareinsights.com'] },
+  plausible: { script: ['https://plausible.io'], connect: ['https://plausible.io'] },
+  umami: { script: [], connect: [] }, // self-hosted: origin comes from PUBLIC_ANALYTICS_HOST
+};
+
+const provider = process.env.PUBLIC_ANALYTICS_PROVIDER?.trim();
+const host = process.env.PUBLIC_ANALYTICS_HOST?.trim();
+const armed = Boolean(provider && process.env.PUBLIC_ANALYTICS_ID?.trim() && ANALYTICS_ORIGINS[provider]);
+
+const extraScript = armed ? [...ANALYTICS_ORIGINS[provider].script, ...(host ? [host] : [])] : [];
+const extraConnect = armed ? [...ANALYTICS_ORIGINS[provider].connect, ...(host ? [host] : [])] : [];
+
 // script-src needs no hashes: every executable script in the output is an
 // external module (Astro hoists them), and `<script type="application/ld+json">`
 // is a data block the browser never executes. verify-csp.mjs proves both.
@@ -36,11 +52,11 @@ const csp = [
   `base-uri 'self'`,
   `form-action 'none'`,
   `frame-ancestors 'none'`,
-  `script-src 'self'`,
+  [`script-src 'self'`, ...extraScript].join(' '),
   `style-src 'self' ${[...styles].sort().join(' ')}`,
   `font-src 'self'`,
   `img-src 'self' data:`,
-  `connect-src 'self'`,
+  [`connect-src 'self'`, ...extraConnect].join(' '),
   `manifest-src 'self'`,
   `upgrade-insecure-requests`,
 ].join('; ');
@@ -55,4 +71,5 @@ await writeFile(OUT, template.replace('__CSP__', csp));
 console.log(`Wrote ${OUT}`);
 console.log(`  scanned ${files.length} HTML file(s)`);
 console.log(`  style-src hashes: ${styles.size}`);
+console.log(`  analytics: ${armed ? `${provider} (CSP widened)` : 'not armed'}`);
 [...styles].sort().forEach((h) => console.log(`    ${h}`));

@@ -16,7 +16,7 @@ Status: ✅ done · 🔄 in progress · ⏸ blocked · ⬜ not started
 | 5 | Security hardening | ✅ | `ca2912e` · *deploy* gated on [Q9](QUESTIONS.md#q9) |
 | 6 | CI gates | ⬜ | *(swapped with accessibility)* |
 | 7 | Performance budgets | ✅ | `b90007a` |
-| 8 | Analytics + monitoring | ⬜ | *next* |
+| 8 | Analytics + monitoring | ✅ | `83fd43c` · founder must arm |
 | 9 | Deploy pipeline | ⬜ | |
 | 10 | Indexing | ⬜ | founder-only; needs Search Console access |
 
@@ -174,13 +174,32 @@ guessed.
 Closes [Q8](QUESTIONS.md#q8).
 
 
-## 8 · Analytics + monitoring ⬜
+## 8 · Analytics + monitoring ✅
 
-- Cookieless analytics hook, **inert until a token is supplied**
-  ([Q13](QUESTIONS.md#q13)). Claude does not create accounts.
-- Free uptime monitor — founder task.
-- No RUM baseline exists today, so increment 7's gains are currently unmeasurable
-  in the field.
+Built as a slot, not a choice ([Q13](QUESTIONS.md#q13)). `Analytics.astro`
+renders **nothing** unless `PUBLIC_ANALYTICS_PROVIDER` and `PUBLIC_ANALYTICS_ID`
+are both set at build time. Supports Cloudflare Web Analytics, Plausible and
+Umami — all cookieless, none needing a consent banner.
+
+The CSP is derived from the same environment variables, so arming analytics
+widens `script-src`/`connect-src` automatically. A hand-edited CSP would
+silently block the very script it was armed for.
+
+Verified in all four states: disarmed (nothing emitted, CSP unchanged), armed
+Cloudflare, armed self-hosted Umami (host flows into both the script URL and the
+CSP), and incomplete config (warns loudly, emits nothing).
+
+**Founder tasks, none of which Claude can do:**
+- Pick a vendor and create the account. Cloudflare Web Analytics is free and
+  needs only a beacon token.
+- Set the variables — see `.env.example`.
+- Add a free uptime monitor.
+- Add a short privacy note **only once analytics is armed**. Today the site
+  collects nothing, so a privacy page would be inaccurate.
+
+Note: there is still no RUM baseline, so increment 7's gains are measured in the
+lab only. That is the main argument for arming analytics.
+
 
 ## 9 · Deploy pipeline ⬜
 

@@ -8,6 +8,7 @@
 // Canonical URLs are derived from Astro.site + the current path and always end
 // in a trailing slash, matching the 301 the server already performs.
 import StructuredData from './StructuredData.astro';
+import Analytics from './Analytics.astro';
 
 interface Props {
   title: string;
@@ -103,6 +104,8 @@ const imageUrl = new URL(image, Astro.site).href;
     }
   </style>
 </noscript>
+
+<Analytics />
 
 <!-- Inter is self-hosted (src/styles/global.css). Preload only the latin subset:
      latin-ext carries a single glyph on this site and is not on the critical

@@ -1,0 +1,48 @@
+---
+// Cookieless analytics — inert until armed, the same pattern as the deploy
+// pipeline (QUESTIONS.md Q13).
+//
+// Renders NOTHING unless PUBLIC_ANALYTICS_PROVIDER and PUBLIC_ANALYTICS_ID are
+// both set at build time. Claude does not create accounts; the founder picks a
+// vendor, creates the account, and supplies the id. Nothing else changes.
+//
+// All three options are cookieless and need no consent banner, so there is no
+// privacy policy obligation beyond a short note. See .env.example.
+//
+// If you arm this, `npm run generate:htaccess` widens the CSP to match — the
+// origin list below is the single source of truth for both.
+const provider = import.meta.env.PUBLIC_ANALYTICS_PROVIDER?.trim();
+const id = import.meta.env.PUBLIC_ANALYTICS_ID?.trim();
+const host = import.meta.env.PUBLIC_ANALYTICS_HOST?.trim();
+
+type Provider = { src: string; attrs: Record<string, string> };
+
+const providers: Record<string, (id: string, host?: string) => Provider> = {
+  cloudflare: (token) => ({
+    src: 'https://static.cloudflareinsights.com/beacon.min.js',
+    attrs: { 'data-cf-beacon': JSON.stringify({ token }) }
+  }),
+  plausible: (domain, h) => ({
+    src: `${h ?? 'https://plausible.io'}/js/script.js`,
+    attrs: { 'data-domain': domain }
+  }),
+  umami: (websiteId, h) => ({
+    // Umami is self-hostable, so the host is required rather than assumed.
+    src: `${h ?? ''}/script.js`,
+    attrs: { 'data-website-id': websiteId }
+  })
+};
+
+const armed = Boolean(provider && id && providers[provider]);
+const config = armed ? providers[provider!](id!, host) : null;
+
+if (provider && !armed) {
+  console.warn(
+    `[analytics] PUBLIC_ANALYTICS_PROVIDER="${provider}" but the config is incomplete ` +
+      `(id=${id ? 'set' : 'missing'}${provider === 'umami' ? `, host=${host ? 'set' : 'missing'}` : ''}). ` +
+      'Rendering nothing.'
+  );
+}
+---
+
+{config && <script defer src={config.src} {...config.attrs} is:inline />}
