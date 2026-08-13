@@ -1,0 +1,59 @@
+---
+// Single source of truth for document metadata.
+//
+// Both layouts render this. Before increment 1 they each carried their own
+// hand-written <head>, which is why the canonical placeholder was fixed in one
+// place and absent in the other.
+//
+// Canonical URLs are derived from Astro.site + the current path and always end
+// in a trailing slash, matching the 301 the server already performs.
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description,
+  // Interim share image — increment 4 replaces this with a purpose-built
+  // 1200x630 render. Until then this points at a file that actually exists.
+  image = '/hero-portrait.png',
+  type = 'website'
+} = Astro.props as Props;
+
+const path = Astro.url.pathname.replace(/\/+$/, '');
+const canonical = new URL(path === '' ? '/' : `${path}/`, Astro.site).href;
+const imageUrl = new URL(image, Astro.site).href;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+{description && <meta name="description" content={description} />}
+<meta name="theme-color" content="#050505" />
+
+<link rel="canonical" href={canonical} />
+<link rel="icon" href="/logo-eivinas.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/logo-eivinas.svg" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:alt" content="Eivinas Norušaitis portfolio" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+{description && <meta name="twitter:description" content={description} />}
+<meta name="twitter:image" content={imageUrl} />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+  rel="stylesheet"
+/>

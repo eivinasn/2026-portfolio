@@ -1,4 +1,5 @@
 ---
+import BaseHead from '../components/BaseHead.astro';
 import './CaseStudyLayout.css';
 import '../styles/global.css';
 const { title, summary, role, timeline, platform } = Astro.props;
@@ -6,16 +7,7 @@ const { title, summary, role, timeline, platform } = Astro.props;
 
 <html lang="en" class="scroll-smooth">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} - Case Study</title>
-    <meta name="theme-color" content="#050505" />
-    <link rel="icon" href="/logo-eivinas.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/logo-eivinas.svg" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <BaseHead title={`${title} - Case Study`} description={summary} type="article" />
   </head>
   <body class="antialiased text-[#A1A1AA] bg-[#050505] selection:bg-white/20">
     <div class="fixed inset-0 pointer-events-none z-0 bg-grid h-[60vh]"></div>
