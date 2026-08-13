@@ -7,20 +7,22 @@
 //
 // Canonical URLs are derived from Astro.site + the current path and always end
 // in a trailing slash, matching the 301 the server already performs.
+import StructuredData from './StructuredData.astro';
+
 interface Props {
   title: string;
   description?: string;
   image?: string;
   type?: 'website' | 'article';
+  noindex?: boolean;
 }
 
 const {
   title,
   description,
-  // Interim share image — increment 4 replaces this with a purpose-built
-  // 1200x630 render. Until then this points at a file that actually exists.
-  image = '/hero-portrait.png',
-  type = 'website'
+  image = '/og-image.png',
+  type = 'website',
+  noindex = false
 } = Astro.props as Props;
 
 const path = Astro.url.pathname.replace(/\/+$/, '');
@@ -33,23 +35,47 @@ const imageUrl = new URL(image, Astro.site).href;
 <title>{title}</title>
 {description && <meta name="description" content={description} />}
 <meta name="theme-color" content="#050505" />
+<meta name="author" content="Eivinas Norušaitis" />
 
-<link rel="canonical" href={canonical} />
+{
+  noindex ? (
+    /* No canonical on a noindex page: /404 has no indexable URL to point at. */
+    <meta name="robots" content="noindex, follow" />
+  ) : (
+    <link rel="canonical" href={canonical} />
+  )
+}
+
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
 <link rel="icon" href="/logo-eivinas.svg" type="image/svg+xml" />
-<link rel="apple-touch-icon" href="/logo-eivinas.svg" />
+<!-- PNG, not SVG: iOS silently ignores an SVG apple-touch-icon. -->
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
 
 <meta property="og:type" content={type} />
+<meta property="og:site_name" content="Eivinas Norušaitis" />
+<meta property="og:locale" content="en_GB" />
 <meta property="og:title" content={title} />
 {description && <meta property="og:description" content={description} />}
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={imageUrl} />
-<meta property="og:image:alt" content="Eivinas Norušaitis portfolio" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Eivinas Norušaitis — Design, Ops & Leadership. Portfolio 2026." />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 {description && <meta name="twitter:description" content={description} />}
 <meta name="twitter:image" content={imageUrl} />
+
+<StructuredData
+  type={type === 'article' ? 'case-study' : 'home'}
+  title={title}
+  description={description}
+  url={canonical}
+  image={imageUrl}
+/>
 
 <!--
   Without JavaScript, ~20 homepage blocks stay at opacity:0 forever and mobile

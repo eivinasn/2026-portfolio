@@ -10,9 +10,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "verify:a11y": "node scripts/verify-a11y.mjs"
+    "verify:a11y": "node scripts/verify-a11y.mjs",
+    "generate:icons": "node scripts/generate-icons.mjs",
+    "generate:og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
     "@astrojs/tailwind": "^5.1.0",
     "astro": "^4.10.0",
     "autoprefixer": "^10.4.18",
@@ -22,6 +25,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "axe-core": "^4.13.0",
-    "playwright": "^1.62.1"
+    "playwright": "^1.62.1",
+    "png-to-ico": "^3.0.2"
   }
 }

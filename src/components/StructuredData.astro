@@ -1,0 +1,80 @@
+---
+// JSON-LD. A portfolio's natural schema is Person, not Organization.
+//
+// The homepage emits Person + WebSite; each case study emits a CreativeWork
+// authored by the same Person, linked by @id so search engines treat them as
+// one entity rather than five unrelated people.
+interface Props {
+  type?: 'home' | 'case-study';
+  title?: string;
+  description?: string;
+  url?: string;
+  image?: string;
+}
+
+const { type = 'home', title, description, url, image } = Astro.props as Props;
+
+const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://eivinasn.com';
+const personId = `${site}/#person`;
+
+const person = {
+  '@type': 'Person',
+  '@id': personId,
+  name: 'Eivinas Norušaitis',
+  url: `${site}/`,
+  image: `${site}/og-image.png`,
+  email: 'mailto:e.norusaitis@gmail.com',
+  jobTitle: 'Product Design Studio Manager & Senior UX Design Manager',
+  description:
+    'Product design leader with over 12 years of experience across product design, design operations and leadership.',
+  worksFor: { '@type': 'Organization', name: 'Dexcom' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of Huddersfield' },
+  knowsAbout: [
+    'Product design',
+    'Design leadership',
+    'Design operations',
+    'Design systems',
+    'User experience research',
+    'Team building',
+  ],
+  sameAs: ['https://www.linkedin.com/in/eivinasnorusaitis/'],
+};
+
+const graph =
+  type === 'home'
+    ? [
+        person,
+        {
+          '@type': 'WebSite',
+          '@id': `${site}/#website`,
+          url: `${site}/`,
+          name: 'Eivinas Norušaitis — Portfolio 2026',
+          description,
+          inLanguage: 'en',
+          publisher: { '@id': personId },
+        },
+      ]
+    : [
+        person,
+        {
+          '@type': 'CreativeWork',
+          '@id': `${url}#case-study`,
+          headline: title,
+          description,
+          url,
+          image,
+          inLanguage: 'en',
+          author: { '@id': personId },
+          creator: { '@id': personId },
+          isPartOf: { '@id': `${site}/#website` },
+        },
+      ];
+
+const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
+---
+
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify(jsonLd)}
+/>

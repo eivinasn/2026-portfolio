@@ -10,9 +10,9 @@ Status: ✅ done · 🔄 in progress · ⏸ blocked · ⬜ not started
 | --- | --- | --- | --- |
 | 0 | Orientation | ✅ | `8337a49` |
 | 1 | Critical SEO repair | ✅ | `28fd664` |
-| 2 | Process foundation | 🔄 | — |
-| 3 | Accessibility pass | ✅ | `pending` *(swapped with CI — [Q15](QUESTIONS.md#q15))* |
-| 4 | SEO completion | ⬜ | |
+| 2 | Process foundation | ✅ | `ce2bdd9` |
+| 3 | Accessibility pass | ✅ | `503ad52` *(swapped with CI — [Q15](QUESTIONS.md#q15))* |
+| 4 | SEO completion | ✅ | `35b4e35` |
 | 5 | Security hardening | ⏸ | blocked on [Q9](QUESTIONS.md#q9) |
 | 6 | CI gates | ⬜ | *(swapped with accessibility)* |
 | 7 | Performance budgets | ⬜ | |
@@ -46,54 +46,57 @@ raw findings. Stack, deploy method and the real gap list recorded in
 Verified: zero `example.com` in `dist/`; homepage diff vs live is exactly 16
 lines; case-study `<body>` byte-identical to production.
 
-## 2 · Process foundation 🔄
+## 2 · Process foundation ✅
 
 `CLAUDE.md`, `BACKLOG.md`, `QUESTIONS.md`, `COMPONENTS.md`, `.nvmrc`, a real
 `.gitignore` entry for `.astro/`, and the README corrected — it currently
 documents a Vercel/Netlify deploy that has never existed.
 
-## 3 · Accessibility pass ⬜
+## 3 · Accessibility pass ✅
 
-Swapped ahead of CI so the gates can go green on arrival ([Q15](QUESTIONS.md#q15)).
+Swapped ahead of CI ([Q15](QUESTIONS.md#q15)). **0 axe violations** on all 6
+pages (WCAG 2.0/2.1 A+AA, 2.2 AA). Re-runnable: `npm run verify:a11y`.
 
-Ordered by severity:
+Contrast raised per-usage to the threshold each size requires ([Q16](QUESTIONS.md#q16)),
+preserving the dim-to-bright hierarchy. Nameless "Go back" link fixed; `<footer>`
+lifted out of `<main>`; `<header>`, skip link and `#main` added;
+`prefers-reduced-motion` honoured; `<noscript>` fallback added;
+mobile-menu focus management; `scroll-padding-top` for SC 2.4.11; alt-text and
+link-text quality.
 
-- **`link-name`** — the "Go back" link on all 4 case studies has no accessible
-  name. The anchor wraps only an SVG; the visible words are a `<span>` outside
-  it. It is the only in-page route from a case study back to the site.
-- **Contrast** — `#52525B` 2.64:1 (35 elements + 29 `::marker`, includes half the
-  `<h1>`), `#1d4ed8` 3.04:1 (22 uses, including every "Read More"), `#71717A`
-  4.22:1 (23 uses, all ≤14px). Approach ruled in [Q16](QUESTIONS.md#q16).
-- **`<noscript>` fallback** — ~20 homepage blocks are `opacity: 0` until JS
-  reveals them; mobile has no navigation at all without JS.
-- **Landmarks** — `<footer>` is nested inside `<main>` on all 5 pages, so it is
-  never exposed as `contentinfo`. No `<header>`/banner anywhere.
-- **Skip link** — absent on all pages.
-- **`prefers-reduced-motion`** — not honoured anywhere, including
-  `scroll-behavior: smooth`.
-- **Mobile menu focus management** — focus never enters the panel, never returns
-  to the trigger on Escape.
-- **`scroll-padding-top`** — absent while a fixed nav overlays the viewport
-  (WCAG 2.2 SC 2.4.11).
-- Alt-text quality; 4 identical "Read More" links; 20 case-study `<section>`s
-  labelled by a `<span>` rather than a heading.
+Also fixed a live bug no audit found: an IntersectionObserver never fires for an
+element a jump skipped, so landing on `/#competencies` left 7 of 20 blocks
+invisible until reload. `RevealScript.astro` now sweeps by position and is shared
+by both layouts. 7 stranded before, 0 after.
 
-## 4 · SEO completion ⬜
+Side effect: hoisting the reveal logic left **zero inline scripts** in the
+output, so increment 5's CSP needs no script hashes — only one for the
+`<noscript>` style block.
 
-- `robots.txt` — AI crawlers allowed ([Q7](QUESTIONS.md#q7)).
-- `sitemap.xml` via `@astrojs/sitemap`. **Only safe now that `site` is correct.**
-- Custom `404.astro`. Also removes the Hostinger fallback page, which currently
-  fires Google Analytics, GTM and doubleclick.net under this origin
-  ([Q13](QUESTIONS.md#q13)).
+
+## 4 · SEO completion ✅
+
+- `robots.txt` — AI crawlers allowed ([Q7](QUESTIONS.md#q7)), with the opposite
+  policy commented in place so reversing it is one edit.
+- `sitemap-index.xml` + `sitemap-0.xml` via `@astrojs/sitemap`, 5 URLs, 404
+  excluded. Pinned to **3.2.1** — 3.7.3 reads Astro 5's route shape and crashes
+  the build on Astro 4 ([Q3](QUESTIONS.md#q3)).
+- Custom `404.astro`, `noindex`, with recovery links. Replaces Hostinger's
+  fallback page and the third-party tracking it loaded.
 - Favicon set generated from `logo-eivinas.svg` ([Q5](QUESTIONS.md#q5)):
-  `favicon.ico`, 180×180 apple-touch PNG (the current tag points at an SVG, which
-  iOS does not support), 192/512 PNGs for the manifest.
-- OG image, 1200×630, generated from a real page render. **A design task — no
-  suitable asset exists.**
-- `Person` structured data; `WebSite` on the homepage.
-- OG completeness: `og:site_name`, `og:locale`, `og:image:width`/`height`.
-- `/work/` currently returns **403**, not 404 — a crawler walking the hierarchy
-  upward hits a hard error.
+  multi-size `favicon.ico`, 180px apple-touch PNG, 192/512 PNGs, maskable 512.
+  `npm run generate:icons`.
+- OG image, 1200x630, rendered in a real browser from the site's own type and
+  colour. `npm run generate:og`.
+- `Person` + `WebSite` on the homepage; `Person` + `CreativeWork` on each case
+  study, linked by `@id` so they read as one entity.
+- OG completeness: `og:site_name`, `og:locale`, `og:image:width`/`height`/`type`,
+  `og:image:alt`, `author`.
+- Manifest rewritten with real PNG icons, `scope`, `lang`, `description`.
+
+Still open here: `/work/` returns **403**, not 404 — server-side, so it belongs
+to increment 5.
+
 
 ## 5 · Security hardening ⏸
 

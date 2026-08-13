@@ -1,0 +1,21 @@
+# eivinasn.com
+#
+# AI crawlers are allowed deliberately (QUESTIONS.md Q7): this is a portfolio
+# whose purpose is to be discovered, including by AI-assisted search. There is
+# no proprietary content here. Reverse the decision by uncommenting the block
+# at the bottom.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://eivinasn.com/sitemap-index.xml
+
+# To block AI training and answer engines, replace the above with:
+#
+# User-agent: GPTBot
+# User-agent: ClaudeBot
+# User-agent: Google-Extended
+# User-agent: CCBot
+# User-agent: PerplexityBot
+# User-agent: Applebot-Extended
+# Disallow: /

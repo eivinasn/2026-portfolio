@@ -5,13 +5,14 @@ import '../styles/global.css';
 const {
   title = 'Eivinas Norušaitis - Product Design & Leadership',
   description = 'Product design, operations, and leadership. Portfolio 2026 of Eivinas Norušaitis.',
-  image
+  image,
+  noindex = false
 } = Astro.props;
 ---
 
 <html lang="en" class="scroll-smooth">
   <head>
-    <BaseHead title={title} description={description} image={image} />
+    <BaseHead title={title} description={description} image={image} noindex={noindex} />
   </head>
   <body class="antialiased text-[#EDEDED] bg-[#050505]">
     <a class="skip-link" href="#main">Skip to content</a>
