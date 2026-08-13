@@ -20,7 +20,7 @@ const H = 630;
 const dataUri = async (path, mime) =>
   `data:${mime};base64,${(await readFile(path)).toString('base64')}`;
 
-const portrait = await dataUri('public/hero-portrait.png', 'image/png');
+const portrait = await dataUri('src/assets/hero-portrait.png', 'image/png');
 const logo = await dataUri('public/logo-eivinas.svg', 'image/svg+xml');
 
 const html = `<!doctype html>

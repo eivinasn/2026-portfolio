@@ -1,5 +1,10 @@
 ---
 import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import { Picture } from 'astro:assets';
+import caseImageVmi01 from '../../assets/case-image-vmi-01.png';
+import caseImageVmi02 from '../../assets/case-image-vmi-02.png';
+import caseImageVmi03 from '../../assets/case-image-vmi-03.png';
+import caseImageVmi04 from '../../assets/case-image-vmi-04.png';
 ---
 
 <CaseStudyLayout
@@ -67,7 +72,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         </p>
 
         <div class="mt-8">
-          <img src="/case-image-vmi-01.png" alt="VMI case study - Situation" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageVmi01}
+            alt="VMI case study - Situation"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>
@@ -99,7 +115,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         </p>
 
         <div class="mt-8">
-          <img src="/case-image-vmi-02.png" alt="VMI case study - Task" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageVmi02}
+            alt="VMI case study - Task"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>
@@ -155,7 +182,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         </ul>
 
         <div class="mt-8">
-          <img src="/case-image-vmi-03.png" alt="VMI case study - Action" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageVmi03}
+            alt="VMI case study - Action"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>
@@ -194,7 +232,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         </p>
 
         <div class="mt-8">
-          <img src="/case-image-vmi-04.png" alt="VMI case study - Result" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageVmi04}
+            alt="VMI case study - Result"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>

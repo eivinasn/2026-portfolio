@@ -1,5 +1,10 @@
 ---
 import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import { Picture } from 'astro:assets';
+import caseImageVinted01 from '../../assets/case-image-vinted-01.png';
+import caseImageVinted02 from '../../assets/case-image-vinted-02.png';
+import caseImageVinted03 from '../../assets/case-image-vinted-03.png';
+import caseImageVinted04 from '../../assets/case-image-vinted-04.png';
 ---
 
 <CaseStudyLayout
@@ -59,7 +64,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         </p>
 
         <div class="mt-8">
-          <img src="/case-image-vinted-01.png" alt="Vinted case study - Situation" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageVinted01}
+            alt="Vinted case study - Situation"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>
@@ -86,7 +102,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         </p>
 
         <div class="mt-8">
-          <img src="/case-image-vinted-02.png" alt="Vinted case study - Task" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageVinted02}
+            alt="Vinted case study - Task"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>
@@ -142,7 +169,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         </ul>
 
         <div class="mt-8">
-          <img src="/case-image-vinted-03.png" alt="Vinted case study - Action" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageVinted03}
+            alt="Vinted case study - Action"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>
@@ -170,7 +208,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         </p>
 
         <div class="mt-8">
-          <img src="/case-image-vinted-04.png" alt="Vinted case study - Result" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageVinted04}
+            alt="Vinted case study - Result"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>

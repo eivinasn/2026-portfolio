@@ -104,9 +104,13 @@ const imageUrl = new URL(image, Astro.site).href;
   </style>
 </noscript>
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Inter is self-hosted (src/styles/global.css). Preload only the latin subset:
+     latin-ext carries a single glyph on this site and is not on the critical
+     path. -->
 <link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-  rel="stylesheet"
+  rel="preload"
+  href="/fonts/inter-latin-var.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
 />

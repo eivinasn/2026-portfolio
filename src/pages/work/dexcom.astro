@@ -1,5 +1,7 @@
 ---
 import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import { Picture } from 'astro:assets';
+import caseImageDexcom01 from '../../assets/case-image-dexcom-01.png';
 ---
 
 <CaseStudyLayout
@@ -56,7 +58,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         <p class="text-lg leading-8 text-[#A1A1AA] max-w-3xl">The challenge was not only to hire a team, but to establish a studio that could operate independently while remaining fully embedded in Dexcom’s global product strategy.</p>
 
         <div class="mt-8">
-          <img src="/case-image-dexcom-01.png" alt="Dexcom case study - Situation" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageDexcom01}
+            alt="Dexcom case study - Situation"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>

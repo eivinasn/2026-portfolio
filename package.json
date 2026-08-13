@@ -14,7 +14,9 @@
     "generate:icons": "node scripts/generate-icons.mjs",
     "generate:og": "node scripts/generate-og.mjs",
     "generate:htaccess": "node scripts/generate-htaccess.mjs",
-    "verify:csp": "node scripts/verify-csp.mjs"
+    "verify:csp": "node scripts/verify-csp.mjs",
+    "measure:perf": "node scripts/measure-perf.mjs",
+    "generate:fonts": "node scripts/subset-fonts.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",

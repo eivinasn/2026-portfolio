@@ -47,18 +47,28 @@ founder can review.
 
 ## 4 · Budgets
 
-Set from measurements taken 2026-08-13, not from convention. Current numbers are
-the ceiling — nothing may get worse.
+Measured, never guessed. Enforced by `npm run measure:perf`.
 
-| Metric | Baseline (2026-08-13) | Budget |
-| --- | --- | --- |
-| Homepage total transfer | 945 KB | **≤ 400 KB** after increment 7 |
-| Largest single image | 284 KB | **≤ 150 KB** |
-| Client JS | 894 B | **≤ 5 KB** |
-| CSS | 24 KB | **≤ 35 KB** |
-| Requests, first load | 18 | **≤ 15** |
-| TTFB | ~150 ms | no regression |
-| Axe violations | see BACKLOG | **0** |
+The first version of this table was written before increment 7 and was mostly
+invention — a 400 KB budget against a 109 KB page catches nothing. These numbers
+are the real post-increment-7 measurements plus roughly 25% headroom: enough to
+absorb an ordinary edit, tight enough that a regression trips them.
+
+| Metric | Before (2026-08-13) | Now | Budget |
+| --- | --- | --- | --- |
+| Homepage transfer | 945 KB | **109 KB** | ≤ 150 KB |
+| Largest single image | 284 KB | 43 KB | ≤ 60 KB |
+| Client JS | 894 B | 0.8 KB | ≤ 5 KB |
+| CSS | 24 KB | 5.8 KB | ≤ 10 KB |
+| Requests, first load | 18 | 17 | ≤ 20 |
+| CLS | unmeasured | **0** | ≤ 0.1 |
+| LCP | unmeasured | 84 ms | ≤ 1500 ms |
+| Axe violations | 58+ predicted | **0** | 0 |
+
+Request count is deliberately loose. Seven of the seventeen are small
+company-logo SVGs on an HTTP/2 connection; multiplexing makes that cost close to
+nothing, and inlining them would put an approved design at risk to save
+milliseconds. Bytes, CLS and LCP are the budgets that matter here.
 
 ## 5 · Definition of done
 
@@ -102,13 +112,30 @@ Learned the hard way. Do not rediscover these.
   hardcoded arbitrary value (`text-[#A1A1AA]` ×143). Editing the config changes
   almost nothing — grep for the hex instead.
 - **~20 homepage blocks are `opacity: 0` until JavaScript reveals them.**
-  `.reveal-on-scroll` + an inline IntersectionObserver. Consequences: a
-  `script-src 'self'` CSP blanks the page; Playwright `textContent` assertions
-  pass while sighted users see nothing; there is no `<noscript>` fallback.
-- **A strict CSP needs build-time hashes.** The reveal script is inline and a
-  static host cannot generate a nonce.
+  `.reveal-on-scroll`, driven by `RevealScript.astro`. Still true, and still the
+  highest-risk thing here. **Assert visibility, never presence** — an
+  `opacity: 0` element still has `textContent` and still appears in the
+  accessibility tree, so a naive Playwright assertion passes while sighted users
+  see nothing. A `<noscript>` fallback and a reduced-motion override now cover
+  the degraded cases.
+  An IntersectionObserver alone was not enough: it never fires for an element a
+  jump skips over, so landing on `/#competencies` stranded 7 blocks invisible.
+  `RevealScript` sweeps by position for exactly this reason — do not "simplify"
+  it back to a bare observer.
+- **CSP hashes are generated, not written.** `scripts/generate-htaccess.mjs`
+  computes `style-src` hashes from `dist/` on every build. A hand-maintained list
+  goes stale silently and the failure mode is an unstyled page. `script-src`
+  needs no hashes — Astro hoists every script to an external module.
+- **Never use an inline `style="…"` attribute.** A CSP cannot hash one, so a
+  single inline style forces `style-src-attr 'unsafe-inline'` site-wide. Use a
+  class; `.anim-delay-1..6` already exist for animation stagger.
 - **`public/` is not processed by Astro.** Files there are copied byte-for-byte.
-  Images must move to `src/assets/` to get the image pipeline.
+  Images live in `src/assets/` and go through `<Picture>`; only icons, fonts,
+  logos, the OG image and the unreferenced assets from [Q10](QUESTIONS.md#q10)
+  remain in `public/`.
+- **The fonts are subsetted to the glyphs actually in use.** If the copy gains a
+  character outside Latin-1, re-run `npm run generate:fonts` after a build or it
+  will render in the fallback face.
 - **The live server is not a mirror of this repo.** 13 of 38 `public/` files
   diverge, and for 3 images production is *ahead* of the repo. Never assume a
   `dist/` mirror is safe — see [Q8](QUESTIONS.md#q8).

@@ -15,8 +15,8 @@ Status: ✅ done · 🔄 in progress · ⏸ blocked · ⬜ not started
 | 4 | SEO completion | ✅ | `35b4e35` |
 | 5 | Security hardening | ✅ | `ca2912e` · *deploy* gated on [Q9](QUESTIONS.md#q9) |
 | 6 | CI gates | ⬜ | *(swapped with accessibility)* |
-| 7 | Performance budgets | ⬜ | |
-| 8 | Analytics + monitoring | ⬜ | |
+| 7 | Performance budgets | ✅ | `b90007a` |
+| 8 | Analytics + monitoring | ⬜ | *next* |
 | 9 | Deploy pipeline | ⬜ | |
 | 10 | Indexing | ⬜ | founder-only; needs Search Console access |
 
@@ -146,26 +146,33 @@ Lean, per [Q14](QUESTIONS.md#q14) — private repo, metered minutes.
 - Lighthouse: set `maxAutodiscoverUrls` to 0 (defaults to 5 and silently drops
   pages) and exclude any search-engine verification `.html`.
 
-## 7 · Performance budgets ⬜
+## 7 · Performance budgets ✅
 
-Baseline measured 2026-08-13: homepage 945 KB over 18 requests to 3 origins;
-images are 98.4% of it; client JS is 894 B. **There is no JavaScript problem and
-no server problem — TTFB is ~150 ms.**
+**Homepage 945 KB -> 109 KB (-88%). CLS 0. LCP 84 ms.** Enforced by
+`npm run measure:perf`; budgets in CLAUDE.md §4 are now measured rather than
+guessed.
 
-- Move images `public/` → `src/assets/` so Astro's pipeline applies at all.
-  `sharp` is already installed and entirely unused.
-- Modern formats. Measured: AVIF q70 cuts the homepage raster payload **85.7%**
-  (781,023 → 111,973 B).
-- `srcset`/`sizes` — currently zero across all 22 images. They are simultaneously
-  over-delivered at 1× and under-delivered at 2×.
-- Explicit `width`/`height` on the 16 unprotected images (6 are already
-  aspect-ratio protected).
-- `loading="lazy"` below the fold; `fetchpriority="high"` + preload on the LCP
-  hero.
-- Self-host Inter. Smaller win than it looks — it is a variable font resolving to
-  one file — but it removes two origins from the critical path and narrows the
-  CSP.
-- Closes [Q8](QUESTIONS.md#q8) if the re-encoded output beats the live variants.
+| | Before | After |
+| --- | --- | --- |
+| Homepage transfer | 945 KB | **109 KB** |
+| Case study transfer | ~800 KB | **71-88 KB** |
+| Largest image | 284 KB | 43 KB |
+| Fonts | 134 KB, 2 third-party origins | **34 KB, self-hosted** |
+| CLS / LCP | unmeasured | **0** / 84 ms |
+
+- 15 referenced images moved `public/` -> `src/assets/` and rendered through
+  `<Picture>` with AVIF + WebP + PNG fallback, `widths`/`sizes`, explicit
+  dimensions, `loading="lazy"` below the fold and `fetchpriority="high"` on the
+  LCP hero. Astro's pipeline was previously unused despite `sharp` being
+  installed.
+- Inter self-hosted, removing two origins from the critical path and every
+  visitor's IP from a third party — and letting the CSP drop to `'self'` for
+  both `style-src` and `font-src`.
+- Fonts subsetted to the glyphs actually used: latin-ext went 85,272 B -> 1,812 B
+  (**-97.9%**). It existed to carry one character, the š in "Norušaitis".
+
+Closes [Q8](QUESTIONS.md#q8).
+
 
 ## 8 · Analytics + monitoring ⬜
 

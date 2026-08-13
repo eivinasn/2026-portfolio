@@ -1,5 +1,7 @@
 ---
 import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import { Picture } from 'astro:assets';
+import caseImageNfq01 from '../../assets/case-image-nfq-01.png';
 ---
 
 <CaseStudyLayout
@@ -67,7 +69,18 @@ import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
         </p>
 
         <div class="mt-8">
-          <img src="/case-image-nfq-01.png" alt="NFQ case study - Situation" class="w-full rounded-2xl border border-white/5 shadow-lg" />
+          <Picture
+            src={caseImageNfq01}
+            alt="NFQ case study - Situation"
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[472, 944]}
+            sizes="(min-width: 768px) 944px, 100vw"
+            loading="lazy"
+            decoding="async"
+            pictureAttributes={{ class: 'block' }}
+            class="w-full rounded-2xl border border-white/5 shadow-lg"
+          />
         </div>
       </div>
     </div>
