@@ -14,25 +14,14 @@ reports 22 failures. After task 2 it should report none.
 
 ---
 
-## 1 · Check for an existing `.htaccess` — 2 minutes
+## 1 · ~~Check for an existing `.htaccess`~~ — DONE 2026-08-13
 
-**Blocks:** nothing hard, but the deploy will stop and ask if you skip it.
+Confirmed over SSH: **there is none**. Hostinger's redirects and injected CSP
+header come from server-level config, so our `.htaccess` is purely additive.
+See [Q9](QUESTIONS.md#q9).
 
-The live server does things this repo cannot explain: it 301s `http`→`https`,
-301s slashless URLs, and injects a `content-security-policy` header. None of that
-is in version control, so something is configured server-side. HTTP cannot tell
-us what — Hostinger returns 403 for the `.htaccess` filename whether or not the
-file exists.
-
-1. hPanel → **File Manager** → `public_html`, turn on **show hidden files**.
-2. If an `.htaccess` is there, open it and paste the contents into the repo issue
-   or straight into [QUESTIONS.md Q9](QUESTIONS.md#q9).
-3. While you are there: hPanel → **Git**, and note whether any auto-deploy was
-   ever configured.
-
-If anything meaningful is in that file, fold it into `config/htaccess.template`
-before deploying. The pipeline will refuse to overwrite a file it did not create,
-so nothing is lost either way — it will just stop.
+Also established: the real document root is
+`/home/REDACTED-SSH-USER/domains/eivinasn.com/public_html` — not `~/public_html`.
 
 ---
 
@@ -67,14 +56,14 @@ ssh-keyscan -p 65002 <your-ssh-host>
 
 Repository → **Settings** → **Secrets and variables** → **Actions**.
 
-| Secret            | Value                                                                         |
-| ----------------- | ----------------------------------------------------------------------------- |
-| `SSH_HOST`        | from 2a                                                                       |
-| `SSH_USER`        | from 2a                                                                       |
-| `SSH_PORT`        | from 2a, usually `65002`                                                      |
-| `SSH_PRIVATE_KEY` | contents of `~/.ssh/eivinasn_deploy`, including the BEGIN and END lines       |
-| `SSH_KNOWN_HOSTS` | the full output of the `ssh-keyscan` above                                    |
-| `DEPLOY_PATH`     | absolute remote path, e.g. `/home/uXXXXXXXX/domains/eivinasn.com/public_html` |
+| Secret            | Value                                                                   |
+| ----------------- | ----------------------------------------------------------------------- |
+| `SSH_HOST`        | from 2a                                                                 |
+| `SSH_USER`        | from 2a                                                                 |
+| `SSH_PORT`        | from 2a, usually `65002`                                                |
+| `SSH_PRIVATE_KEY` | contents of `~/.ssh/eivinasn_deploy`, including the BEGIN and END lines |
+| `SSH_KNOWN_HOSTS` | the full output of the `ssh-keyscan` above                              |
+| `DEPLOY_PATH`     | `/home/REDACTED-SSH-USER/domains/eivinasn.com/public_html`                     |
 
 | Variable         | Value  |
 | ---------------- | ------ |

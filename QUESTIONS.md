@@ -149,13 +149,35 @@ control. Increment 5 writes an `.htaccess` and could silently overwrite it. HTTP
 cannot answer the question: the host returns 403 for that filename whether or not
 the file exists.
 
-**PENDING — founder is checking** (hPanel → File Manager → `public_html`, hidden
-files shown; plus the hPanel Git page for any configured auto-deploy).
+**CLOSED — Founder, 2026-08-13: there is no `.htaccess`.** Confirmed over SSH,
+which HTTP could not do:
 
-Interim handling, Claude 2026-08-13: increment 5 writes `public/.htaccess`
-**additively and defensively** — documented as read-before-write, never deployed
-by blind overwrite, and the deploy step in increment 9 will refuse to clobber a
-server-side `.htaccess` it did not create.
+```
+$ ssh REDACTED-SSH-USER@REDACTED-SERVER-IP "ls -la ~/domains/eivinasn.com/public_html"
+```
+
+The listing shows dotfiles (the home directory listing in the same command
+returned `.ssh`, `.api_token`, `.profile`), and the document root contains none.
+
+Consequences:
+
+- **The `http→https` redirect, the trailing-slash 301 and the injected
+  `content-security-policy: upgrade-insecure-requests` all come from Hostinger's
+  server-level configuration**, not from a user file. Our `.htaccess` is purely
+  additive — there is nothing to fold in and nothing to clobber.
+- `Header always set` replaces rather than appends, so our CSP should supersede
+  the injected one. If Hostinger injects after `mod_headers` runs, the browser
+  would receive two CSP headers and enforce the intersection. That is still safe
+  — `upgrade-insecure-requests` carries no fetch directives — but
+  `npm run smoke` asserts the served CSP contains real directives, so the case
+  where ours is lost would fail loudly rather than silently.
+- The deploy pipeline's `.htaccess` guard stays in place regardless. It costs
+  nothing and protects against a file appearing later.
+
+Also established by the same listing: the real document root is
+**`/home/REDACTED-SSH-USER/domains/eivinasn.com/public_html`**, not `~/public_html`, and
+a leftover Hostinger `default.php` placeholder (16,390 B) sits in it — see
+[Q20](#q20).
 
 <a id="q10"></a>
 
@@ -329,3 +351,23 @@ automated gate, so every increment was verified by hand instead. That was
 affordable because the increments were small and each shipped its own
 verification script — by the time CI landed it was wiring up checks that already
 existed and already passed, rather than writing them from scratch.
+
+<a id="q20"></a>
+
+## Q20 · The leftover `default.php` on the server
+
+The document root contains `default.php` (16,390 B, dated 2026-01-12) — the
+Hostinger placeholder page from before the site was uploaded. It is not part of
+this repo, is not linked from anything, and is not served at any URL the site
+uses.
+
+**OPEN — low priority.** `rsync --delete` is off by default
+([increment 9](BACKLOG.md)), so a deploy will not remove it. Deleting it is one
+SSH command and the founder can do it any time:
+
+```
+rm ~/domains/eivinasn.com/public_html/default.php
+```
+
+Left alone rather than deleted unilaterally: it is the founder's server, the file
+is inert, and nothing in this programme depends on its removal.
