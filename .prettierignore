@@ -9,3 +9,6 @@ src/assets/
 # invalidates it.
 public/google*.html
 public/BingSiteAuth.xml
+
+# IndexNow key file — must be served byte-exact at the site root.
+public/[0-9a-f]*.txt

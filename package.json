@@ -24,7 +24,8 @@
     "check:links": "node scripts/check-links.mjs",
     "audit": "npm audit --audit-level=critical",
     "verify": "npm run format:check && npm run typecheck && npm run build && npm run validate:html && npm run check:links && npm run verify:a11y && npm run verify:csp && npm run measure:perf",
-    "smoke": "node scripts/smoke-deploy.mjs"
+    "smoke": "node scripts/smoke-deploy.mjs",
+    "ping:indexnow": "node scripts/ping-indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
