@@ -194,6 +194,28 @@ body {
   border-radius: 2px;
 }
 
+/* Print. The reveal blocks are opacity:0 until an IntersectionObserver runs,
+   and printing does not wait for it — the homepage printed blank below the
+   hero. Recruiters save portfolios as PDFs, so this is a real output. */
+@media print {
+  .reveal-on-scroll,
+  .reveal-opacity-only,
+  .animate-fade-up,
+  .fade-in {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .skip-link,
+  header {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
 /* Reduced motion. Two jobs: stop the movement, and — critically — make the
    JS-revealed content visible immediately, so a reduced-motion user is never
    left looking at an empty page. */

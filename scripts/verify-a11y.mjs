@@ -207,6 +207,54 @@ try {
       before.y < 0 && after.y >= 0,
       `y ${Math.round(before.y)} -> ${Math.round(after.y)}`
     );
+
+    // Visibility is not enough. Activating it must move focus to <main>, or the
+    // next Tab resumes from the top of the nav and the link achieved nothing.
+    // <main> is not focusable by default — it needs tabindex="-1".
+    await page.locator('.skip-link').press('Enter');
+    await page.waitForTimeout(300);
+    const focused = await page.evaluate(
+      () => document.activeElement?.id ?? document.activeElement?.tagName
+    );
+    check('activating it moves focus to #main', focused === 'main', `activeElement=${focused}`);
+  });
+
+  // -------------------------------------------------------------- overflow
+  //
+  // Every other gate in this repo ran at one desktop width, and a 320px
+  // horizontal overflow shipped to production between 768 and 1087px as a
+  // result. Measure the real scroll range, not scrollWidth: scrollWidth
+  // over-reports clipped content, and `html { scroll-behavior: smooth }` makes
+  // a plain scrollTo animate and read back 0 — hence behavior: 'instant'.
+  console.log('\n== no horizontal overflow at any width ==');
+  for (const width of [390, 768, 820, 1024, 1280, 1440]) {
+    await withPage({ viewport: { width, height: 900 } }, async (page) => {
+      await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+      const scrollX = await page.evaluate(() => {
+        document.documentElement.style.scrollBehavior = 'auto';
+        window.scrollTo({ left: 9999, top: 0, behavior: 'instant' });
+        return Math.round(window.scrollX);
+      });
+      check(`${width}px`, scrollX === 0, `scrollX=${scrollX}`);
+    });
+  }
+
+  // -------------------------------------------------------------- print
+  //
+  // The reveal blocks are opacity:0 until JS runs and printing does not wait,
+  // so the homepage printed blank below the hero. Recruiters PDF portfolios.
+  console.log('\n== page is not blank when printed ==');
+  await withPage({}, async (page) => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+    await page.emulateMedia({ media: 'print' });
+    await page.waitForTimeout(300);
+    const hidden = await page.evaluate(
+      () =>
+        [...document.querySelectorAll('.reveal-on-scroll,.reveal-opacity-only')].filter(
+          (e) => getComputedStyle(e).opacity === '0'
+        ).length
+    );
+    check('nothing hidden under print media', hidden === 0, `hidden=${hidden}`);
   });
 
   // -------------------------------------------------------------- reduced motion
