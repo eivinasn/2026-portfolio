@@ -20,9 +20,13 @@ Status: ✅ done · 🔄 in progress · ⏸ blocked · ⬜ not started
 | 9   | Deploy pipeline        | ⬜     |                                                         |
 | 10  | Indexing               | ⬜     | founder-only; needs Search Console access               |
 
-**Nothing reaches eivinasn.com until increment 9** — see
-[Q1](QUESTIONS.md#q1). The `example.com` canonical is fixed in the repo and
-still wrong in production.
+**SHIPPED 2026-08-13.** The deploy pipeline was armed and run; `npm run smoke`
+against production went from **22 failures to 0**. The `example.com` canonical
+is gone from eivinasn.com after seven months.
+
+Live measurements, taken after deploy: **107 KB over 17 requests** (was 945 KB
+over 18), **LCP 420 ms**, **CLS 0**, full load 983 ms. All six security headers
+present with a real `default-src 'none'` CSP.
 
 ---
 
