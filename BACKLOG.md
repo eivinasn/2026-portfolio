@@ -219,18 +219,37 @@ CSP), and incomplete config (warns loudly, emits nothing).
 Note: there is still no RUM baseline, so increment 7's gains are measured in the
 lab only. That is the main argument for arming analytics.
 
-## 9 · Deploy pipeline ⬜
+## 9 · Deploy pipeline ✅
 
-- Build → gate → mirror to Hostinger over SFTP → post-deploy smoke test against
-  the live URL.
-- **Dormant until armed by a repository variable.** Founder adds credentials as
-  GitHub secrets; Claude never handles them.
-- **Must not blind-mirror `dist/`.** 13 of 38 `public/` files diverge and for 3
-  images production is ahead of the repo ([Q8](QUESTIONS.md#q8)). Must also
-  refuse to clobber a server-side `.htaccess` it did not create
-  ([Q9](QUESTIONS.md#q9)).
-- Hostinger bans the runner IP after ~12 SSH deploys in a day. Deploy sparingly.
-- **This is the increment that finally ships increment 1's canonical fix.**
+`.github/workflows/deploy.yml`. **Dormant** — every step is gated on the
+repository variable `DEPLOY_ENABLED`, so until the founder sets it the workflow
+runs, skips everything and reports success.
+
+Build → all gates → protect `.htaccess` → rsync `dist/` → smoke test the live
+URL. Manual dispatch only, defaulting to a dry run: Hostinger bans the runner IP
+after roughly a dozen SSH connections in a day.
+
+- **Refuses to clobber an `.htaccess` it did not create** ([Q9](QUESTIONS.md#q9)).
+  The generated file carries a `GENERATED FILE` marker; if the remote one lacks
+  it, the deploy stops with instructions rather than replacing working config.
+  An override exists and takes a timestamped backup first.
+- **`--delete` is off by default.** The server holds files this repo has never
+  seen, and search-console verification files must survive a deploy.
+- Zero third-party actions; both `actions/*` pinned to commit SHAs.
+- Secrets are referenced, never echoed, and the key is removed in an `always()`
+  step.
+
+`npm run smoke` verifies production directly: all 5 pages self-canonical with no
+placeholder domain, every asset the metadata promises, all six security headers
+with a CSP that has real directives, slashless redirect, custom 404 with no
+third-party tracking, `/work/` returning 404 not 403, and every sitemap URL
+resolving.
+
+Run against production today it reports **22 failures** — exactly the audit
+findings. That is the correct answer, and it is the measure of what increment 9
+will fix the moment it is armed.
+
+**This is the increment that finally ships increment 1's canonical fix.**
 
 ## 10 · Indexing ⬜
 
