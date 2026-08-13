@@ -21,7 +21,7 @@ header come from server-level config, so our `.htaccess` is purely additive.
 See [Q9](QUESTIONS.md#q9).
 
 Also established: the real document root is
-`/home/REDACTED-SSH-USER/domains/eivinasn.com/public_html` — not `~/public_html`.
+`/home/uXXXXXXXXX/domains/eivinasn.com/public_html` — not `~/public_html`.
 
 ---
 
@@ -63,7 +63,7 @@ Repository → **Settings** → **Secrets and variables** → **Actions**.
 | `SSH_PORT`        | from 2a, usually `65002`                                                |
 | `SSH_PRIVATE_KEY` | contents of `~/.ssh/eivinasn_deploy`, including the BEGIN and END lines |
 | `SSH_KNOWN_HOSTS` | the full output of the `ssh-keyscan` above                              |
-| `DEPLOY_PATH`     | `/home/REDACTED-SSH-USER/domains/eivinasn.com/public_html`                     |
+| `DEPLOY_PATH`     | `/home/uXXXXXXXXX/domains/eivinasn.com/public_html`                     |
 
 | Variable         | Value  |
 | ---------------- | ------ |

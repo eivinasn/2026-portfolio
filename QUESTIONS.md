@@ -153,7 +153,7 @@ the file exists.
 which HTTP could not do:
 
 ```
-$ ssh REDACTED-SSH-USER@REDACTED-SERVER-IP "ls -la ~/domains/eivinasn.com/public_html"
+$ ssh uXXXXXXXXX@<server-ip> "ls -la ~/domains/eivinasn.com/public_html"
 ```
 
 The listing shows dotfiles (the home directory listing in the same command
@@ -175,7 +175,7 @@ Consequences:
   nothing and protects against a file appearing later.
 
 Also established by the same listing: the real document root is
-**`/home/REDACTED-SSH-USER/domains/eivinasn.com/public_html`**, not `~/public_html`, and
+**`/home/uXXXXXXXXX/domains/eivinasn.com/public_html`**, not `~/public_html`, and
 a leftover Hostinger `default.php` placeholder (16,390 B) sits in it — see
 [Q20](#q20).
 
