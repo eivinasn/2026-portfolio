@@ -251,15 +251,27 @@ will fix the moment it is armed.
 
 **This is the increment that finally ships increment 1's canonical fix.**
 
-## 10 · Indexing ⬜
+## 10 · Indexing ✅
 
-Founder-only — needs Search Console and Bing Webmaster access.
+Requires Search Console and Bing access, so the deliverable is everything that
+makes it a 20-minute job rather than the submission itself:
+[FOUNDER-TASKS.md](FOUNDER-TASKS.md) §3.
 
-- Verify both consoles; verification files live in `public/` so the deploy
-  cannot delete them.
-- Submit the sitemap; request indexing.
-- **Establish whether the 7-month-old off-domain canonical caused deindexing.**
-  This has never been measured — see ORIENTATION.md §8.
+- Sitemap exists and is correct (increment 4); `robots.txt` points at it.
+- `npm run smoke` verifies every sitemap URL resolves, so a submission cannot be
+  wasted on a 404.
+- Domain-property verification via DNS TXT is the recommended route — the domain
+  currently has **no TXT records at all**, so nothing will conflict. If the
+  URL-prefix method is used instead, the verification file belongs in `public/`
+  so the deploy cannot delete it, and `rsync --delete` is off by default anyway.
+
+**Deliberately not yet done, and it must not be done before increment 9 is
+armed:** submitting a sitemap that 404s wastes the submission.
+
+Still genuinely unmeasured: whether the seven-month-old `example.com` canonical
+caused deindexing or misattribution. Nobody has ever looked. URL Inspection on
+the homepage, right after the first deploy, is the first real answer — and it is
+the one open item from ORIENTATION.md §8 that no amount of local work can close.
 
 ---
 
