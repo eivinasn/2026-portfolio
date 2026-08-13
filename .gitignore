@@ -23,3 +23,6 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Private planning document — references besight.io internals, not for publication.
+portfolio-uplift-plan.md

@@ -1,0 +1,115 @@
+---
+// A short privacy notice. Deliberately indexable — a privacy policy people
+// cannot find is not a privacy policy.
+//
+// Why this exists at all, given the site collects nothing through forms: the
+// host keeps standard access logs containing IP addresses, which are personal
+// data under GDPR, and the mailto: link routes inbound personal data here. The
+// earlier position — "the site collects nothing, so a page would be inaccurate"
+// — was wrong on that point. A short accurate page is better than none.
+//
+// Deliberately NOT copied from besight.io: its contact-form, honeypot, IP-hash
+// and California sections. None of them are true here, and a policy describing
+// processing you do not do is worse than no policy.
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const updated = '13 August 2026';
+
+const sections = [
+  {
+    heading: 'The short version',
+    paragraphs: [
+      'This website sets no cookies, runs no analytics, and loads nothing from third-party servers. Fonts are served from this domain. Nobody is tracked here, and there is nothing to consent to.',
+      'Two things do involve personal data: the hosting provider keeps standard server logs, and if you email me I keep the email. Both are explained below.'
+    ]
+  },
+  {
+    heading: 'Who is responsible',
+    paragraphs: [
+      'Eivinas Norušaitis, an individual based in the European Union, is the controller for the personal data described on this page.',
+      'For any question about it, or to exercise any of the rights listed below, email e.norusaitis@gmail.com.'
+    ]
+  },
+  {
+    heading: 'What this site does not do',
+    paragraphs: [
+      'No cookies are set. No local storage or session storage is written. No analytics, tag manager, pixel, or advertising script is loaded. No fonts, scripts, images, or styles are requested from another domain.',
+      'Because nothing is stored on your device and nothing is shared with third parties, there is no cookie banner and no consent to give.'
+    ]
+  },
+  {
+    heading: 'What the server records automatically',
+    paragraphs: [
+      'This site is hosted by Hostinger. Like any web server, it writes an access log entry for each request: the requesting IP address, the time, the page requested, and the browser user agent.',
+      'IP addresses can be personal data, so this is named here rather than glossed over. The logs exist for security and reliability — spotting abuse, diagnosing errors — and are processed on the basis of legitimate interest under Article 6(1)(f) GDPR. They are kept and deleted by the hosting provider under its own retention schedule. They are not used to build a profile, not combined with anything else, and not shared.'
+    ]
+  },
+  {
+    heading: 'If you email me',
+    paragraphs: [
+      'The email addresses on this site are ordinary mailto: links. Sending one is your choice, and it carries whatever you put in it — your name, your address, and the contents of your message.',
+      'I use it to reply and to carry on the conversation, on the basis of taking steps at your request under Article 6(1)(b) GDPR. I keep correspondence for as long as the conversation is live and for up to 24 months afterwards, so I can pick up a thread later. Ask me to delete it sooner and I will.',
+      'Email is handled by Gmail, so Google processes it as my mail provider.'
+    ]
+  },
+  {
+    heading: 'Your rights',
+    paragraphs: [
+      'You can ask for a copy of the personal data I hold about you, ask me to correct it, ask me to delete it, ask me to restrict how I use it, or object to my using it. Email the address above and I will answer within a month.',
+      'If you think I have handled your data badly, you can complain to the data protection authority in the EU country where you live or work.'
+    ]
+  },
+  {
+    heading: 'Changes',
+    paragraphs: [
+      'If this notice changes, the date below changes with it. There is no version history — the current text is the whole notice.'
+    ]
+  }
+];
+---
+
+<Layout
+  title="Privacy - Eivinas Norušaitis"
+  description="What this website does and does not collect. No cookies, no analytics, no third-party requests."
+>
+  <header>
+    <Nav />
+  </header>
+
+  <main id="main" tabindex="-1" class="w-full mt-32 md:mt-40">
+    <section class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+      <span
+        class="text-[11px] font-semibold text-[#8a8a94] mb-6 border-b border-[#27272A] pb-1 uppercase tracking-wider inline-block"
+      >
+        Privacy
+      </span>
+      <h1
+        class="text-4xl md:text-6xl font-semibold text-white tracking-tighter leading-[1.05] mb-6"
+      >
+        Privacy notice
+      </h1>
+      <p class="text-sm text-[#8a8a94] mb-16">Last updated {updated}</p>
+
+      <div class="max-w-3xl space-y-12">
+        {
+          sections.map((section) => (
+            <div>
+              <h2 class="text-xl md:text-2xl font-semibold text-white tracking-tight mb-4">
+                {section.heading}
+              </h2>
+              <div class="space-y-4">
+                {section.paragraphs.map((paragraph) => (
+                  <p class="text-base md:text-lg text-[#A1A1AA] leading-relaxed">{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
