@@ -10,6 +10,8 @@
 // It deliberately re-checks the increment-1 bug by name. The whole programme
 // exists because a placeholder canonical shipped and nobody noticed for seven
 // months.
+import { readFile } from 'node:fs/promises';
+
 const BASE = (process.env.SMOKE_URL ?? 'https://eivinasn.com').replace(/\/$/, '');
 
 const PAGES = ['/', '/work/dexcom/', '/work/nfq/', '/work/vinted/', '/work/vmi/'];
@@ -143,7 +145,18 @@ console.log('\n== sitemap points at real pages ==');
 try {
   const xml = await (await get('/sitemap-0.xml')).text();
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-  check('sitemap lists 5 URLs', locs.length === 5, `found ${locs.length}`);
+  // Compare against what was actually built rather than a hardcoded count — the
+  // hardcoded 5 went stale the moment /privacy/ was added, and a smoke test that
+  // needs editing every time a page is added is a smoke test people switch off.
+  const builtXml = await readFile('dist/sitemap-0.xml', 'utf8').catch(() => null);
+  const builtLocs = builtXml
+    ? [...builtXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
+    : null;
+  check(
+    builtLocs ? 'sitemap matches the build' : 'sitemap is non-empty',
+    builtLocs ? locs.length === builtLocs.length : locs.length > 0,
+    builtLocs ? `live=${locs.length} built=${builtLocs.length}` : `found ${locs.length}`
+  );
   check(
     'no placeholder domain in sitemap',
     !locs.some((u) => u.includes('example.com')),
