@@ -1,8 +1,9 @@
-﻿# Dependencies
+# Dependencies
 node_modules/
 
 # Builds
 dist/
+.astro/
 .out/
 .cache/
 .vercel/
