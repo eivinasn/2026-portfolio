@@ -4,3 +4,8 @@ package-lock.json
 public/fonts/
 src/assets/
 .astro/
+
+# Search-engine verification tokens must be served byte-exact. Reformatting one
+# invalidates it.
+public/google*.html
+public/BingSiteAuth.xml

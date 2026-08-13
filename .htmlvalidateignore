@@ -1,0 +1,5 @@
+# Search-engine verification tokens are not HTML — they are a single line of
+# plain text that Google requires be served at a .html path. Validating them is
+# meaningless and they would fail every structural rule.
+google*.html
+BingSiteAuth.xml
