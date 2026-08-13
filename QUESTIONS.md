@@ -195,7 +195,11 @@ not stubs. 15 of 38 files in `public/` (1.27 MB) are referenced by nothing.
 
 **RULED — Founder, 2026-08-13: delete them.** _"Delete, if they're not visible
 and not used."_ All seven removed (1,246,431 B), along with the PDF in
-[Q11](#q11). They remain in git history if the case studies are ever finished.
+[Q11](#q11).
+
+**Amended 2026-08-14:** they no longer remain in git history either. `3b24b5a`
+purged them from all 34 commits before the repo was published ([Q23](#q23)), so
+recovering them means going back to the founder's originals, not to this repo.
 
 <a id="q11"></a>
 
@@ -205,8 +209,10 @@ Committed, copied into every build, linked from nothing, and 404s on the live
 server. Three options: wire it up as a download, delete it, or keep it as an
 unlinked direct-share URL (which does not currently work).
 
-**RULED — Founder, 2026-08-13: delete it.** Removed (78,379 B). Recoverable
-from git history.
+**RULED — Founder, 2026-08-13: delete it.** Removed (78,379 B).
+
+**Amended 2026-08-14:** no longer recoverable from git history — `3b24b5a`
+purged it from every commit before publication ([Q23](#q23)).
 
 <a id="q12"></a>
 

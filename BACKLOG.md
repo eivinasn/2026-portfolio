@@ -6,19 +6,24 @@ pass. Source of the ladder: `portfolio-uplift-plan.md`; source of the gap list:
 
 Status: ✅ done · 🔄 in progress · ⏸ blocked · ⬜ not started
 
-| #   | Increment              | Status | Commit                                                  |
-| --- | ---------------------- | ------ | ------------------------------------------------------- |
-| 0   | Orientation            | ✅     | `8337a49`                                               |
-| 1   | Critical SEO repair    | ✅     | `28fd664`                                               |
-| 2   | Process foundation     | ✅     | `ce2bdd9`                                               |
-| 3   | Accessibility pass     | ✅     | `503ad52` _(swapped with CI — [Q15](QUESTIONS.md#q15))_ |
-| 4   | SEO completion         | ✅     | `35b4e35`                                               |
-| 5   | Security hardening     | ✅     | `ca2912e` · _deploy_ gated on [Q9](QUESTIONS.md#q9)     |
-| 6   | CI gates               | ⬜     | _(swapped with accessibility)_                          |
-| 7   | Performance budgets    | ✅     | `b90007a`                                               |
-| 8   | Analytics + monitoring | ✅     | `83fd43c` · founder must arm                            |
-| 9   | Deploy pipeline        | ⬜     |                                                         |
-| 10  | Indexing               | ⬜     | founder-only; needs Search Console access               |
+| #   | Increment              | Status | Commit                                                                                     |
+| --- | ---------------------- | ------ | ------------------------------------------------------------------------------------------ |
+| 0   | Orientation            | ✅     | `15a090b`                                                                                  |
+| 1   | Critical SEO repair    | ✅     | `fe3f057`                                                                                  |
+| 2   | Process foundation     | ✅     | `52f7305`                                                                                  |
+| 3   | Accessibility pass     | ✅     | `efca621` _(swapped with CI — [Q15](QUESTIONS.md#q15))_                                    |
+| 4   | SEO completion         | ✅     | `e34365b`                                                                                  |
+| 5   | Security hardening     | ✅     | `7905f6d` · [Q9](QUESTIONS.md#q9) closed by `d5b9a0b`                                      |
+| 6   | CI gates               | ✅     | `c1fcec1` _(swapped with accessibility)_                                                   |
+| 7   | Performance budgets    | ✅     | `7370839`                                                                                  |
+| 8   | Analytics + monitoring | ✅     | `8c255e9` · slot deliberately inert ([Q22](QUESTIONS.md#q22))                              |
+| 9   | Deploy pipeline        | ✅     | `b3231c7` · armed; first deploy recorded in `df534c4`                                      |
+| 10  | Indexing               | ✅     | `1c3f39c` · the submission itself is founder-only, [FOUNDER-TASKS.md](FOUNDER-TASKS.md) §3 |
+
+**Every SHA above was re-resolved on 2026-08-14.** The history purge in
+`3b24b5a` rewrote all 34 commits, so the identifiers this table carried until
+then referred to objects that no longer exist in the repo. If a SHA here does
+not resolve, suspect another rewrite before suspecting a typo.
 
 **SHIPPED 2026-08-13.** The deploy pipeline was armed and run; `npm run smoke`
 against production went from **22 failures to 0**. The `example.com` canonical
@@ -279,13 +284,52 @@ the one open item from ORIENTATION.md §8 that no amount of local work can close
 
 ---
 
+## After the ladder · 2026-08-13 → 2026-08-14
+
+The ladder ended at increment 10. Everything since, in order, so the repo's
+record does not stop where the plan did:
+
+| Commit               | What                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------- |
+| `d5b9a0b`            | Q9 closed over SSH — there is no server-side `.htaccess`                                    |
+| `df534c4`            | first deploy recorded; production verified green                                            |
+| `b19769f`, `cf47a74` | Search Console and Bing verification tokens, in `public/` so a deploy cannot delete them    |
+| `aa1a953`            | shorter case-study `<title>` tags                                                           |
+| `b14290b`            | `www` 301s to the apex                                                                      |
+| `1eae07f`            | IndexNow, so Bing recrawls on demand                                                        |
+| `223f308`            | Astro 4 → 7 and Tailwind 3 → 4 merged; CTA removed; the 7 unused images and the PDF deleted |
+| `0250ecd`            | orphaned nav divider removed, hero copy, server details redacted                            |
+| `dc5d192`            | three live defects found by diffing against besight.io                                      |
+| `16feb16`            | privacy notice                                                                              |
+| `3b24b5a`            | history purged with `git filter-repo`, repo published, stale smoke assertion fixed          |
+| `8752d05`            | third-party marks disclaimer; gitleaks secret scanning over the full history                |
+| `1eb645e`            | Q23 — the cross-repo security audit, and two recommendations withdrawn after checking them  |
+| `21c620b`            | privacy notice names Lithuania and the State Data Protection Inspectorate                   |
+| `0622399`            | per-page OG cards, a mobile performance gate, three accessibility fixes                     |
+
+**Production state, verified 2026-08-14.** `npm run smoke` against
+https://eivinasn.com/ passes every check, and the live `Last-Modified` is
+2026-08-13T22:19:57Z on both the homepage and `og-dexcom.png` — so production
+serves `0622399`, the current tip.
+
+**Interpretation, not a log entry:** that timestamp matches the local `dist/`
+build exactly, and no Deploy workflow run exists after 20:47 UTC, so the deploy
+that put `0622399` live was made from the founder's machine rather than through
+`deploy.yml`. The last workflow dispatch (`16feb16`) failed on
+`ssh: connect to host … Connection timed out` — the documented Hostinger
+IP-throttling trap, not a pipeline defect.
+
+---
+
 ## Out of ladder
 
-| Item                     | Owner        | Note                                                                                                                         |
-| ------------------------ | ------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| Astro 4 → 7 upgrade      | Claude       | Deferred past increment 10 ([Q3](QUESTIONS.md#q3)). Also unlocks the image pipeline properly                                 |
-| Unused case-study images | Founder      | [Q10](QUESTIONS.md#q10) — 1.27 MB shipping unreferenced                                                                      |
-| `dexcom case study.pdf`  | Founder      | [Q11](QUESTIONS.md#q11)                                                                                                      |
-| Divergent live images    | Founder      | [Q8](QUESTIONS.md#q8) — may close automatically at increment 7                                                               |
-| `www` → apex redirect    | Founder/host | Both hostnames serve 200 with no redirect. Canonical now disambiguates for search, but a host-level redirect is the real fix |
-| Commit history           | —            | 9 of 10 pre-2026-08-13 commits say `your message`. Not rewritten                                                             |
+| Item                     | Owner        | Note                                                                                                                           |
+| ------------------------ | ------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| Astro 4 → 7 upgrade      | Claude       | **Done** — merged in `223f308`, with Tailwind 3 → 4 ([Q3](QUESTIONS.md#q3))                                                    |
+| Unused case-study images | Founder      | **Done** — ruled delete, removed in `223f308`, then purged from history by `3b24b5a` ([Q10](QUESTIONS.md#q10))                 |
+| `dexcom case study.pdf`  | Founder      | **Done** — ruled delete, and likewise purged from history ([Q11](QUESTIONS.md#q11))                                            |
+| Divergent live images    | Founder      | **Closed** by increment 7 — nothing on the server is authoritative any more ([Q8](QUESTIONS.md#q8))                            |
+| `www` → apex redirect    | Founder/host | **Done** — `b14290b`; smoke asserts the 301 preserves the path                                                                 |
+| Commit history           | —            | 9 of the 10 pre-2026-08-13 commits still say `your message`; `3b24b5a` rewrote blobs and one message body, not those           |
+| Analytics                | Founder      | Open — the increment-8 slot stays inert; besight.io ships none and "simple as besight.io" means none ([Q22](QUESTIONS.md#q22)) |
+| Deindexing check         | Founder      | Open — URL Inspection on the homepage is the only way to learn what the 7-month `example.com` canonical cost                   |
