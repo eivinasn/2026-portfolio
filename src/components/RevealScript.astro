@@ -19,11 +19,11 @@
 
 <script>
   const items = Array.from(
-    document.querySelectorAll('.reveal-on-scroll, .reveal-opacity-only')
+    document.querySelectorAll<HTMLElement>('.reveal-on-scroll, .reveal-opacity-only')
   );
 
-  const show = (el) => el.classList.add('is-visible');
-  const reached = (el) => el.getBoundingClientRect().top < window.innerHeight;
+  const show = (el: Element) => el.classList.add('is-visible');
+  const reached = (el: Element) => el.getBoundingClientRect().top < window.innerHeight;
 
   const observer = new IntersectionObserver(
     (entries, obs) => {

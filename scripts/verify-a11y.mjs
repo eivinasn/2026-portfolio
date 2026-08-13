@@ -127,13 +127,13 @@ try {
         visible: els.filter((e) => e.classList.contains('is-visible')).length,
         stranded: els.filter(
           (e) => getComputedStyle(e).opacity === '0' && e.getBoundingClientRect().bottom < 0
-        ).length,
+        ).length
       };
     });
 
   for (const [label, top] of [
     ['instant jump past content', 4500],
-    ['instant jump to bottom', 999999],
+    ['instant jump to bottom', 999999]
   ]) {
     await withPage({}, async (page) => {
       await page.goto(BASE + '/', { waitUntil: 'networkidle' });
@@ -143,7 +143,11 @@ try {
       }, top);
       await page.waitForTimeout(600);
       const r = await stranded(page);
-      check(label, r.stranded === 0, `total=${r.total} visible=${r.visible} stranded=${r.stranded}`);
+      check(
+        label,
+        r.stranded === 0,
+        `total=${r.total} visible=${r.visible} stranded=${r.stranded}`
+      );
     });
   }
 
@@ -175,7 +179,7 @@ try {
           footerInMain: !!(main && main.querySelector('footer')),
           skip: !!document.querySelector('.skip-link[href="#main"]'),
           mainId: !!document.querySelector('#main'),
-          nameless,
+          nameless
         };
       });
       check(
@@ -211,21 +215,27 @@ try {
     await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
     const r = await page.evaluate(() => {
       const els = [
-        ...document.querySelectorAll('.reveal-on-scroll,.reveal-opacity-only,.animate-fade-up'),
+        ...document.querySelectorAll('.reveal-on-scroll,.reveal-opacity-only,.animate-fade-up')
       ];
-      return { total: els.length, hidden: els.filter((e) => getComputedStyle(e).opacity === '0').length };
+      return {
+        total: els.length,
+        hidden: els.filter((e) => getComputedStyle(e).opacity === '0').length
+      };
     });
     check('nothing hidden', r.hidden === 0, `total=${r.total} hidden=${r.hidden}`);
   });
 
   // -------------------------------------------------------------- no JavaScript
   console.log('\n== JavaScript disabled ==');
-  await withPage({ viewport: { width: 390, height: 800 }, javaScriptEnabled: false }, async (page) => {
-    await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
-    const nav = await page.locator('#mobile-nav a').first().isVisible();
-    const about = await page.locator('#about').isVisible();
-    check('mobile nav and content still visible', nav && about, `nav=${nav} content=${about}`);
-  });
+  await withPage(
+    { viewport: { width: 390, height: 800 }, javaScriptEnabled: false },
+    async (page) => {
+      await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
+      const nav = await page.locator('#mobile-nav a').first().isVisible();
+      const about = await page.locator('#about').isVisible();
+      check('mobile nav and content still visible', nav && about, `nav=${nav} content=${about}`);
+    }
+  );
 } finally {
   await browser.close();
   stopServer();

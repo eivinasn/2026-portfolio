@@ -10,12 +10,12 @@ four case studies sharing a layout.
 Read [CLAUDE.md](CLAUDE.md) first — it holds the standing rules, constraints and
 definition of done. Then:
 
-| File | What it is for |
-| --- | --- |
-| [BACKLOG.md](BACKLOG.md) | The increment ladder and current status |
-| [QUESTIONS.md](QUESTIONS.md) | Every decision, its ruling, and the date |
-| [COMPONENTS.md](COMPONENTS.md) | The component library and the real colour palette |
-| [ORIENTATION.md](ORIENTATION.md) | The dated audit this work is based on |
+| File                             | What it is for                                    |
+| -------------------------------- | ------------------------------------------------- |
+| [BACKLOG.md](BACKLOG.md)         | The increment ladder and current status           |
+| [QUESTIONS.md](QUESTIONS.md)     | Every decision, its ruling, and the date          |
+| [COMPONENTS.md](COMPONENTS.md)   | The component library and the real colour palette |
+| [ORIENTATION.md](ORIENTATION.md) | The dated audit this work is based on             |
 
 ## Tech stack
 
@@ -60,7 +60,7 @@ GitHub secrets and are never handled by Claude.
 Two things to know before deploying anything:
 
 - **The live server is not a mirror of this repo.** 13 of 38 files in `public/`
-  diverge, and for three images production is *ahead* of the repo. A naive
+  diverge, and for three images production is _ahead_ of the repo. A naive
   `dist/` mirror would regress them. See [Q8](QUESTIONS.md#q8).
 - **Something configures the server that is not in version control** — the 301s
   and an injected CSP header come from somewhere. See [Q9](QUESTIONS.md#q9).

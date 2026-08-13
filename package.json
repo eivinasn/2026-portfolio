@@ -16,7 +16,14 @@
     "generate:htaccess": "node scripts/generate-htaccess.mjs",
     "verify:csp": "node scripts/verify-csp.mjs",
     "measure:perf": "node scripts/measure-perf.mjs",
-    "generate:fonts": "node scripts/subset-fonts.mjs"
+    "generate:fonts": "node scripts/subset-fonts.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "astro sync && astro check",
+    "validate:html": "html-validate \"dist/**/*.html\"",
+    "check:links": "node scripts/check-links.mjs",
+    "audit": "npm audit --audit-level=critical",
+    "verify": "npm run format:check && npm run typecheck && npm run build && npm run validate:html && npm run check:links && npm run verify:a11y && npm run verify:csp && npm run measure:perf"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
@@ -27,9 +34,15 @@
     "tailwindcss": "^3.4.9"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@axe-core/playwright": "^4.13.0",
     "axe-core": "^4.13.0",
+    "html-validate": "^11.6.2",
+    "linkinator": "^8.0.3",
     "playwright": "^1.62.1",
-    "png-to-ico": "^3.0.2"
+    "png-to-ico": "^3.0.2",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.9.3"
   }
 }

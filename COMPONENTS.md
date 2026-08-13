@@ -17,7 +17,7 @@ in one is not made in the other — check both, deliberately.
 ### `Layout.astro` — the homepage only
 
 ```astro
-<Layout title?={string} description?={string} image?={string}>
+<Layout title?={string} description?={string} image?={string} />
 ```
 
 All props optional; the defaults are the real homepage values. `index.astro`
@@ -27,12 +27,12 @@ currently passes none. Renders `<html>`, `<head>` (via `BaseHead`), `<body>`, a
 ### `CaseStudyLayout.astro` — the four case studies
 
 ```astro
-<CaseStudyLayout
-  title={string}      // also becomes "<title> - Case Study" and og:title
-  summary={string}    // also becomes the meta description and og:description
-  role?={string}
+<CaseStudyLayout title={string} also becomes "<title>
+  - Case Study" and og:title summary={string} // also becomes the meta description
+  and og:description role?={string}
   timeline?={string}
   platform?={string}
+  ></CaseStudyLayout
 >
 ```
 
@@ -41,6 +41,7 @@ the STAR sections, and its own footer. Imports `CaseStudyLayout.css` for
 `.fade-in` and `.bg-grid`.
 
 **Known defects** — see [BACKLOG.md](BACKLOG.md) §3:
+
 - The "Go back" link has **no accessible name**. The `<a>` wraps only an SVG; the
   visible words are a `<span>` outside it.
 - `<footer>` is nested inside `<main>`, so it is never a `contentinfo` landmark.
@@ -51,7 +52,12 @@ the STAR sections, and its own footer. Imports `CaseStudyLayout.css` for
 ### `BaseHead.astro`
 
 ```astro
-<BaseHead title={string} description?={string} image?={string} type?={'website'|'article'} />
+<BaseHead
+  title={string}
+  description?={string}
+  image?={string}
+  type?={'website' | 'article'}
+/>
 ```
 
 **Single source of truth for document metadata.** Added in increment 1, because
@@ -69,7 +75,7 @@ a purpose-built 1200×630 render.
 ### `Nav.astro`
 
 ```astro
-<Nav showCta?={boolean} />   // default true
+<Nav showCta?={boolean} /> // default true
 ```
 
 Homepage only. Fixed glass pill. Desktop centre links + LinkedIn/email/CTA;
@@ -85,9 +91,12 @@ navigation at all** — the desktop copies are `display:none` below `md`.
 
 ```astro
 <CaseStudyCard
-  href={string} tag={string} title={string}
-  description={string} imageUrl={string}
-  delay?={'delay-100'|'delay-200'|'delay-300'}
+  href={string}
+  tag={string}
+  title={string}
+  description={string}
+  imageUrl={string}
+  delay?={'delay-100' | 'delay-200' | 'delay-300'}
 />
 ```
 
@@ -127,15 +136,15 @@ utilities.
 
 Animation classes, all **unguarded by `prefers-reduced-motion`**:
 
-| Class | Effect |
-| --- | --- |
-| `.animate-fade-up` | one-shot entrance; hero only |
-| `.reveal-on-scroll` | `opacity: 0` → revealed by IntersectionObserver |
-| `.reveal-opacity-only` | as above, opacity only |
-| `.delay-100/200/300` | `transition-delay` |
-| `.fade-in` | case-study entrance (in `CaseStudyLayout.css`) |
-| `.glass-panel` | nav backdrop blur |
-| `.bg-grid` | case-study background grid |
+| Class                  | Effect                                          |
+| ---------------------- | ----------------------------------------------- |
+| `.animate-fade-up`     | one-shot entrance; hero only                    |
+| `.reveal-on-scroll`    | `opacity: 0` → revealed by IntersectionObserver |
+| `.reveal-opacity-only` | as above, opacity only                          |
+| `.delay-100/200/300`   | `transition-delay`                              |
+| `.fade-in`             | case-study entrance (in `CaseStudyLayout.css`)  |
+| `.glass-panel`         | nav backdrop blur                               |
+| `.bg-grid`             | case-study background grid                      |
 
 > **`.reveal-on-scroll` is the highest-risk thing in this codebase.** ~20
 > homepage blocks ship at `opacity: 0` and become visible only when inline JS
@@ -147,15 +156,15 @@ Animation classes, all **unguarded by `prefers-reduced-motion`**:
 
 Grep results, not the config. Contrast measured against `#050505`.
 
-| Hex | Uses | Ratio | Verdict |
-| --- | --- | --- | --- |
-| `#EDEDED` | 104 | 15.9:1 | pass |
-| `#A1A1AA` | 143 | 8.6:1 | pass |
-| `#71717A` | 23 | 4.22:1 | **fails AA** — all uses ≤14px |
-| `#52525B` | 62 | 2.64:1 | **fails AA and large-text** — includes half the `<h1>` |
-| `#1d4ed8` | 22 | 3.04:1 | **fails AA** as text — includes every "Read More" |
-| `#27272A` | 40 | — | borders |
-| `#0A0A0A` / `#121212` / `#18181B` / `#1F1F22` | — | — | surfaces |
+| Hex                                           | Uses | Ratio  | Verdict                                                |
+| --------------------------------------------- | ---- | ------ | ------------------------------------------------------ |
+| `#EDEDED`                                     | 104  | 15.9:1 | pass                                                   |
+| `#A1A1AA`                                     | 143  | 8.6:1  | pass                                                   |
+| `#71717A`                                     | 23   | 4.22:1 | **fails AA** — all uses ≤14px                          |
+| `#52525B`                                     | 62   | 2.64:1 | **fails AA and large-text** — includes half the `<h1>` |
+| `#1d4ed8`                                     | 22   | 3.04:1 | **fails AA** as text — includes every "Read More"      |
+| `#27272A`                                     | 40   | —      | borders                                                |
+| `#0A0A0A` / `#121212` / `#18181B` / `#1F1F22` | —    | —      | surfaces                                               |
 
 Remediation approach ruled in [Q16](QUESTIONS.md#q16): raise each usage to the
 threshold its own size requires, preserving hierarchy — not one blanket grey.

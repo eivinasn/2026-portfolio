@@ -37,7 +37,7 @@ async function plate(size, inset) {
     .resize(inner, inner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .toBuffer();
   return sharp({
-    create: { width: size, height: size, channels: 4, background: BG },
+    create: { width: size, height: size, channels: 4, background: BG }
   })
     .composite([{ input: resized, gravity: 'center' }])
     .png()

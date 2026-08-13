@@ -15,17 +15,17 @@ rather than asserted.
 
 ## 1 · Stack
 
-| | |
-| --- | --- |
-| Framework | Astro **4.16.19** (`package.json` says `^4.10.0`; latest is **7.2.1**) |
-| Styling | Tailwind **3.4.19** via `@astrojs/tailwind` 5.1.5, `applyBaseStyles: false` |
-| Package manager | **npm** (`package-lock.json`, 221 KB). No `pnpm-lock.yaml` |
-| Node | Built locally on **v26.5.0** / npm 11.17.0. No `engines`, no `.nvmrc`, no `.node-version`. README claims "18+" |
-| Source | 1,488 lines: 5 pages, 2 layouts, 4 components, 2 stylesheets |
-| Routes | `/`, `/work/dexcom`, `/work/nfq`, `/work/vinted`, `/work/vmi` |
-| `public/` | 38 files, 3.63 MB — 28 PNG (3.69 MB, **96.9%**), 8 SVG, 1 PDF, 1 webmanifest |
-| Client JS | 894 B inline on the homepage, 279 B on a case study. One CSS bundle (24 KB). No framework runtime |
-| Repo | **Private**, no description, no homepage URL, no licence, 61 tracked files, single `main` branch |
+|                 |                                                                                                                |
+| --------------- | -------------------------------------------------------------------------------------------------------------- |
+| Framework       | Astro **4.16.19** (`package.json` says `^4.10.0`; latest is **7.2.1**)                                         |
+| Styling         | Tailwind **3.4.19** via `@astrojs/tailwind` 5.1.5, `applyBaseStyles: false`                                    |
+| Package manager | **npm** (`package-lock.json`, 221 KB). No `pnpm-lock.yaml`                                                     |
+| Node            | Built locally on **v26.5.0** / npm 11.17.0. No `engines`, no `.nvmrc`, no `.node-version`. README claims "18+" |
+| Source          | 1,488 lines: 5 pages, 2 layouts, 4 components, 2 stylesheets                                                   |
+| Routes          | `/`, `/work/dexcom`, `/work/nfq`, `/work/vinted`, `/work/vmi`                                                  |
+| `public/`       | 38 files, 3.63 MB — 28 PNG (3.69 MB, **96.9%**), 8 SVG, 1 PDF, 1 webmanifest                                   |
+| Client JS       | 894 B inline on the homepage, 279 B on a case study. One CSS bundle (24 KB). No framework runtime              |
+| Repo            | **Private**, no description, no homepage URL, no licence, 61 tracked files, single `main` branch               |
 
 `npm run build` **succeeds** and is deterministic: the built `dist/*.html` is
 byte-identical to what the live server returns for all five pages.
@@ -122,88 +122,88 @@ The plan implicitly treats some of this as work. It is done:
 
 The plan says "fix the canonical." **That is under-scoped by a factor of five.**
 
-| Gap | Sev |
-| --- | --- |
-| `rel=canonical` on the homepage is `https://example.com` — live right now, telling Google to attribute the page to a domain the owner does not control | **Critical** |
-| `og:url` is also `https://example.com` — same literal, same line, so one edit fixes both | **Critical** |
-| **The 4 case-study pages have no canonical at all.** `CaseStudyLayout.astro` is a separate document with its own `<head>` that shares nothing with `Layout.astro` | **Critical** |
-| `astro.config.mjs:5` `site: 'https://example.com'` is currently **inert** (nothing reads `Astro.site`) — but `@astrojs/sitemap` in increment 4 will silently emit five `example.com` URLs | **Critical** |
-| `og:image` / `twitter:image` → `/og-image.jpg`, which **does not exist** and 404s. Every homepage share unfurls blank | **Critical** |
-| `www.eivinasn.com` returns **200 with byte-identical content and no redirect** — the site is duplicated across hostnames with no disambiguating signal. The plan never mentions host canonicalisation | **High** |
-| `/index.html` and `/work/<slug>/index.html` also serve 200 — 10 indexable URLs for 5 pages | **Medium** |
-| Any query string returns 200 with identical content and no canonical to collapse it — every UTM-tagged share mints a new URL | **High** |
+| Gap                                                                                                                                                                                                   | Sev          |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `rel=canonical` on the homepage is `https://example.com` — live right now, telling Google to attribute the page to a domain the owner does not control                                                | **Critical** |
+| `og:url` is also `https://example.com` — same literal, same line, so one edit fixes both                                                                                                              | **Critical** |
+| **The 4 case-study pages have no canonical at all.** `CaseStudyLayout.astro` is a separate document with its own `<head>` that shares nothing with `Layout.astro`                                     | **Critical** |
+| `astro.config.mjs:5` `site: 'https://example.com'` is currently **inert** (nothing reads `Astro.site`) — but `@astrojs/sitemap` in increment 4 will silently emit five `example.com` URLs             | **Critical** |
+| `og:image` / `twitter:image` → `/og-image.jpg`, which **does not exist** and 404s. Every homepage share unfurls blank                                                                                 | **Critical** |
+| `www.eivinasn.com` returns **200 with byte-identical content and no redirect** — the site is duplicated across hostnames with no disambiguating signal. The plan never mentions host canonicalisation | **High**     |
+| `/index.html` and `/work/<slug>/index.html` also serve 200 — 10 indexable URLs for 5 pages                                                                                                            | **Medium**   |
+| Any query string returns 200 with identical content and no canonical to collapse it — every UTM-tagged share mints a new URL                                                                          | **High**     |
 
 The literal edit is small — **two occurrences** (`Layout.astro:7`,
-`astro.config.mjs:5`) — but the *increment* is not, because
+`astro.config.mjs:5`) — but the _increment_ is not, because
 `CaseStudyLayout.astro` needs canonical support built from scratch, and
 `index.astro:9` calls `<Layout>` with **zero props**, so the prop plumbing is
 dead code that no caller overrides.
 
 ### Increment 2 — Process foundation
 
-| Gap | Sev |
-| --- | --- |
-| **9 of 10 commit messages are the literal string `your message`.** Git history carries zero information about what changed or why | **High** |
+| Gap                                                                                                                                                                                       | Sev        |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **9 of 10 commit messages are the literal string `your message`.** Git history carries zero information about what changed or why                                                         | **High**   |
 | All 10 commits are authored by `sootheandseoul`; the repo is owned by `heshipstech`. Local git has **no `user.name`/`user.email` at all** — a commit cannot be made until this is decided | **Medium** |
-| README documents Vercel/Netlify deploy; reality is Hostinger/LiteSpeed. `.gitignore` also carries `.vercel/`, `.netlify/` | **Medium** |
-| No `COMPONENTS.md`, and the component library is 4 files with two independently-maintained layouts that duplicate the same bugs | **Medium** |
+| README documents Vercel/Netlify deploy; reality is Hostinger/LiteSpeed. `.gitignore` also carries `.vercel/`, `.netlify/`                                                                 | **Medium** |
+| No `COMPONENTS.md`, and the component library is 4 files with two independently-maintained layouts that duplicate the same bugs                                                           | **Medium** |
 
 ### Increment 3 — CI gates
 
 Nobody had looked here. Two findings make the increment **unrunnable as written**:
 
-| Gap | Sev |
-| --- | --- |
-| **The typecheck gate cannot run.** No `tsconfig.json` and `@astrojs/check` is not installed — `astro check` has neither config nor binary | **High** |
-| **The dep-audit gate is red on day one.** `npm audit` reports **13 vulnerabilities (9 high)**. For `sharp`/`rollup`/`postcss` npm's remediation is `astro@7.2.1` — a **three-major-version upgrade** | **High** |
-| **The axe gate will fail immediately** — `link-name` (4 nameless links) and `color-contrast` (≥58 elements) are guaranteed violations. The plan puts CI (3) *before* the a11y fix (6) | **High** |
-| Playwright smoke tests will **not** catch the JS-gated-content bug: `opacity:0` elements remain in the DOM and the accessibility tree, so `textContent` assertions pass while sighted users see nothing | **High** |
-| No Node version pinned anywhere — CI has no defined runtime and the build is not reproducible | **Medium** |
-| **The repo is private**, so ten CI gates plus a weekly cron consume a metered Actions allowance. Lighthouse/Playwright/axe are the expensive kind. The ladder never prices this | **Medium** |
+| Gap                                                                                                                                                                                                     | Sev        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **The typecheck gate cannot run.** No `tsconfig.json` and `@astrojs/check` is not installed — `astro check` has neither config nor binary                                                               | **High**   |
+| **The dep-audit gate is red on day one.** `npm audit` reports **13 vulnerabilities (9 high)**. For `sharp`/`rollup`/`postcss` npm's remediation is `astro@7.2.1` — a **three-major-version upgrade**    | **High**   |
+| **The axe gate will fail immediately** — `link-name` (4 nameless links) and `color-contrast` (≥58 elements) are guaranteed violations. The plan puts CI (3) _before_ the a11y fix (6)                   | **High**   |
+| Playwright smoke tests will **not** catch the JS-gated-content bug: `opacity:0` elements remain in the DOM and the accessibility tree, so `textContent` assertions pass while sighted users see nothing | **High**   |
+| No Node version pinned anywhere — CI has no defined runtime and the build is not reproducible                                                                                                           | **Medium** |
+| **The repo is private**, so ten CI gates plus a weekly cron consume a metered Actions allowance. Lighthouse/Playwright/axe are the expensive kind. The ladder never prices this                         | **Medium** |
 
 ### Increment 4 — SEO completion
 
-| Gap | Sev |
-| --- | --- |
-| 4 of 5 pages have **no meta description, no OG tags, no Twitter card** — 80% of the site, and the pages most likely to be landed on from search | **High** |
-| No `robots.txt` (404), no `sitemap.xml` (404), `@astrojs/sitemap` not installed | **High** |
-| No JSON-LD of any kind. Plan wants `Person`; `WebSite` + `CreativeWork` also apply | **High** |
-| No `404.astro`. **The Hostinger fallback 404 loads Google Analytics (`G-9Q6H0QETRF`, `UA-26575989-46`), GTM and doubleclick.net under the `eivinasn.com` origin, with no consent banner** — third-party tracking that is not the owner's, live today | **High** |
-| Once `/og-image.jpg` exists it still needs to be an **absolute** URL; and no source asset exists to build it from — the only candidates are a 896×1200 portrait and four 540×302 thumbs vs the 1200×630 required. This is a design task, not a wiring task | **High** |
-| `/favicon.ico` 404s. `apple-touch-icon` points at an **SVG**, which iOS does not support. `site.webmanifest` declares one SVG icon; Android install needs 192px and 512px PNGs | **Medium** |
-| `public/favicon.svg` exists but is **referenced by nothing** — both layouts use `/logo-eivinas.svg`. Two different marks are in play | **Medium** |
-| `/work/` returns **403**, not 404 — a crawler or link checker walking the hierarchy upward hits a hard error | **High** |
+| Gap                                                                                                                                                                                                                                                        | Sev        |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| 4 of 5 pages have **no meta description, no OG tags, no Twitter card** — 80% of the site, and the pages most likely to be landed on from search                                                                                                            | **High**   |
+| No `robots.txt` (404), no `sitemap.xml` (404), `@astrojs/sitemap` not installed                                                                                                                                                                            | **High**   |
+| No JSON-LD of any kind. Plan wants `Person`; `WebSite` + `CreativeWork` also apply                                                                                                                                                                         | **High**   |
+| No `404.astro`. **The Hostinger fallback 404 loads Google Analytics (`G-9Q6H0QETRF`, `UA-26575989-46`), GTM and doubleclick.net under the `eivinasn.com` origin, with no consent banner** — third-party tracking that is not the owner's, live today       | **High**   |
+| Once `/og-image.jpg` exists it still needs to be an **absolute** URL; and no source asset exists to build it from — the only candidates are a 896×1200 portrait and four 540×302 thumbs vs the 1200×630 required. This is a design task, not a wiring task | **High**   |
+| `/favicon.ico` 404s. `apple-touch-icon` points at an **SVG**, which iOS does not support. `site.webmanifest` declares one SVG icon; Android install needs 192px and 512px PNGs                                                                             | **Medium** |
+| `public/favicon.svg` exists but is **referenced by nothing** — both layouts use `/logo-eivinas.svg`. Two different marks are in play                                                                                                                       | **Medium** |
+| `/work/` returns **403**, not 404 — a crawler or link checker walking the hierarchy upward hits a hard error                                                                                                                                               | **High**   |
 
 ### Increment 5 — Security hardening
 
-| Gap | Sev |
-| --- | --- |
-| **Absent on every response:** HSTS, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`. The only CSP is Hostinger's `upgrade-insecure-requests`, which has no directives and restricts nothing | **High** |
+| Gap                                                                                                                                                                                                                                                                                                                        | Sev          |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| **Absent on every response:** HSTS, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`. The only CSP is Hostinger's `upgrade-insecure-requests`, which has no directives and restricts nothing                                                                                           | **High**     |
 | **⚠ A naive CSP will blank the homepage.** Astro emits the reveal logic as an **inline** `<script type="module">`. `script-src 'self'` blocks it, `.is-visible` is never added, and ~20 content blocks stay at `opacity: 0`. Needs build-time hashes (5 inline scripts across 2 distinct bodies; 4 inline styles across 1) | **Critical** |
-| HTML responses carry **no `Cache-Control` at all** — browsers fall back to heuristic freshness against a 7-month-old `Last-Modified`. A fix could be deployed and not seen | **High** |
-| No `.htaccess` exists in the repo, yet the server already does 301s and injects a CSP header. **Something is configured server-side that is not in version control** — increment 5 risks overwriting behaviour it cannot see | **High** |
-| `.htaccess` is not a build output. An SFTP mirror of `dist/` will either fail to upload it or delete it | **Medium** |
-| `/site.webmanifest` is served as `text/plain`, so browsers may reject it — and LiteSpeed's cache rule keys off content-type, so it also gets no caching | **Medium** |
+| HTML responses carry **no `Cache-Control` at all** — browsers fall back to heuristic freshness against a 7-month-old `Last-Modified`. A fix could be deployed and not seen                                                                                                                                                 | **High**     |
+| No `.htaccess` exists in the repo, yet the server already does 301s and injects a CSP header. **Something is configured server-side that is not in version control** — increment 5 risks overwriting behaviour it cannot see                                                                                               | **High**     |
+| `.htaccess` is not a build output. An SFTP mirror of `dist/` will either fail to upload it or delete it                                                                                                                                                                                                                    | **Medium**   |
+| `/site.webmanifest` is served as `text/plain`, so browsers may reject it — and LiteSpeed's cache rule keys off content-type, so it also gets no caching                                                                                                                                                                    | **Medium**   |
 
 ### Increment 6 — Accessibility
 
-| Gap | Sev |
-| --- | --- |
-| **The "Go back" link on all 4 case studies has no accessible name.** The anchor wraps only an SVG; the visible words are a `<span>` *outside* it. It is the only in-page route from a case study back to the site | **Critical** |
-| **`#52525B` = 2.64:1** on `#050505` — fails AA and even the 3:1 large-text floor. 35 rendered elements + 29 `::marker` declarations. **This includes half the homepage `<h1>`** | **Critical** |
-| **`#1d4ed8` = 3.04:1** — 22 text uses including "Read More", the primary path into every case study | **Critical** |
-| `#71717A` = 4.22:1 — 23 elements, all at 10–14px, so no large-text exemption | **High** |
-| **~20 homepage blocks are `opacity: 0` and revealed only by JS, with no `<noscript>` anywhere.** JS off → everything below the hero is invisible | **High** |
-| **With JS off, mobile has no navigation at all** — the four destinations exist only inside the JS-toggled panel, and the desktop copies are `display:none` below 768px | **High** |
-| `<footer>` is nested **inside `<main>`** on all 5 pages, so it is never exposed as a `contentinfo` landmark | **High** |
-| No skip link on any page. No `<header>`/banner landmark — the fixed nav sits in a bare `<div>` | **High** |
-| No `prefers-reduced-motion` guard anywhere — not on the animations, not on `scroll-behavior: smooth` | **High** |
-| Mobile menu has no focus management: focus never enters the panel, never returns to the trigger on Escape | **High** |
-| **WCAG 2.2 SC 2.4.11** fails — no `scroll-padding-top` on `<html>` while a fixed nav overlays the viewport, so focused controls can sit under the nav | **Medium** |
-| Case-study pages have **only 2 links each**, one of them nameless and one `href="#"` | **Medium** |
-| No `:focus-visible` styling anywhere (design gap; not an axe violation) | **Medium** |
-| 4 identical context-free "Read More" links; 4 thumbnails whose `alt` duplicates the adjacent `<h3>`; 10 case-study images with generic `alt` | **Medium** |
-| 20 case-study `<section>`s are labelled by a `<span>`, not a heading, so the Situation/Task/Action/Result structure is invisible to assistive tech | **Medium** |
+| Gap                                                                                                                                                                                                               | Sev          |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| **The "Go back" link on all 4 case studies has no accessible name.** The anchor wraps only an SVG; the visible words are a `<span>` _outside_ it. It is the only in-page route from a case study back to the site | **Critical** |
+| **`#52525B` = 2.64:1** on `#050505` — fails AA and even the 3:1 large-text floor. 35 rendered elements + 29 `::marker` declarations. **This includes half the homepage `<h1>`**                                   | **Critical** |
+| **`#1d4ed8` = 3.04:1** — 22 text uses including "Read More", the primary path into every case study                                                                                                               | **Critical** |
+| `#71717A` = 4.22:1 — 23 elements, all at 10–14px, so no large-text exemption                                                                                                                                      | **High**     |
+| **~20 homepage blocks are `opacity: 0` and revealed only by JS, with no `<noscript>` anywhere.** JS off → everything below the hero is invisible                                                                  | **High**     |
+| **With JS off, mobile has no navigation at all** — the four destinations exist only inside the JS-toggled panel, and the desktop copies are `display:none` below 768px                                            | **High**     |
+| `<footer>` is nested **inside `<main>`** on all 5 pages, so it is never exposed as a `contentinfo` landmark                                                                                                       | **High**     |
+| No skip link on any page. No `<header>`/banner landmark — the fixed nav sits in a bare `<div>`                                                                                                                    | **High**     |
+| No `prefers-reduced-motion` guard anywhere — not on the animations, not on `scroll-behavior: smooth`                                                                                                              | **High**     |
+| Mobile menu has no focus management: focus never enters the panel, never returns to the trigger on Escape                                                                                                         | **High**     |
+| **WCAG 2.2 SC 2.4.11** fails — no `scroll-padding-top` on `<html>` while a fixed nav overlays the viewport, so focused controls can sit under the nav                                                             | **Medium**   |
+| Case-study pages have **only 2 links each**, one of them nameless and one `href="#"`                                                                                                                              | **Medium**   |
+| No `:focus-visible` styling anywhere (design gap; not an axe violation)                                                                                                                                           | **Medium**   |
+| 4 identical context-free "Read More" links; 4 thumbnails whose `alt` duplicates the adjacent `<h3>`; 10 case-study images with generic `alt`                                                                      | **Medium**   |
+| 20 case-study `<section>`s are labelled by a `<span>`, not a heading, so the Situation/Task/Action/Result structure is invisible to assistive tech                                                                | **Medium**   |
 
 **Note:** the Tailwind tokens are effectively unused — the 7 colours in
 `tailwind.config.cjs` are referenced exactly twice, both on `global.css:8`.
@@ -215,41 +215,41 @@ token list at all**, so fixing the tokens fixes nothing.
 
 The plan says measure first. Measured:
 
-| | |
-| --- | --- |
+|                     |                                                                |
+| ------------------- | -------------------------------------------------------------- |
 | Homepage first load | **944,955 B (~923 KiB)** over **18 requests** to **3 origins** |
-| Images | **797,882 B — 98.4%** of it |
-| JavaScript | 894 B. There is no JS problem |
-| Server | ~150 ms TTFB, 0.22 s total |
+| Images              | **797,882 B — 98.4%** of it                                    |
+| JavaScript          | 894 B. There is no JS problem                                  |
+| Server              | ~150 ms TTFB, 0.22 s total                                     |
 
-| Gap | Sev |
-| --- | --- |
-| Every photographic asset is PNG; 13 PNGs over 100 KB total 3.22 MB. AVIF q70 cuts the homepage raster payload **85.7%** (781,023 → 111,973 B) | **High** |
-| **Zero responsive images** — 0 `srcset`, 0 `sizes`, 0 `<picture>` across 22 `<img>`. Images are simultaneously **over**-delivered at 1× and **under**-delivered at 2× — "just compress them" is not sufficient | **High** |
-| **16 of 22 images have no width/height** and no aspect-ratio protection (6 are already protected) — direct CLS exposure | **High** |
-| No `loading="lazy"` anywhere; 4 below-fold thumbnails (496 KB) load eagerly against the LCP hero | **High** |
-| No `fetchpriority`/`preload` on the LCP image | **Medium** |
-| Astro's image pipeline is **entirely unused** despite `sharp` already being installed — everything is raw `<img>` to `/public`, copied byte-for-byte | **High** |
-| Google Fonts CDN: one render-blocking cross-origin stylesheet, two extra origins, visitor IPs to a third party. **Smaller than it looks** — Inter resolves to a single variable-font file | **Medium** |
-| All 4 internal case-study links omit the trailing slash and eat a **301 on every click and every crawl** | **Medium** |
+| Gap                                                                                                                                                                                                            | Sev        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| Every photographic asset is PNG; 13 PNGs over 100 KB total 3.22 MB. AVIF q70 cuts the homepage raster payload **85.7%** (781,023 → 111,973 B)                                                                  | **High**   |
+| **Zero responsive images** — 0 `srcset`, 0 `sizes`, 0 `<picture>` across 22 `<img>`. Images are simultaneously **over**-delivered at 1× and **under**-delivered at 2× — "just compress them" is not sufficient | **High**   |
+| **16 of 22 images have no width/height** and no aspect-ratio protection (6 are already protected) — direct CLS exposure                                                                                        | **High**   |
+| No `loading="lazy"` anywhere; 4 below-fold thumbnails (496 KB) load eagerly against the LCP hero                                                                                                               | **High**   |
+| No `fetchpriority`/`preload` on the LCP image                                                                                                                                                                  | **Medium** |
+| Astro's image pipeline is **entirely unused** despite `sharp` already being installed — everything is raw `<img>` to `/public`, copied byte-for-byte                                                           | **High**   |
+| Google Fonts CDN: one render-blocking cross-origin stylesheet, two extra origins, visitor IPs to a third party. **Smaller than it looks** — Inter resolves to a single variable-font file                      | **Medium** |
+| All 4 internal case-study links omit the trailing slash and eat a **301 on every click and every crawl**                                                                                                       | **Medium** |
 
 ### Increments 8–10
 
-| Gap | Sev |
-| --- | --- |
-| No analytics or monitoring — zero visibility into traffic, and **no RUM baseline to measure increment 7 against** | **Medium** |
-| No ownership verification — no meta tag, no DNS TXT. Neither Search Console nor Bing has been started | **Medium** |
-| **Increment 10 has no measured starting point.** Whether the 7-month-old off-domain canonical has already deindexed the site is unknown — and the plan schedules the damage assessment *last* | **Medium** |
+| Gap                                                                                                                                                                                           | Sev        |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| No analytics or monitoring — zero visibility into traffic, and **no RUM baseline to measure increment 7 against**                                                                             | **Medium** |
+| No ownership verification — no meta tag, no DNS TXT. Neither Search Console nor Bing has been started                                                                                         | **Medium** |
+| **Increment 10 has no measured starting point.** Whether the 7-month-old off-domain canonical has already deindexed the site is unknown — and the plan schedules the damage assessment _last_ | **Medium** |
 
 ### Not in the plan at all
 
-| Gap | Sev |
-| --- | --- |
-| **15 of 38 `public/` files (1.27 MB, 34%) are referenced by nothing** and ship to production as dead weight | **Medium** |
+| Gap                                                                                                                                                                                                              | Sev        |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **15 of 38 `public/` files (1.27 MB, 34%) are referenced by nothing** and ship to production as dead weight                                                                                                      | **Medium** |
 | **Two case studies are visibly unfinished.** Dexcom ships 5 images and renders 1; NFQ ships 4 and renders 1. Vinted and VMI render all 4. The unused Dexcom assets are 446/383/380 KB — finished work, not stubs | **Medium** |
-| `e.norusaitis@gmail.com` appears in plain unobfuscated HTML **4 times**, fully scrapeable | **Medium** |
-| The 4 case studies have **no contact route at all** — no email, no footer, no booking link. A visitor from search can only convert by navigating back | **Medium** |
-| `dexcom case study.pdf` is committed, built, linked from nothing, and 404s on live | **Medium** |
+| `e.norusaitis@gmail.com` appears in plain unobfuscated HTML **4 times**, fully scrapeable                                                                                                                        | **Medium** |
+| The 4 case studies have **no contact route at all** — no email, no footer, no booking link. A visitor from search can only convert by navigating back                                                            | **Medium** |
+| `dexcom case study.pdf` is committed, built, linked from nothing, and 404s on live                                                                                                                               | **Medium** |
 
 ---
 
@@ -282,7 +282,7 @@ The plan says measure first. Measured:
 **Increments 1–8 all produce repo changes, and the repo has no path to
 production.** No CI, no deploy script, no deploy tooling; the only deploy in
 project history was a manual upload 212 days ago. Increment 9 — the only
-increment that creates a delivery path — is specified as *dormant until armed*.
+increment that creates a delivery path — is specified as _dormant until armed_.
 
 **So the critical canonical fix in increment 1 does not reach eivinasn.com until
 increment 9 runs.** Three ways out, and it is a founder call:
@@ -342,15 +342,15 @@ These carry into QUESTIONS.md in increment 2. Ordered by what blocks soonest.
 Deploy ordering was ruled on: **the plan runs 1→10 as written**. One ordering
 recommendation remains open, and it is the only one still worth raising.
 
-| # | Increment | Note |
-| --- | --- | --- |
-| 1 | Critical SEO repair | **Scope is all 5 pages**, not just `Layout.astro` — plus `astro.config.mjs`, `og:image`, and the `www`/`index.html` duplication. Verified against the local build; ships at increment 9 |
-| 2 | Process foundation | + commit convention (history is 9× `your message`), + the rulings above |
-| 3 | CI gates | **⚠ Cannot go green as specified.** Axe fails on day one; typecheck has no config or binary; dep-audit needs the Astro decision |
-| 4 | SEO completion | unchanged |
-| 5 | Security hardening | **Build-time CSP hashes required** or the homepage blanks. Extend the host's config, don't replace it. Blocked on the hPanel check |
-| 6 | Accessibility pass | unchanged |
-| 7–10 | as written | unchanged |
+| #    | Increment           | Note                                                                                                                                                                                    |
+| ---- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Critical SEO repair | **Scope is all 5 pages**, not just `Layout.astro` — plus `astro.config.mjs`, `og:image`, and the `www`/`index.html` duplication. Verified against the local build; ships at increment 9 |
+| 2    | Process foundation  | + commit convention (history is 9× `your message`), + the rulings above                                                                                                                 |
+| 3    | CI gates            | **⚠ Cannot go green as specified.** Axe fails on day one; typecheck has no config or binary; dep-audit needs the Astro decision                                                         |
+| 4    | SEO completion      | unchanged                                                                                                                                                                               |
+| 5    | Security hardening  | **Build-time CSP hashes required** or the homepage blanks. Extend the host's config, don't replace it. Blocked on the hPanel check                                                      |
+| 6    | Accessibility pass  | unchanged                                                                                                                                                                               |
+| 7–10 | as written          | unchanged                                                                                                                                                                               |
 
 **Still open — increment 3 vs 6.** Landing the CI gates before the accessibility
 fixes means axe goes red immediately on `link-name` and `color-contrast`. Either

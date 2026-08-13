@@ -30,7 +30,7 @@ const BUDGET = {
   cssBytes: 10 * 1024,
   requests: 20,
   cls: 0.1,
-  lcp: 1500,
+  lcp: 1500
 };
 
 const TYPES = {
@@ -48,7 +48,7 @@ const TYPES = {
   '.webp': ['image/webp', false],
   '.ico': ['image/x-icon', false],
   '.woff2': ['font/woff2', false],
-  '.pdf': ['application/pdf', false],
+  '.pdf': ['application/pdf', false]
 };
 
 const server = createServer(async (req, res) => {
@@ -133,14 +133,16 @@ for (const path of PAGES) {
     ['css', byType.css ?? 0, BUDGET.cssBytes, kb],
     ['requests', requests, BUDGET.requests, String],
     ['CLS', vitals.cls, BUDGET.cls, String],
-    ['LCP (ms)', vitals.lcp, BUDGET.lcp, String],
+    ['LCP (ms)', vitals.lcp, BUDGET.lcp, String]
   ];
 
   console.log(`\n${path}   LCP ${vitals.lcp} ms`);
   for (const [label, value, limit, fmt] of checks) {
     const ok = value <= limit;
     if (!ok) failures += 1;
-    console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${label.padEnd(16)} ${fmt(value).padStart(10)}  budget ${fmt(limit)}`);
+    console.log(
+      `  ${ok ? 'PASS' : 'FAIL'}  ${label.padEnd(16)} ${fmt(value).padStart(10)}  budget ${fmt(limit)}`
+    );
   }
   console.log(
     '        breakdown: ' +

@@ -16,9 +16,10 @@
   font-weight: 300 700;
   font-display: swap;
   src: url('/fonts/inter-latin-ext-var.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
-    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
-    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
 }
 @font-face {
   font-family: 'Inter';
@@ -26,12 +27,14 @@
   font-weight: 300 700;
   font-display: swap;
   src: url('/fonts/inter-latin-var.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-:root { color-scheme: dark; }
+:root {
+  color-scheme: dark;
+}
 html {
   scroll-behavior: smooth;
   /* The nav is fixed and ~72px tall. Without this, fragment navigation and
@@ -40,16 +43,25 @@ html {
 }
 body {
   @apply antialiased bg-background text-textPrimary;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
 .font-heading {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   letter-spacing: -0.02em;
 }
 
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 .glass-panel {
   background: rgba(20, 20, 20, 0.7);
@@ -63,8 +75,14 @@ body {
 
 /* Animations disabled */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translate3d(0, 16px, 0); }
-  to { opacity: 1; transform: translate3d(0, 0, 0); }
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 .animate-fade-up {
   animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
@@ -75,7 +93,9 @@ body {
 .reveal-on-scroll {
   opacity: 0;
   transform: translate3d(0, 12px, 0);
-  transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
   backface-visibility: hidden;
   will-change: opacity, transform;
   contain: paint;
@@ -84,25 +104,53 @@ body {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
-.backdrop-blur-md { transform: translateZ(0); -webkit-transform: translateZ(0); will-change: transform; }
+.backdrop-blur-md {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+}
 
 /* Opacity-only reveal disabled */
-.reveal-opacity-only { opacity: 0; transition: opacity 500ms ease-out; will-change: opacity; }
-.reveal-opacity-only.is-visible { opacity: 1; }
-.delay-100 { transition-delay: 100ms; }
-.delay-200 { transition-delay: 200ms; }
-.delay-300 { transition-delay: 300ms; }
+.reveal-opacity-only {
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+  will-change: opacity;
+}
+.reveal-opacity-only.is-visible {
+  opacity: 1;
+}
+.delay-100 {
+  transition-delay: 100ms;
+}
+.delay-200 {
+  transition-delay: 200ms;
+}
+.delay-300 {
+  transition-delay: 300ms;
+}
 
 /* Entrance stagger. These replaced inline style="animation-delay: …" attributes
    in increment 5: a CSP cannot hash a style attribute, so keeping them would
    have forced style-src-attr 'unsafe-inline' across the whole site to stagger
    six animations. */
-.anim-delay-1 { animation-delay: 0.1s; }
-.anim-delay-2 { animation-delay: 0.2s; }
-.anim-delay-3 { animation-delay: 0.3s; }
-.anim-delay-4 { animation-delay: 0.4s; }
-.anim-delay-5 { animation-delay: 0.5s; }
-.anim-delay-6 { animation-delay: 0.6s; }
+.anim-delay-1 {
+  animation-delay: 0.1s;
+}
+.anim-delay-2 {
+  animation-delay: 0.2s;
+}
+.anim-delay-3 {
+  animation-delay: 0.3s;
+}
+.anim-delay-4 {
+  animation-delay: 0.4s;
+}
+.anim-delay-5 {
+  animation-delay: 0.5s;
+}
+.anim-delay-6 {
+  animation-delay: 0.6s;
+}
 
 ::selection {
   background: #1e40af;
@@ -166,4 +214,3 @@ body {
     animation: none !important;
   }
 }
-

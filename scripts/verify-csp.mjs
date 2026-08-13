@@ -32,7 +32,7 @@ const TYPES = {
   '.ico': 'image/x-icon',
   '.xml': 'application/xml',
   '.txt': 'text/plain; charset=utf-8',
-  '.pdf': 'application/pdf',
+  '.pdf': 'application/pdf'
 };
 
 // Pull the `Header always set NAME "VALUE"` lines straight out of the generated
@@ -65,7 +65,10 @@ const server = createServer(async (req, res) => {
   const file = join(DIST, normalize(path).replace(/^(\.\.[/\\])+/, ''));
   try {
     const body = await readFile(file);
-    res.writeHead(200, { ...headers, 'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream' });
+    res.writeHead(200, {
+      ...headers,
+      'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream'
+    });
     res.end(body);
   } catch {
     const body = await readFile(join(DIST, '404.html')).catch(() => 'Not found');
@@ -111,12 +114,13 @@ for (const path of PAGES) {
     const els = [...document.querySelectorAll('.reveal-on-scroll,.reveal-opacity-only')];
     return {
       stranded: els.filter((e) => getComputedStyle(e).opacity === '0').length,
-      styled: getComputedStyle(document.body).backgroundColor,
+      styled: getComputedStyle(document.body).backgroundColor
     };
   });
   const stylesApplied = state.styled === 'rgb(5, 5, 5)';
 
-  const ok = !violations.length && !errors.length && !blocked.length && !state.stranded && stylesApplied;
+  const ok =
+    !violations.length && !errors.length && !blocked.length && !state.stranded && stylesApplied;
   if (!ok) failures += 1;
   console.log(
     `  ${ok ? 'PASS' : 'FAIL'}  ${path} — violations=${violations.length} errors=${errors.length} ` +
@@ -131,5 +135,7 @@ for (const path of PAGES) {
 await browser.close();
 server.close();
 
-console.log(`\n${failures === 0 ? 'CSP VERIFIED — nothing blocked' : `${failures} PAGE(S) FAILED`}\n`);
+console.log(
+  `\n${failures === 0 ? 'CSP VERIFIED — nothing blocked' : `${failures} PAGE(S) FAILED`}\n`
+);
 process.exit(failures === 0 ? 0 : 1);

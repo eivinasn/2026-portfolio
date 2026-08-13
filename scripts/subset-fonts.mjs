@@ -20,7 +20,7 @@ import { glob } from 'node:fs/promises';
 const run = promisify(execFile);
 const SRC = {
   latin: 'public/fonts/inter-latin-var.woff2',
-  'latin-ext': 'public/fonts/inter-latin-ext-var.woff2',
+  'latin-ext': 'public/fonts/inter-latin-ext-var.woff2'
 };
 
 // Scan the built output for every character that actually appears in text.
@@ -46,7 +46,9 @@ for await (const file of glob('dist/**/*.html')) {
 for (let c = 0x20; c <= 0xff; c += 1) used.add(c);
 
 const extras = [...used].filter((c) => c > 0xff).sort((a, b) => a - b);
-console.log(`Characters above U+00FF in use: ${extras.map((c) => 'U+' + c.toString(16).toUpperCase().padStart(4, '0')).join(' ') || 'none'}`);
+console.log(
+  `Characters above U+00FF in use: ${extras.map((c) => 'U+' + c.toString(16).toUpperCase().padStart(4, '0')).join(' ') || 'none'}`
+);
 
 const unicodes = [...used]
   .sort((a, b) => a - b)
@@ -65,12 +67,14 @@ for (const [name, src] of Object.entries(SRC)) {
     '--flavor=woff2',
     '--with-zopfli',
     '--desubroutinize',
-    `--output-file=${out}`,
+    `--output-file=${out}`
   ]);
   const after = (await stat(out)).size;
   // Replace the original so the CSS URL stays stable.
   await writeFile(src, await readFile(out));
   await run('rm', [out]);
   const saved = (((before - after) / before) * 100).toFixed(1);
-  console.log(`  ${name.padEnd(10)} ${before.toLocaleString()} B -> ${after.toLocaleString()} B  (-${saved}%)`);
+  console.log(
+    `  ${name.padEnd(10)} ${before.toLocaleString()} B -> ${after.toLocaleString()} B  (-${saved}%)`
+  );
 }

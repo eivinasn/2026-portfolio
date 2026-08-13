@@ -10,13 +10,14 @@ Two kinds of ruling:
 
 - **Founder** — decided by Eivinas. Authoritative.
 - **Claude (pending review)** — decided by Claude under a standing instruction to
-  proceed without blocking (2026-08-13: *"just continue without me until
-  completion, unless critical"*). Reversible. Flagged for review; the rationale
+  proceed without blocking (2026-08-13: _"just continue without me until
+  completion, unless critical"_). Reversible. Flagged for review; the rationale
   is recorded so the call can be judged rather than re-derived.
 
 ---
 
 <a id="q1"></a>
+
 ## Q1 · Should the deploy path be built before the SEO fix ships?
 
 Increments 1–8 all change the repo, but the repo has no path to production. The
@@ -31,6 +32,7 @@ eivinasn.com until increment 9 completes. Increments 1–8 are verified against 
 local build, not against production.
 
 <a id="q2"></a>
+
 ## Q2 · Which git identity?
 
 All 10 pre-existing commits are authored by `sootheandseoul`; the repo is owned
@@ -42,6 +44,7 @@ repo-locally, not globally. History before 2026-08-13 is not rewritten. This is
 also the account that will hold the deploy secrets in increment 9.
 
 <a id="q3"></a>
+
 ## Q3 · Upgrade Astro 4 → 7, or accept the audit findings?
 
 `npm audit` reports 13 vulnerabilities (9 high) across `postcss`, `rollup`,
@@ -50,8 +53,7 @@ three-major-version upgrade. Increment 3's dependency gate is red until this is
 resolved.
 
 **Ruling — Claude (pending review), 2026-08-13: stay on Astro 4. Apply the
-non-breaking fixes, document the rest, defer the major upgrade past increment
-10.**
+non-breaking fixes, document the rest, defer the major upgrade past increment 10.**
 
 Rationale: **this is a static site, so every one of these advisories is
 build-time only.** `postcss`, `rollup`, `sharp` and `yaml` run on the build
@@ -69,6 +71,7 @@ pass. It also unlocks the modern image pipeline, so it is worth doing — just n
 while eight other increments are in flight.
 
 <a id="q4"></a>
+
 ## Q4 · npm or pnpm?
 
 The uplift plan specifies `pnpm audit`; the repo has `package-lock.json` and no
@@ -80,6 +83,7 @@ regenerates the entire dependency tree for no benefit here, and the lockfile is
 the one artefact whose fidelity the deploy depends on.
 
 <a id="q5"></a>
+
 ## Q5 · Which mark is the brand?
 
 `public/favicon.svg` and `public/logo-eivinas.svg` are different designs. Blocks
@@ -92,6 +96,7 @@ page. The favicon set is generated from `logo-eivinas.svg`; `favicon.svg` is lef
 in place but unused, pending [Q10](#q10).
 
 <a id="q6"></a>
+
 ## Q6 · Trailing slash convention?
 
 Must be fixed before the sitemap is generated, or sitemap URLs disagree with the
@@ -102,11 +107,12 @@ server already 301s `/work/dexcom` → `/work/dexcom/`; matching it costs nothin
 and removes a redirect from every internal click and every crawl. Implemented in
 increment 1 via `trailingSlash: 'always'` plus updated internal links.
 
-Side effect, intentional: local dev is now *stricter* than production — a
+Side effect, intentional: local dev is now _stricter_ than production — a
 slashless URL 404s locally where production would redirect it. That surfaces link
 inconsistencies before increment 3's link checker exists.
 
 <a id="q7"></a>
+
 ## Q7 · Allow or block AI crawlers in robots.txt?
 
 **Ruling — Claude (pending review), 2026-08-13: allow.** This is a portfolio
@@ -116,6 +122,7 @@ upside and gains nothing — there is no proprietary content here. Reversible in
 one line of `public/robots.txt`.
 
 <a id="q8"></a>
+
 ## Q8 · Which side is authoritative for the 3 divergent live images?
 
 `hero-portrait.png`, `case-image-dexcom-01.png` and `case-image-nfq-01.png` exist
@@ -133,6 +140,7 @@ server is authoritative any more and there is nothing to reconcile.
 The unreferenced assets are a separate question — see [Q10](#q10).
 
 <a id="q9"></a>
+
 ## Q9 · Is there already an `.htaccess` in `public_html`?
 
 The live server performs 301s and injects a CSP header, but no `.htaccess` exists
@@ -150,6 +158,7 @@ by blind overwrite, and the deploy step in increment 9 will refuse to clobber a
 server-side `.htaccess` it did not create.
 
 <a id="q10"></a>
+
 ## Q10 · Finish or delete the unused case-study images?
 
 Dexcom ships 5 images and renders 1; NFQ ships 4 and renders 1. Vinted and VMI
@@ -161,6 +170,7 @@ Nothing is deleted. The unused files continue to ship; that cost is recorded
 against the increment 7 budget rather than silently removed.
 
 <a id="q11"></a>
+
 ## Q11 · What happens to `dexcom case study.pdf`?
 
 Committed, copied into every build, linked from nothing, and 404s on the live
@@ -170,6 +180,7 @@ unlinked direct-share URL (which does not currently work).
 **OPEN — founder.** Left in place untouched.
 
 <a id="q12"></a>
+
 ## Q12 · Is exposing the Gmail address in plain HTML acceptable?
 
 `e.norusaitis@gmail.com` appears unobfuscated four times on the homepage, fully
@@ -183,6 +194,7 @@ defeat trivially. Changing a founder's chosen contact route is not an engineerin
 call.
 
 <a id="q13"></a>
+
 ## Q13 · Which analytics vendor?
 
 The plan recommends Cloudflare Web Analytics or Umami (cookieless, no consent
@@ -200,6 +212,7 @@ under the eivinasn.com origin with no consent banner. These are not the founder'
 tracking IDs. Increment 4's custom 404 removes that exposure.
 
 <a id="q14"></a>
+
 ## Q14 · CI cost on a private repo?
 
 `heshipstech/2026-portfolio` is private, so Actions minutes are metered rather
@@ -213,6 +226,7 @@ The weekly dependency cron stays; it is cheap and it is the whole reason CVEs
 surface while the site sits untouched.
 
 <a id="q15"></a>
+
 ## Q15 · CI gates (increment 3) before or after the accessibility pass (increment 6)?
 
 Landing the gates first means axe goes red immediately: `link-name` (four
@@ -228,6 +242,7 @@ This is the one ordering change to the ladder. [Q1](#q1) governs deploy ordering
 and is untouched: nothing ships before increment 9 regardless.
 
 <a id="q16"></a>
+
 ## Q16 · The contrast fixes change colours the founder approved. How far to go?
 
 The founder confirmed on 2026-08-13 that the design, pages, photos, icons and
@@ -248,3 +263,69 @@ the increment 6 commit so any of it can be reverted individually.
 
 **This is the one place in the programme where engineering necessarily touches
 approved design.** It is flagged for review rather than treated as settled.
+
+<a id="q17"></a>
+
+## Q17 · ESLint, or is `astro check` + Prettier + html-validate enough?
+
+The plan lists "lint" as a CI gate. Adding ESLint to an Astro project means
+`eslint`, `eslint-plugin-astro`, `typescript-eslint`, a flat config and a
+parser — a meaningful config surface and a slower CI job.
+
+**Ruling — Claude (pending review), 2026-08-13: no ESLint.**
+
+What would it catch here that is not already caught? The site has **under 1 KB of
+first-party JavaScript** across three small scripts. `astro check` type-checks
+those scripts and every `.astro` file in strict mode — and it did find real bugs
+(implicit `any`, a nullable `EventTarget`, an arity mismatch in the nav toggle).
+Prettier settles every style question mechanically. html-validate covers markup
+correctness, including `no-inline-style`, which is the rule that actually matters
+here because an inline style attribute cannot be hashed by the CSP.
+
+That leaves ESLint policing idioms in ~30 lines of code, on metered CI minutes
+([Q14](#q14)). Revisit if the site ever grows real client-side logic.
+
+<a id="q18"></a>
+
+## Q18 · Lighthouse, or a purpose-built budget check?
+
+The plan specifies Lighthouse budgets in CI.
+
+**Ruling — Claude (pending review), 2026-08-13: `scripts/measure-perf.mjs`
+instead.**
+
+It measures the things the budgets are actually about — total transfer, per-type
+breakdown, largest image, request count, CLS and LCP — against explicit numbers,
+serving `dist/` with gzip so the figures are comparable to production. It runs in
+seconds on the Chromium that Playwright already installed, and it fails with the
+specific number that broke.
+
+It also sidesteps both Lighthouse traps the plan warns about, by not having them:
+`maxAutodiscoverUrls` silently dropping pages beyond the first five, and
+Lighthouse auditing every `.html` in the output including search-engine
+verification tokens. The page list here is explicit.
+
+The trade-off, stated plainly: no Lighthouse score, no third-party-blessed
+number to quote, and no audit of things outside the budget (best-practices,
+SEO heuristics). Accessibility is covered more thoroughly by `verify:a11y` than
+Lighthouse would, since axe runs there directly.
+
+<a id="q19"></a>
+
+## Q19 · Where does the CI increment actually belong?
+
+[Q15](#q15) moved accessibility ahead of CI so the gates would not be red on
+arrival. The same argument applies to performance: landing Lighthouse-style
+budgets before increment 7 would have failed a 945 KB homepage on day one.
+
+**Ruling — Claude (pending review), 2026-08-13: CI lands last among the build
+increments** — after 3 (accessibility), 4 (SEO), 5 (security), 7 (performance)
+and 8 (analytics).
+
+Final order: 0, 1, 2, 3 (a11y), 4, 5, 7, 8, 6 (CI), 9, 10.
+
+The cost is real and worth naming: for most of this programme there was no
+automated gate, so every increment was verified by hand instead. That was
+affordable because the increments were small and each shipped its own
+verification script — by the time CI landed it was wiring up checks that already
+existed and already passed, rather than writing them from scratch.

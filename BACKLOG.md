@@ -6,19 +6,19 @@ pass. Source of the ladder: `portfolio-uplift-plan.md`; source of the gap list:
 
 Status: ✅ done · 🔄 in progress · ⏸ blocked · ⬜ not started
 
-| # | Increment | Status | Commit |
-| --- | --- | --- | --- |
-| 0 | Orientation | ✅ | `8337a49` |
-| 1 | Critical SEO repair | ✅ | `28fd664` |
-| 2 | Process foundation | ✅ | `ce2bdd9` |
-| 3 | Accessibility pass | ✅ | `503ad52` *(swapped with CI — [Q15](QUESTIONS.md#q15))* |
-| 4 | SEO completion | ✅ | `35b4e35` |
-| 5 | Security hardening | ✅ | `ca2912e` · *deploy* gated on [Q9](QUESTIONS.md#q9) |
-| 6 | CI gates | ⬜ | *(swapped with accessibility)* |
-| 7 | Performance budgets | ✅ | `b90007a` |
-| 8 | Analytics + monitoring | ✅ | `83fd43c` · founder must arm |
-| 9 | Deploy pipeline | ⬜ | |
-| 10 | Indexing | ⬜ | founder-only; needs Search Console access |
+| #   | Increment              | Status | Commit                                                  |
+| --- | ---------------------- | ------ | ------------------------------------------------------- |
+| 0   | Orientation            | ✅     | `8337a49`                                               |
+| 1   | Critical SEO repair    | ✅     | `28fd664`                                               |
+| 2   | Process foundation     | ✅     | `ce2bdd9`                                               |
+| 3   | Accessibility pass     | ✅     | `503ad52` _(swapped with CI — [Q15](QUESTIONS.md#q15))_ |
+| 4   | SEO completion         | ✅     | `35b4e35`                                               |
+| 5   | Security hardening     | ✅     | `ca2912e` · _deploy_ gated on [Q9](QUESTIONS.md#q9)     |
+| 6   | CI gates               | ⬜     | _(swapped with accessibility)_                          |
+| 7   | Performance budgets    | ✅     | `b90007a`                                               |
+| 8   | Analytics + monitoring | ✅     | `83fd43c` · founder must arm                            |
+| 9   | Deploy pipeline        | ⬜     |                                                         |
+| 10  | Indexing               | ⬜     | founder-only; needs Search Console access               |
 
 **Nothing reaches eivinasn.com until increment 9** — see
 [Q1](QUESTIONS.md#q1). The `example.com` canonical is fixed in the repo and
@@ -73,7 +73,6 @@ Side effect: hoisting the reveal logic left **zero inline scripts** in the
 output, so increment 5's CSP needs no script hashes — only one for the
 `<noscript>` style block.
 
-
 ## 4 · SEO completion ✅
 
 - `robots.txt` — AI crawlers allowed ([Q7](QUESTIONS.md#q7)), with the opposite
@@ -97,7 +96,6 @@ output, so increment 5's CSP needs no script hashes — only one for the
 Still open here: `/work/` returns **403**, not 404 — server-side, so it belongs
 to increment 5.
 
-
 ## 5 · Security hardening ✅
 
 Built and verified. **Deploying it is still gated on [Q9](QUESTIONS.md#q9)** —
@@ -112,7 +110,7 @@ increment 9 anyway, so this was never a build-time blocker.
   no `unsafe-inline`** — hoisting the scripts in increment 3 removed every
   inline script. `style-src` carries exactly 2 hashes plus Google Fonts.
 - HSTS (no `preload` — one-way door, founder's call), `nosniff`, `X-Frame-Options:
-  DENY` + `frame-ancestors 'none'`, `Referrer-Policy`, `Permissions-Policy`,
+DENY` + `frame-ancestors 'none'`, `Referrer-Policy`, `Permissions-Policy`,
   COOP/CORP.
 - `Cache-Control: no-cache` on HTML — documents previously had none at all — and
   `immutable` on content-hashed `/_astro/`.
@@ -131,20 +129,41 @@ are now CSS classes and the policy needs no relaxation. It also confirmed
 empirically that `<script type="application/ld+json">` is a data block and is
 not subject to `script-src`.
 
+## 6 · CI gates ✅
 
-## 6 · CI gates ⬜
+Lean, per [Q14](QUESTIONS.md#q14) — private repo, metered minutes. One
+workflow, two jobs, Chromium cached, **every action pinned to a commit SHA**.
 
-Lean, per [Q14](QUESTIONS.md#q14) — private repo, metered minutes.
+`npm run verify` runs the whole suite locally, in the same order CI does:
 
-- Format, lint, typecheck, build, HTML validation, link check.
-- Playwright smoke: zero console errors, zero failed requests. **Must assert
-  visibility, not just presence** — `opacity: 0` elements pass `textContent`.
-- Axe, Lighthouse budgets (§4 of CLAUDE.md).
-- `npm audit` with the documented exception from [Q3](QUESTIONS.md#q3).
-- Weekly scheduled run. SHA-pin every action.
-- Needs `tsconfig.json` and `@astrojs/check`, neither of which exists.
-- Lighthouse: set `maxAutodiscoverUrls` to 0 (defaults to 5 and silently drops
-  pages) and exclude any search-engine verification `.html`.
+| Gate            | Command                                                                  |
+| --------------- | ------------------------------------------------------------------------ |
+| Format          | `format:check` (Prettier)                                                |
+| Typecheck       | `typecheck` (`astro check`, strict)                                      |
+| Build           | `build`                                                                  |
+| HTML validation | `validate:html` (html-validate)                                          |
+| Link check      | `check:links`                                                            |
+| Accessibility   | `verify:a11y` (axe + skip link, reduced motion, no-JS, stranded content) |
+| CSP             | `verify:csp`                                                             |
+| Performance     | `measure:perf`                                                           |
+| Dependencies    | `audit` (separate job, also weekly)                                      |
+
+Everything green on the commit that introduced it — the point of
+[Q19](QUESTIONS.md#q19).
+
+Not included, with reasons recorded: **ESLint** ([Q17](QUESTIONS.md#q17) — under
+1 KB of first-party JS, and `astro check` already found the real bugs) and
+**Lighthouse** ([Q18](QUESTIONS.md#q18) — `measure:perf` checks the same budgets
+directly and avoids both Lighthouse traps the plan warns about).
+
+The dependency job gates on **critical** only and prints the accepted
+high-severity advisories to the run summary on every run, so the
+[Q3](QUESTIONS.md#q3) exception stays visible instead of becoming folklore.
+
+Typecheck found real defects on first run: implicit `any` in the reveal sweep, a
+nullable `EventTarget` and an arity mismatch in the nav toggle. HTML validation
+found a `<button>` with no `type` and two `<nav>` landmarks sharing no
+distinguishable name on the 404 page.
 
 ## 7 · Performance budgets ✅
 
@@ -152,13 +171,13 @@ Lean, per [Q14](QUESTIONS.md#q14) — private repo, metered minutes.
 `npm run measure:perf`; budgets in CLAUDE.md §4 are now measured rather than
 guessed.
 
-| | Before | After |
-| --- | --- | --- |
-| Homepage transfer | 945 KB | **109 KB** |
-| Case study transfer | ~800 KB | **71-88 KB** |
-| Largest image | 284 KB | 43 KB |
-| Fonts | 134 KB, 2 third-party origins | **34 KB, self-hosted** |
-| CLS / LCP | unmeasured | **0** / 84 ms |
+|                     | Before                        | After                  |
+| ------------------- | ----------------------------- | ---------------------- |
+| Homepage transfer   | 945 KB                        | **109 KB**             |
+| Case study transfer | ~800 KB                       | **71-88 KB**           |
+| Largest image       | 284 KB                        | 43 KB                  |
+| Fonts               | 134 KB, 2 third-party origins | **34 KB, self-hosted** |
+| CLS / LCP           | unmeasured                    | **0** / 84 ms          |
 
 - 15 referenced images moved `public/` -> `src/assets/` and rendered through
   `<Picture>` with AVIF + WebP + PNG fallback, `widths`/`sizes`, explicit
@@ -172,7 +191,6 @@ guessed.
   (**-97.9%**). It existed to carry one character, the š in "Norušaitis".
 
 Closes [Q8](QUESTIONS.md#q8).
-
 
 ## 8 · Analytics + monitoring ✅
 
@@ -190,6 +208,7 @@ Cloudflare, armed self-hosted Umami (host flows into both the script URL and the
 CSP), and incomplete config (warns loudly, emits nothing).
 
 **Founder tasks, none of which Claude can do:**
+
 - Pick a vendor and create the account. Cloudflare Web Analytics is free and
   needs only a beacon token.
 - Set the variables — see `.env.example`.
@@ -199,7 +218,6 @@ CSP), and incomplete config (warns loudly, emits nothing).
 
 Note: there is still no RUM baseline, so increment 7's gains are measured in the
 lab only. That is the main argument for arming analytics.
-
 
 ## 9 · Deploy pipeline ⬜
 
@@ -228,11 +246,11 @@ Founder-only — needs Search Console and Bing Webmaster access.
 
 ## Out of ladder
 
-| Item | Owner | Note |
-| --- | --- | --- |
-| Astro 4 → 7 upgrade | Claude | Deferred past increment 10 ([Q3](QUESTIONS.md#q3)). Also unlocks the image pipeline properly |
-| Unused case-study images | Founder | [Q10](QUESTIONS.md#q10) — 1.27 MB shipping unreferenced |
-| `dexcom case study.pdf` | Founder | [Q11](QUESTIONS.md#q11) |
-| Divergent live images | Founder | [Q8](QUESTIONS.md#q8) — may close automatically at increment 7 |
-| `www` → apex redirect | Founder/host | Both hostnames serve 200 with no redirect. Canonical now disambiguates for search, but a host-level redirect is the real fix |
-| Commit history | — | 9 of 10 pre-2026-08-13 commits say `your message`. Not rewritten |
+| Item                     | Owner        | Note                                                                                                                         |
+| ------------------------ | ------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| Astro 4 → 7 upgrade      | Claude       | Deferred past increment 10 ([Q3](QUESTIONS.md#q3)). Also unlocks the image pipeline properly                                 |
+| Unused case-study images | Founder      | [Q10](QUESTIONS.md#q10) — 1.27 MB shipping unreferenced                                                                      |
+| `dexcom case study.pdf`  | Founder      | [Q11](QUESTIONS.md#q11)                                                                                                      |
+| Divergent live images    | Founder      | [Q8](QUESTIONS.md#q8) — may close automatically at increment 7                                                               |
+| `www` → apex redirect    | Founder/host | Both hostnames serve 200 with no redirect. Canonical now disambiguates for search, but a host-level redirect is the real fix |
+| Commit history           | —            | 9 of 10 pre-2026-08-13 commits say `your message`. Not rewritten                                                             |

@@ -35,9 +35,9 @@ const person = {
     'Design operations',
     'Design systems',
     'User experience research',
-    'Team building',
+    'Team building'
   ],
-  sameAs: ['https://www.linkedin.com/in/eivinasnorusaitis/'],
+  sameAs: ['https://www.linkedin.com/in/eivinasnorusaitis/']
 };
 
 const graph =
@@ -51,8 +51,8 @@ const graph =
           name: 'Eivinas Norušaitis — Portfolio 2026',
           description,
           inLanguage: 'en',
-          publisher: { '@id': personId },
-        },
+          publisher: { '@id': personId }
+        }
       ]
     : [
         person,
@@ -66,15 +66,11 @@ const graph =
           inLanguage: 'en',
           author: { '@id': personId },
           creator: { '@id': personId },
-          isPartOf: { '@id': `${site}/#website` },
-        },
+          isPartOf: { '@id': `${site}/#website` }
+        }
       ];
 
 const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
 ---
 
-<script
-  type="application/ld+json"
-  is:inline
-  set:html={JSON.stringify(jsonLd)}
-/>
+<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />

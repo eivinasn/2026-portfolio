@@ -32,14 +32,19 @@ for (const file of files) {
 // has to allow its origin, so the two are derived from the same env vars — a
 // hand-edited CSP would silently block the very script it was armed for.
 const ANALYTICS_ORIGINS = {
-  cloudflare: { script: ['https://static.cloudflareinsights.com'], connect: ['https://cloudflareinsights.com'] },
+  cloudflare: {
+    script: ['https://static.cloudflareinsights.com'],
+    connect: ['https://cloudflareinsights.com']
+  },
   plausible: { script: ['https://plausible.io'], connect: ['https://plausible.io'] },
-  umami: { script: [], connect: [] }, // self-hosted: origin comes from PUBLIC_ANALYTICS_HOST
+  umami: { script: [], connect: [] } // self-hosted: origin comes from PUBLIC_ANALYTICS_HOST
 };
 
 const provider = process.env.PUBLIC_ANALYTICS_PROVIDER?.trim();
 const host = process.env.PUBLIC_ANALYTICS_HOST?.trim();
-const armed = Boolean(provider && process.env.PUBLIC_ANALYTICS_ID?.trim() && ANALYTICS_ORIGINS[provider]);
+const armed = Boolean(
+  provider && process.env.PUBLIC_ANALYTICS_ID?.trim() && ANALYTICS_ORIGINS[provider]
+);
 
 const extraScript = armed ? [...ANALYTICS_ORIGINS[provider].script, ...(host ? [host] : [])] : [];
 const extraConnect = armed ? [...ANALYTICS_ORIGINS[provider].connect, ...(host ? [host] : [])] : [];
@@ -58,7 +63,7 @@ const csp = [
   `img-src 'self' data:`,
   [`connect-src 'self'`, ...extraConnect].join(' '),
   `manifest-src 'self'`,
-  `upgrade-insecure-requests`,
+  `upgrade-insecure-requests`
 ].join('; ');
 
 const template = await readFile(TEMPLATE, 'utf8');

@@ -23,14 +23,14 @@ founder can review.
 
 ## 2 · Stack
 
-| | |
-| --- | --- |
-| Framework | Astro 4.16.19 — **pinned; see [Q3](QUESTIONS.md#q3)** |
-| Styling | Tailwind 3.4.19 via `@astrojs/tailwind`, `applyBaseStyles: false` |
-| Package manager | **npm.** Not pnpm, not yarn — see [Q4](QUESTIONS.md#q4) |
-| Node | See `.nvmrc`. CI and local must match |
-| Output | Static. `npm run build` → `dist/`. No SSR, no adapter, no server runtime |
-| Host | LiteSpeed on Hostinger. `.htaccess` applies |
+|                 |                                                                          |
+| --------------- | ------------------------------------------------------------------------ |
+| Framework       | Astro 4.16.19 — **pinned; see [Q3](QUESTIONS.md#q3)**                    |
+| Styling         | Tailwind 3.4.19 via `@astrojs/tailwind`, `applyBaseStyles: false`        |
+| Package manager | **npm.** Not pnpm, not yarn — see [Q4](QUESTIONS.md#q4)                  |
+| Node            | See `.nvmrc`. CI and local must match                                    |
+| Output          | Static. `npm run build` → `dist/`. No SSR, no adapter, no server runtime |
+| Host            | LiteSpeed on Hostinger. `.htaccess` applies                              |
 
 ## 3 · Hard constraints
 
@@ -54,16 +54,16 @@ invention — a 400 KB budget against a 109 KB page catches nothing. These numbe
 are the real post-increment-7 measurements plus roughly 25% headroom: enough to
 absorb an ordinary edit, tight enough that a regression trips them.
 
-| Metric | Before (2026-08-13) | Now | Budget |
-| --- | --- | --- | --- |
-| Homepage transfer | 945 KB | **109 KB** | ≤ 150 KB |
-| Largest single image | 284 KB | 43 KB | ≤ 60 KB |
-| Client JS | 894 B | 0.8 KB | ≤ 5 KB |
-| CSS | 24 KB | 5.8 KB | ≤ 10 KB |
-| Requests, first load | 18 | 17 | ≤ 20 |
-| CLS | unmeasured | **0** | ≤ 0.1 |
-| LCP | unmeasured | 84 ms | ≤ 1500 ms |
-| Axe violations | 58+ predicted | **0** | 0 |
+| Metric               | Before (2026-08-13) | Now        | Budget    |
+| -------------------- | ------------------- | ---------- | --------- |
+| Homepage transfer    | 945 KB              | **109 KB** | ≤ 150 KB  |
+| Largest single image | 284 KB              | 43 KB      | ≤ 60 KB   |
+| Client JS            | 894 B               | 0.8 KB     | ≤ 5 KB    |
+| CSS                  | 24 KB               | 5.8 KB     | ≤ 10 KB   |
+| Requests, first load | 18                  | 17         | ≤ 20      |
+| CLS                  | unmeasured          | **0**      | ≤ 0.1     |
+| LCP                  | unmeasured          | 84 ms      | ≤ 1500 ms |
+| Axe violations       | 58+ predicted       | **0**      | 0         |
 
 Request count is deliberately loose. Seven of the seventeen are small
 company-logo SVGs on an HTTP/2 connection; multiplexing makes that cost close to
@@ -137,7 +137,7 @@ Learned the hard way. Do not rediscover these.
   character outside Latin-1, re-run `npm run generate:fonts` after a build or it
   will render in the fallback face.
 - **The live server is not a mirror of this repo.** 13 of 38 `public/` files
-  diverge, and for 3 images production is *ahead* of the repo. Never assume a
+  diverge, and for 3 images production is _ahead_ of the repo. Never assume a
   `dist/` mirror is safe — see [Q8](QUESTIONS.md#q8).
 - **Something configures the server that is not in this repo.** The 301s and the
   injected CSP header come from somewhere. Increment 5 must read before it
