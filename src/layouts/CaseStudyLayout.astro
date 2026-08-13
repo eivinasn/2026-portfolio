@@ -8,7 +8,12 @@ const { title, summary, role, timeline, platform } = Astro.props;
 
 <html lang="en" class="scroll-smooth">
   <head>
-    <BaseHead title={`${title} - Case Study`} description={summary} type="article" />
+    {
+      /* No " - Case Study" suffix: it cost 13 characters and pushed every title
+      past the ~55-60 char point where search results truncate. The <h1> is
+      unchanged — a <title> is metadata and may legitimately differ from it. */
+    }
+    <BaseHead title={title} description={summary} type="article" />
   </head>
   <body class="antialiased text-[#A1A1AA] bg-[#050505] selection:bg-white/20">
     <a class="skip-link" href="#main">Skip to content</a>
