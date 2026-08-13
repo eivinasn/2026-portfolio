@@ -1,5 +1,8 @@
 ---
-const { showCta = true } = Astro.props;
+// Default off: the founder asked for the "Book a call" CTA to come out for now
+// (2026-08-13). The markup is kept behind the flag rather than deleted, because
+// "not needed right now" is not the same as "gone" — pass showCta to restore it.
+const { showCta = false } = Astro.props;
 ---
 
 <div class="fixed flex z-50 pt-4 pr-4 pl-4 top-0 right-0 left-0 justify-center">

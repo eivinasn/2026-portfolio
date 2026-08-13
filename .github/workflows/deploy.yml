@@ -171,6 +171,16 @@ jobs:
         if: steps.armed.outputs.armed == 'true' && inputs.dry_run != true
         run: npm run smoke
 
+      # Tell Bing (and Yandex/Seznam/Naver) to recrawl now rather than on their
+      # own schedule. Without this, a deploy can sit unnoticed for weeks — Bing's
+      # crawl of /work/dexcom/ was six months stale before IndexNow was added.
+      # Google does not participate; it uses the sitemap and its own scheduling.
+      # Never fails the deploy: a search engine being slow is not a bad deploy.
+      - name: Notify IndexNow
+        if: steps.armed.outputs.armed == 'true' && inputs.dry_run != true
+        continue-on-error: true
+        run: npm run ping:indexnow
+
       - name: Clean up credentials
         if: always()
         run: rm -f ~/.ssh/id_deploy

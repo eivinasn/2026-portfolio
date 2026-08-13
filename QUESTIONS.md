@@ -187,9 +187,9 @@ Dexcom ships 5 images and renders 1; NFQ ships 4 and renders 1. Vinted and VMI
 render all 4. The three unused Dexcom assets are 446/383/380 KB — finished work,
 not stubs. 15 of 38 files in `public/` (1.27 MB) are referenced by nothing.
 
-**OPEN — founder. This is a content decision and Claude will not make it.**
-Nothing is deleted. The unused files continue to ship; that cost is recorded
-against the increment 7 budget rather than silently removed.
+**RULED — Founder, 2026-08-13: delete them.** _"Delete, if they're not visible
+and not used."_ All seven removed (1,246,431 B), along with the PDF in
+[Q11](#q11). They remain in git history if the case studies are ever finished.
 
 <a id="q11"></a>
 
@@ -199,7 +199,8 @@ Committed, copied into every build, linked from nothing, and 404s on the live
 server. Three options: wire it up as a download, delete it, or keep it as an
 unlinked direct-share URL (which does not currently work).
 
-**OPEN — founder.** Left in place untouched.
+**RULED — Founder, 2026-08-13: delete it.** Removed (78,379 B). Recoverable
+from git history.
 
 <a id="q12"></a>
 
@@ -371,3 +372,37 @@ rm ~/domains/eivinasn.com/public_html/default.php
 
 Left alone rather than deleted unilaterally: it is the founder's server, the file
 is inert, and nothing in this programme depends on its removal.
+
+<a id="q21"></a>
+
+## Q21 · Should the deploy delete remote files that are no longer in the build?
+
+`rsync --delete` was off initially because the server held files this repo had
+never seen and nobody knew what was safe to remove.
+
+**Ruling — Claude (pending review), 2026-08-13: on.** The unknowns are resolved:
+[Q9](#q9) established there is no server-side `.htaccess`, [Q10](#q10) and
+[Q11](#q11) cleared the unreferenced assets, and both search-engine verification
+tokens now live in `public/` so they are part of every build rather than
+hand-placed. `.well-known/` and `.htaccess.bak-*` stay excluded.
+
+The reason to turn it on is the finding that opened this programme: the deployed
+tree had silently drifted from the repo, with 13 of 38 files differing. A mirror
+that only ever adds cannot correct drift — it accumulates it.
+
+<a id="q22"></a>
+
+## Q22 · Analytics — match besight.io, or add some?
+
+Revisited 2026-08-13. The founder asked to _"do simple, as we did with
+besight.io"_ and correctly recalled that besight.io uses no Cloudflare.
+
+**Clarification of fact:** besight.io ships **no analytics at all**, deliberately.
+"Simple as besight.io" therefore means none.
+
+**Status: OPEN — founder.** The slot built in increment 8 stays inert. Nothing is
+collected, so no privacy note is required. Arming it later is one token and a
+redeploy; the CSP widens automatically.
+
+Worth weighing: there is still no field data, so increment 7's 88% weight
+reduction is a lab measurement. That is the only argument for turning it on.
