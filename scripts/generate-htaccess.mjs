@@ -23,9 +23,25 @@ files.sort();
 const sha = (s) => `'sha256-${createHash('sha256').update(s, 'utf8').digest('base64')}'`;
 
 const styles = new Set();
+const scripts = new Set();
 for (const file of files) {
   const html = await readFile(file, 'utf8');
   for (const [, body] of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) styles.add(sha(body));
+
+  // Astro 4 hoisted every script to an external module, so script-src needed no
+  // hashes. Astro 7 inlines small ones instead — which silently broke a
+  // `script-src 'self'` policy and left 20 homepage blocks at opacity:0. Hash
+  // whatever is actually inline rather than assuming either behaviour.
+  //
+  // `type="application/ld+json"` is a data block the browser never executes and
+  // is not subject to script-src; verify-csp.mjs proves it.
+  // Note the leading comma: matchAll yields [fullMatch, group1, group2].
+  for (const [, tag, body] of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
+    if (/\ssrc=/.test(tag)) continue;
+    const type = tag.match(/type=["']([^"']+)["']/)?.[1] ?? '';
+    if (type && !/^(module|text\/javascript|application\/javascript)$/.test(type)) continue;
+    if (body.trim()) scripts.add(sha(body));
+  }
 }
 
 // Analytics is inert unless armed (QUESTIONS.md Q13). When it is armed the CSP
@@ -57,7 +73,7 @@ const csp = [
   `base-uri 'self'`,
   `form-action 'none'`,
   `frame-ancestors 'none'`,
-  [`script-src 'self'`, ...extraScript].join(' '),
+  [`script-src 'self'`, ...extraScript, ...[...scripts].sort()].join(' '),
   `style-src 'self' ${[...styles].sort().join(' ')}`,
   `font-src 'self'`,
   `img-src 'self' data:`,
@@ -75,6 +91,7 @@ await writeFile(OUT, template.replace('__CSP__', csp));
 
 console.log(`Wrote ${OUT}`);
 console.log(`  scanned ${files.length} HTML file(s)`);
+console.log(`  script-src hashes: ${scripts.size}`);
 console.log(`  style-src hashes: ${styles.size}`);
 console.log(`  analytics: ${armed ? `${provider} (CSP widened)` : 'not armed'}`);
 [...styles].sort().forEach((h) => console.log(`    ${h}`));

@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/index.css';
 
 /* Inter, self-hosted (increment 7). Previously loaded from Google's CDN, which
    cost two extra origins on the critical path, a render-blocking cross-origin
@@ -42,7 +40,14 @@ html {
   scroll-padding-top: 6rem;
 }
 body {
-  @apply antialiased bg-background text-textPrimary;
+  /* These were `@apply bg-background text-textPrimary` — the only two uses of
+     the Tailwind colour palette anywhere in the codebase. Every other colour has
+     always been a hardcoded arbitrary value, so the config described a design
+     system that did not exist. Inlined to exactly what they resolved to, which
+     leaves tailwind.config.cjs referenced by nothing. */
+  @apply antialiased;
+  background: #050505;
+  color: #ededed;
   font-family:
     'Inter',
     -apple-system,
