@@ -104,35 +104,49 @@ const { showCta = true } = Astro.props;
 </div>
 
 <script>
-  // Mobile menu toggle
+  // Mobile menu toggle.
+  //
+  // The panel is not adjacent to its trigger in DOM order, so focus is moved
+  // explicitly on open and returned to the trigger on Escape. Without that, a
+  // keyboard user opens the menu and their focus is still back on the button
+  // with the links several stops away.
   document.addEventListener('DOMContentLoaded', () => {
     const toggleButton = document.querySelector('[data-nav-toggle]');
     const mobilePanel = document.getElementById('mobile-nav');
 
     if (!toggleButton || !mobilePanel) return;
 
-    const closePanel = () => {
-      mobilePanel.classList.add('hidden');
-      toggleButton.setAttribute('aria-expanded', 'false');
+    const isOpen = () => !mobilePanel.classList.contains('hidden');
+
+    const setOpen = (open, returnFocus) => {
+      mobilePanel.classList.toggle('hidden', !open);
+      toggleButton.setAttribute('aria-expanded', String(open));
+      if (open) {
+        mobilePanel.querySelector('a')?.focus();
+      } else if (returnFocus) {
+        toggleButton.focus();
+      }
     };
 
     toggleButton.addEventListener('click', (e) => {
       e.stopPropagation();
-      const expanded = toggleButton.getAttribute('aria-expanded') === 'true';
-      toggleButton.setAttribute('aria-expanded', String(!expanded));
-      mobilePanel.classList.toggle('hidden', expanded);
+      setOpen(!isOpen());
+    });
+
+    // Following a link inside the panel should dismiss it.
+    mobilePanel.addEventListener('click', (e) => {
+      if (e.target.closest('a')) setOpen(false);
     });
 
     document.addEventListener('click', (e) => {
-      if (mobilePanel.classList.contains('hidden')) return;
-      const target = e.target;
-      if (!mobilePanel.contains(target) && !toggleButton.contains(target)) {
-        closePanel();
+      if (!isOpen()) return;
+      if (!mobilePanel.contains(e.target) && !toggleButton.contains(e.target)) {
+        setOpen(false);
       }
     });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closePanel();
+      if (e.key === 'Escape' && isOpen()) setOpen(false, true);
     });
   });
 </script>

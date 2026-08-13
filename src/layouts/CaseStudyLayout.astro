@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import RevealScript from '../components/RevealScript.astro';
 import './CaseStudyLayout.css';
 import '../styles/global.css';
 const { title, summary, role, timeline, platform } = Astro.props;
@@ -10,25 +11,29 @@ const { title, summary, role, timeline, platform } = Astro.props;
     <BaseHead title={`${title} - Case Study`} description={summary} type="article" />
   </head>
   <body class="antialiased text-[#A1A1AA] bg-[#050505] selection:bg-white/20">
-    <div class="fixed inset-0 pointer-events-none z-0 bg-grid h-[60vh]"></div>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="fixed inset-0 pointer-events-none z-0 bg-grid h-[60vh]" aria-hidden="true"></div>
 
-    <div class="fixed z-50 top-6 left-0 right-0 flex justify-center px-4 fade-in">
-      <nav class="flex items-center gap-5 px-1.5 pl-1.5 pr-5 py-1.5 bg-[#0A0A0A]/80 backdrop-blur-md border border-white/5 rounded-full shadow-xl transition-all hover:border-white/10">
-        <a href="/" class="flex items-center gap-2 group">
+    <header class="fixed z-50 top-6 left-0 right-0 flex justify-center px-4 fade-in">
+      <nav class="flex items-center px-1.5 pl-1.5 pr-5 py-1.5 bg-[#0A0A0A]/80 backdrop-blur-md border border-white/5 rounded-full shadow-xl transition-all hover:border-white/10" aria-label="Breadcrumb">
+        <!-- The label lives inside the anchor. Previously it was a sibling
+             <span>, which left this link with no accessible name at all — and
+             it is the only route from a case study back to the site. -->
+        <a href="/" class="flex items-center gap-5 group">
           <div class="w-8 h-8 rounded-full bg-[#1F1F22] flex items-center justify-center text-[#A1A1AA] group-hover:text-white group-hover:bg-[#27272A] transition-all">
             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 19l-7-7l7-7m7 7H5"></path></svg>
           </div>
+          <div class="h-4 w-px bg-white/10"></div>
+          <span class="text-xs font-medium text-[#EDEDED]">Go back</span>
         </a>
-        <div class="h-4 w-px bg-white/10"></div>
-        <span class="text-xs font-medium text-[#EDEDED]">Go back</span>
       </nav>
-    </div>
+    </header>
 
-    <main class="w-full z-10 pt-32 pb-40 relative">
+    <main id="main" class="w-full z-10 pt-32 pb-40 relative">
       <section class="max-w-7xl mx-auto px-6 mb-32 fade-in" style="animation-delay: 0.1s;">
         <h1 class="text-5xl sm:text-6xl font-medium text-[#EDEDED] tracking-tight leading-[1.1] mb-8 max-w-4xl">{title}</h1>
         <p class="text-xl text-[#A1A1AA] leading-relaxed max-w-2xl mb-12">{summary}</p>
-        <ul class="flex flex-wrap gap-8 text-sm text-[#71717A]">
+        <ul class="flex flex-wrap gap-8 text-sm text-[#8a8a94]">
           {role && <li><span class="text-[#EDEDED]">Role:</span> {role}</li>}
           {timeline && <li><span class="text-[#EDEDED]">Timeline:</span> {timeline}</li>}
           {platform && <li><span class="text-[#EDEDED]">Platform:</span> {platform}</li>}
@@ -39,24 +44,14 @@ const { title, summary, role, timeline, platform } = Astro.props;
         <slot />
       </div>
 
-      <footer class="max-w-7xl mx-auto px-6 mt-32 pt-10 border-t border-white/5 flex justify-between items-center text-xs text-[#52525B]">
-        <span>© 2026</span>
-        <a href="#" class="hover:text-[#EDEDED] transition-colors">Back to top</a>
-      </footer>
     </main>
 
-    <script>
-      const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
-      document.querySelectorAll('.reveal-on-scroll, .reveal-opacity-only').forEach((el) => observer.observe(el));
-    </script>
+    <footer class="max-w-7xl mx-auto px-6 mt-32 pt-10 pb-10 border-t border-white/5 flex justify-between items-center text-xs text-[#787885] relative z-10">
+      <span>© 2026 Eivinas Norušaitis</span>
+      <a href="#main" class="hover:text-[#EDEDED] transition-colors">Back to top</a>
+    </footer>
+
+    <RevealScript />
   </body>
   </html>
 

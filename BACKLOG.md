@@ -11,7 +11,7 @@ Status: ✅ done · 🔄 in progress · ⏸ blocked · ⬜ not started
 | 0 | Orientation | ✅ | `8337a49` |
 | 1 | Critical SEO repair | ✅ | `28fd664` |
 | 2 | Process foundation | 🔄 | — |
-| 3 | Accessibility pass | ⬜ | *(swapped with CI — [Q15](QUESTIONS.md#q15))* |
+| 3 | Accessibility pass | ✅ | `pending` *(swapped with CI — [Q15](QUESTIONS.md#q15))* |
 | 4 | SEO completion | ⬜ | |
 | 5 | Security hardening | ⏸ | blocked on [Q9](QUESTIONS.md#q9) |
 | 6 | CI gates | ⬜ | *(swapped with accessibility)* |

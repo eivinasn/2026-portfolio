@@ -1,0 +1,77 @@
+---
+// Reveals `.reveal-on-scroll` / `.reveal-opacity-only` content.
+//
+// Shared by both layouts, which previously each carried their own near-identical
+// copy of this logic.
+//
+// An IntersectionObserver on its own is not sufficient. An element that is
+// skipped over entirely — by landing on a #fragment URL, or by any instant jump
+// — never intersects the viewport, so it stays at `opacity: 0` permanently.
+// Measured 2026-08-13: loading /#competencies stranded 7 of 20 blocks invisible
+// until reload, which means a shared deep link showed a half-blank page.
+//
+// The sweep below reveals anything that has reached the viewport bottom
+// regardless of how it got there, and detaches itself once nothing is pending.
+//
+// Users with prefers-reduced-motion never depend on any of this — global.css
+// forces these elements visible for them.
+---
+
+<script>
+  const items = Array.from(
+    document.querySelectorAll('.reveal-on-scroll, .reveal-opacity-only')
+  );
+
+  const show = (el) => el.classList.add('is-visible');
+  const reached = (el) => el.getBoundingClientRect().top < window.innerHeight;
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          show(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    { root: null, rootMargin: '0px', threshold: 0.1 }
+  );
+
+  let pending = items.filter((el) => {
+    if (reached(el)) {
+      show(el);
+      return false;
+    }
+    observer.observe(el);
+    return true;
+  });
+
+  const sweep = () => {
+    pending = pending.filter((el) => {
+      if (!reached(el)) return true;
+      show(el);
+      observer.unobserve(el);
+      return false;
+    });
+    if (!pending.length) {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('load', sweep);
+    }
+  };
+
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      sweep();
+    });
+  };
+
+  if (pending.length) {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // The fragment jump can land after this module runs.
+    window.addEventListener('load', sweep);
+  }
+</script>

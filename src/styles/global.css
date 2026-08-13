@@ -3,7 +3,12 @@
 @tailwind utilities;
 
 :root { color-scheme: dark; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* The nav is fixed and ~72px tall. Without this, fragment navigation and
+     keyboard focus both land underneath it (WCAG 2.2 SC 2.4.11). */
+  scroll-padding-top: 6rem;
+}
 body {
   @apply antialiased bg-background text-textPrimary;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -62,5 +67,63 @@ body {
 ::selection {
   background: #1e40af;
   color: #ffffff;
+}
+
+/* ---------------------------------------------------------------- a11y ---
+   Added in increment 3. See BACKLOG.md §3 and QUESTIONS.md Q16.
+   These rules sit after @tailwind utilities on purpose: a rule in @layer base
+   loses to any utility class, and several of these must override one. */
+
+/* Skip link — visually hidden until focused. */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  background: #ededed;
+  color: #050505;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 150ms ease-out;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* The UA default ring is undesigned against #050505 and is not offset from the
+   glass nav. Give focus a visible, consistent treatment everywhere. */
+:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Reduced motion. Two jobs: stop the movement, and — critically — make the
+   JS-revealed content visible immediately, so a reduced-motion user is never
+   left looking at an empty page. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-on-scroll,
+  .reveal-opacity-only,
+  .animate-fade-up,
+  .fade-in {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
 }
 

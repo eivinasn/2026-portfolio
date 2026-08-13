@@ -51,6 +51,33 @@ const imageUrl = new URL(image, Astro.site).href;
 {description && <meta name="twitter:description" content={description} />}
 <meta name="twitter:image" content={imageUrl} />
 
+<!--
+  Without JavaScript, ~20 homepage blocks stay at opacity:0 forever and mobile
+  has no navigation at all. This is the fallback. Increment 5 must include this
+  block's hash in style-src.
+-->
+<noscript>
+  <style>
+    .reveal-on-scroll,
+    .reveal-opacity-only,
+    .animate-fade-up,
+    .fade-in {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+    @media (max-width: 767px) {
+      /* Show the menu in its open state and drop the toggle that cannot work. */
+      #mobile-nav {
+        display: block !important;
+      }
+      [data-nav-toggle] {
+        display: none !important;
+      }
+    }
+  </style>
+</noscript>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link

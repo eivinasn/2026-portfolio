@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import RevealScript from '../components/RevealScript.astro';
 import '../styles/global.css';
 const {
   title = 'Eivinas Norušaitis - Product Design & Leadership',
@@ -13,20 +14,10 @@ const {
     <BaseHead title={title} description={description} image={image} />
   </head>
   <body class="antialiased text-[#EDEDED] bg-[#050505]">
+    <a class="skip-link" href="#main">Skip to content</a>
     <slot />
 
-    <script>
-      const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
-      document.querySelectorAll('.reveal-on-scroll, .reveal-opacity-only').forEach((el) => observer.observe(el));
-    </script>
+    <RevealScript />
   </body>
   </html>
 
