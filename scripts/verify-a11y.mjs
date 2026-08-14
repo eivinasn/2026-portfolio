@@ -10,11 +10,21 @@
 // cannot see: content stranded invisible by a scroll jump, the skip link, the
 // no-JS fallback, and reduced motion.
 import { spawn } from 'node:child_process';
+import { readFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { AxeBuilder } from '@axe-core/playwright';
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:4321';
-const PAGES = ['/', '/work/dexcom/', '/work/nfq/', '/work/vinted/', '/work/vmi/', '/404.html'];
+
+// Derived from the built sitemap, not hardcoded. The hardcoded list went stale
+// the moment /privacy/ was added in 16feb16, so a page carrying legal copy ran
+// with no axe pass for a day. smoke-deploy.mjs already reads the sitemap for
+// the same reason.
+const sitemap = await readFile('dist/sitemap-0.xml', 'utf8');
+const PAGES = [
+  ...[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname),
+  '/404.html'
+];
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 const VIEWPORT = { width: 1280, height: 900 };
 

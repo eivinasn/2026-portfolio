@@ -16,7 +16,17 @@ import { chromium } from 'playwright';
 const DIST = 'dist';
 const PORT = 4399;
 const BASE = `http://localhost:${PORT}`;
-const PAGES = ['/', '/work/dexcom/', '/work/nfq/', '/work/vinted/', '/work/vmi/', '/404.html'];
+
+// Derived from the built sitemap, not hardcoded. The hardcoded list went stale
+// the moment /privacy/ was added in 16feb16, so a page carrying legal copy
+// shipped with no CSP check at all. smoke-deploy.mjs already reads the sitemap
+// for exactly this reason; a list that needs editing whenever a page is added
+// is a list that silently stops covering the site.
+const sitemap = await readFile(join(DIST, 'sitemap-0.xml'), 'utf8');
+const PAGES = [
+  ...[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname),
+  '/404.html'
+];
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',

@@ -17,7 +17,7 @@ import { chromium } from 'playwright';
 const DIST = 'dist';
 const PORT = 4400;
 const BASE = `http://localhost:${PORT}`;
-const PAGES = ['/', '/work/dexcom/', '/work/vmi/'];
+const PAGES = ['/', '/work/dexcom/', '/work/vmi/', '/privacy/'];
 
 // From CLAUDE.md §4. Set from measurements taken after increment 7, with ~25%
 // headroom — enough to absorb an ordinary edit, tight enough that a regression
@@ -140,6 +140,20 @@ for (const path of PAGES) {
         setTimeout(() => resolve({ cls: Number(cls.toFixed(4)), lcp: Math.round(lcp) }), 1200);
       })
   );
+
+  // The js budget was dead. It read only from responses whose content-type is
+  // javascript, and Astro 7 inlines every script this site has, so nothing ever
+  // arrived as a JS response and the budget printed a constant 0.0 KB — a
+  // budget that cannot fail is not a budget. Count the inline modules too.
+  // These bytes are gzipped inside the HTML on the wire, so counting them raw
+  // over-states them slightly; that errs toward failing the budget, not passing
+  // it. `application/ld+json` is data, not script, and stays excluded.
+  const inlineJsBytes = await page.evaluate(() =>
+    [...document.querySelectorAll('script:not([src])')]
+      .filter((s) => !s.type || s.type === 'module' || s.type.includes('javascript'))
+      .reduce((n, s) => n + new TextEncoder().encode(s.textContent ?? '').length, 0)
+  );
+  byType.js = (byType.js ?? 0) + inlineJsBytes;
 
   // Images not yet requested (below the fold, lazy) are excluded from `total` by
   // design — this is first-load weight, which is what the budget is about.

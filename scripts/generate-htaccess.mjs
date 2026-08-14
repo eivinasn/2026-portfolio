@@ -65,9 +65,12 @@ const armed = Boolean(
 const extraScript = armed ? [...ANALYTICS_ORIGINS[provider].script, ...(host ? [host] : [])] : [];
 const extraConnect = armed ? [...ANALYTICS_ORIGINS[provider].connect, ...(host ? [host] : [])] : [];
 
-// script-src needs no hashes: every executable script in the output is an
-// external module (Astro hoists them), and `<script type="application/ld+json">`
-// is a data block the browser never executes. verify-csp.mjs proves both.
+// script-src carries a sha256 for every inline module in the output — 2 in the
+// current build. This comment said the opposite until 2026-08-14, describing
+// Astro 4's behaviour of hoisting every script to an external file; Astro 7
+// inlines the small ones, and line 76 below has been splicing those hashes in
+// the whole time. `<script type="application/ld+json">` is a data block the
+// browser never executes and needs no hash. verify-csp.mjs proves both.
 const csp = [
   `default-src 'none'`,
   `base-uri 'self'`,
