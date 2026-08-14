@@ -21,6 +21,20 @@ updates:
         update-types:
           - minor
           - patch
+    # TypeScript 7 cannot install here and will not be able to until
+    # @astrojs/check moves. 0.9.10 is both the version this repo pins and the
+    # latest published, and its peer range is `typescript ^5.0.0 || ^6.0.0`, so
+    # `npm ci` fails ERESOLVE. PR #1 was opened, proved exactly that, and was
+    # closed 2026-08-14 — but closing a Dependabot PR only suppresses that one
+    # release, so every 7.0.x patch would reopen the same dead PR.
+    #
+    # Scoped to 7.x on purpose, not to `semver-major`: TypeScript 8 should
+    # still get a PR, and this entry should be deleted the moment
+    # `npm view @astrojs/check@latest peerDependencies.typescript` admits ^7.
+    ignore:
+      - dependency-name: typescript
+        versions:
+          - 7.x
     commit-message:
       prefix: 'chore(deps)'
 
