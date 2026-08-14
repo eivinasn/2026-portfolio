@@ -1,0 +1,206 @@
+# NEEDS-REVIEW — portfolio, 2026-08-14
+
+Items from the close-out audit that are **not mine to act on**. Each one is
+parked with the evidence needed to decide. Nothing here has been changed.
+
+The audit itself is in [AUDIT-2026-08-14.md](AUDIT-2026-08-14.md).
+
+No value of any credential appears in this file.
+
+---
+
+## 1 · CRITICAL — the history purge never reached GitHub, and the repo was public the whole time
+
+**Status: data is already exposed, not merely exposable.** Two independent
+verifications, one by the audit agent and one by me from a clean temporary
+clone with credential helpers disabled.
+
+### What is retrievable right now
+
+An anonymous `git fetch <sha>` against the public repo still returns the
+pre-purge objects. Verified:
+
+```
+git init probe && cd probe
+git remote add origin https://github.com/heshipstech/2026-portfolio.git
+git -c credential.helper= fetch --depth=1 origin da26b7a0d309410d60ba55d9f3f3725809222b78
+# fetch_exit=0 — the pre-purge tip is served
+git cat-file -s $(git rev-parse da26b7a0…:portfolio-uplift-plan.md)
+# 8195 — the purged planning document, intact
+```
+
+At pre-purge SHA `12ac69749fef8a8fd8c44ae6ca11098308d7be99`, matching on
+pattern only and never printing the values, `QUESTIONS.md` and
+`FOUNDER-TASKS.md` still contain the Hostinger SSH username and the production
+server's IPv4 address — the exact data `3b24b5a` existed to remove.
+
+### Why the purge's own verification missed it
+
+`3b24b5a` records that it verified the result "from a fresh clone of the
+remote". A clone walks refs. These objects are unreferenced but retained, so no
+clone could ever have seen them. That verification could not have detected this
+failure mode, and its passing told us nothing.
+
+### Why "an attacker would need an old SHA" does not hold
+
+GitHub publishes the complete pre-rewrite SHA chain itself. Verified against
+the unauthenticated public events feed:
+
+```
+2026-08-13T20:46:49Z push da26b7a0 -> 16feb160     (the force-push)
+2026-08-13T20:46:50Z DeleteEvent chore/astro-7
+… 20 pre-purge SHAs, back to 2026-01-11
+```
+
+No prior knowledge is required. The feed is also mirrored by GH Archive and
+similar public datasets, so it cannot be retracted.
+
+### Why "it was never public before the rewrite" does not hold
+
+`GET /repos/heshipstech/2026-portfolio` reports `created_at`
+2026-01-11T17:08:19Z, and the `PublicEvent` marking the private→public
+transition carries the **same timestamp** — seven months before the force-push,
+not after it. The repo has been public since the day it was created.
+
+### Exposure window
+
+- Introduced: old SHA `12ac6974`, pushed 2026-08-13T16:29:52Z
+- Redacted in the tree: old SHA `b9d9683`, pushed 2026-08-13T19:30:56Z
+- **~3 hours on the public tip**, and still fetchable at 9 pre-purge SHAs:
+  `12ac6974`, `5448f33e`, `ca265544`, `bcc5bb5e`, `1d7845de`, `7698f25e`,
+  `92cd18f9` (the deleted `chore/astro-7` branch), `63bd3da0`, `680a2beb`.
+
+No key material was ever committed — only the username, the IP, and the _names_
+of the GitHub secrets. `QUESTIONS.md` at those SHAs additionally discloses that
+the server home directory contains `.ssh` and a file named `.api_token`.
+
+### What I need from you
+
+Rotation is yours (STOP #2), and so is any further history operation (STOP #3).
+Recommended order — **rotate first, removal second, because removal alone
+cannot un-publish three hours on a public tip**:
+
+1. Regenerate the Hostinger deploy keypair; remove the old public key in
+   hPanel → SSH Access; update `SSH_PRIVATE_KEY` and `SSH_KNOWN_HOSTS` in
+   GitHub secrets.
+2. Ask Hostinger whether the SSH username can be changed and the shared IP
+   reassigned. If neither, restrict SSH to known source addresses and confirm
+   password authentication is disabled.
+3. Look at `~/.api_token` on the server. Its existence is now public and its
+   name suggests a credential.
+4. Only then, if you want the objects gone: GitHub Support can run `gc` on the
+   repository. That is the only mechanism — do not force-push again.
+
+**Also affected, and not your call alone:** `portfolio-uplift-plan.md` (8,195 B)
+is still downloadable and describes besight.io's engineering internals. If
+besight.io is a separate party's, they should be told.
+
+**Unassessed:** `public/dexcom case study.pdf` and the seven unreferenced
+case-study images are still retrievable at `58a6e147` and `d89192d6`. I did not
+open the PDF. Whether it carries client-confidential Dexcom material — and
+whether that triggers a notification obligation — is your judgement.
+
+### Related: the CI secret-scanning gate cannot catch this
+
+`.github/workflows/ci.yml` runs `gitleaks detect --source .` after a
+`fetch-depth: 0` checkout. That walks refs, which reach only the rewritten,
+already-clean history. The gate's stated purpose is to catch "a secret
+committed and later reverted", which is precisely the case it misses. Not a
+defect I should silently redesign — flagging it as a known limit.
+
+---
+
+## 2 · Correction owed to the record
+
+`3b24b5a`'s commit message asserts two things the API contradicts: that the
+repo "was never public before the rewrite", and that "no old SHA was ever
+disclosed". Both are false, as evidenced above. A commit message cannot be
+edited without another rewrite, so the correction belongs in QUESTIONS.md as a
+new dated entry. **I have not written it** — it supersedes a recorded ruling,
+and CLAUDE.md §6 makes rulings yours. Suggested wording is in the audit file.
+
+---
+
+## 3 · Consent and third-party material (already accepted in Q23 — re-verified, plus one item Q23 does not cover)
+
+All confirmed still present and live.
+
+- **~36 identifiable people in case-study photography.** Four tracked images
+  show unblurred, individually identifiable faces: `case-image-nfq-01.png`
+  (9 people, live on `/work/nfq/`), `case-image-dexcom-01.png` (~10 people,
+  several wearing lanyard ID badges), plus two more. Accepted in Q23. The
+  residual risk is an Art. 17/21 erasure or objection request, which the site
+  currently has no stated process to answer.
+- **NEW, and not covered by Q23:** commit `0622399` — which postdates the Q23
+  ruling — re-published two of those photographs as **Open Graph share cards**.
+  `public/og-nfq.png` and `public/og-dexcom.png` each embed a 4-person crop at
+  1200×630 with faces clearly legible. These are fetched and cached by every
+  platform a link is shared on. **Your Q23 acceptance was granted before these
+  existed, so you have not actually ruled on this.**
+- **`work/nfq/` publishes a named former employer's commercial figures** —
+  "NFQ Technologies" named 8 times, with annual revenue "to nearly €0.5M", a
+  "€125k" baseline and "85%+ utilization" across six places. Accepted in Q23.
+  The exposure is contractual (a surviving confidentiality clause), not
+  technical, so no engineering change addresses it.
+- **Vinted screenshots may show real end users.** `case-image-vinted-01.png`
+  shows seller "Magdalena" with a photographic avatar, "172 reviews", location
+  Poland; `case-image-vinted-04.png` shows handles "helloashley" and
+  "elzagorgeous" with photos. One question settles it: were these taken against
+  production accounts or a seeded design environment?
+
+All four are approved, frozen design assets — CLAUDE.md forbids me altering
+them, and I have not.
+
+---
+
+## 4 · Sibling-repo internals disclosed in this public repo
+
+QUESTIONS.md is tracked in a **public** repo and discloses operational detail
+about two repos it describes as private:
+
+- Q23: besight.io "22 deploy run logs deleted; deploy identifiers moved from
+  variables to secrets (PR #1)" — names a past CI misconfiguration and where it
+  was fixed.
+- Q23: blinklab "a private venture name neutralised in four documents
+  (PR #231)", while also recording that blinklab is public. Together that tells
+  a reader exactly which public PR diff to open to recover the name the
+  neutralisation was meant to hide.
+- Q22 discloses besight.io ships no analytics; `src/pages/privacy.astro:11`
+  discloses besight.io's contact-form honeypot and IP-hashing design.
+
+None of it reaches the built HTML — verified, `grep -rIi 'besight|blinklab' dist/`
+returns nothing. So this is repo-visible, not site-visible.
+
+Your own `.gitignore:27` draws exactly this line ("references besight.io
+internals, not for publication"), so the standard exists and the decision log
+does not meet it. **Not edited** — QUESTIONS.md is the decision log. Suggested:
+generalise to "a sibling private repository" and drop the PR numbers,
+especially blinklab's.
+
+---
+
+## 5 · Decisions I will not make for you
+
+| Item                                                                                                                                                                                                               | Why it is yours                                                                                                           | Effort                         |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| **LICENSE / `license` field** — both absent, so the repo is all-rights-reserved by omission rather than by decision                                                                                                | Probably the right outcome given the photography and the NFQ figures, but it should be a ruling, not an accident          | 10 min                         |
+| **No test suite exists** — `npm test` is undefined, zero test files; `npm run verify` is 8 end-to-end gates over built output, which is valuable but is not unit testing. 1,370 LOC of `scripts/*.mjs` is untested | Adding a test framework is a programme decision                                                                           | 2-4 h for the high-value cases |
+| **No linter** — no eslint/biome/stylelint, no config, nothing. With `checkJs: false`, `scripts/*.mjs` has neither type checking nor linting                                                                        | Adds devDependencies to a repo that deliberately keeps them few                                                           | 1-2 h                          |
+| **`DEPLOY_DELETE=true`** contradicts deploy.yml's own header ("Off by default — the server holds files this repo has never seen")                                                                                  | Changing a repository variable is a founder action. Currently benign: everything on the server is reproduced by the build | 2 min                          |
+| **No branch protection on `main`** — gates run after the push, not before                                                                                                                                          | Repo-settings decision; reasonable for a solo repo. Recorded as fact, not recommendation                                  | 5 min                          |
+| **`og:image:alt` is global while `og:image` is now per-page** — every page describes the homepage card                                                                                                             | Fixing it means passing per-page alt copy, which is site copy                                                             | 20 min                         |
+| **Analytics variables are not wired into the deploy build** — FOUNDER-TASKS.md §"arm analytics" describes a flow that cannot work: `deploy.yml` maps no `PUBLIC_ANALYTICS_*` into the build step                   | Arming analytics changes product behaviour (STOP #9). The doc is wrong either way                                         | 15 min                         |
+| **LinkedIn profile link unverifiable** — LinkedIn serves HTTP 999 to automation, so the only outbound link on the site is checked by nobody                                                                        | Open it in a browser once                                                                                                 | 1 min                          |
+
+---
+
+## 6 · Not acted on, deliberately
+
+- **Two `.astro` build-cache files** (`settings.json`, `types.d.ts`, 150 B of
+  inert content) are in the published history from the initial commit. Removing
+  them means a second rewrite of a public history for no security gain.
+  `.gitignore` already prevents recurrence.
+- **25 of 40 commits carry the personal Gmail address** as author and committer.
+  The Q2 ruling chose that address; the later noreply amendment is not
+  retroactive. Not worth a rewrite for an address that is already published on
+  the site itself by ruling Q12 — but it is a fact that was recorded nowhere.

@@ -76,6 +76,14 @@ Revisit: after increment 10, as a standalone increment with its own verification
 pass. It also unlocks the modern image pipeline, so it is worth doing — just not
 while eight other increments are in flight.
 
+**Amended 2026-08-14 — REVERSED, and the reversal was never recorded.** The
+upgrade was carried out on `chore/astro-7` and merged in `223f308`: Astro 7.2.1,
+Tailwind 4.3.3 via `@tailwindcss/postcss`, `tailwind.config.cjs` deleted. The
+design survived it. `npm audit` now reports **0 vulnerabilities at any level**
+(verified 2026-08-14), so the documented exception this ruling created is
+retired and the CI comment that carried it is obsolete. The ruling above stands
+as a record of what was decided on 2026-08-13, not as current policy.
+
 <a id="q4"></a>
 
 ## Q4 · npm or pnpm?
@@ -259,6 +267,14 @@ workflow, one job where possible, aggressive caching, the expensive browser-base
 gates only on pull requests and on `main` — not on every push to every branch.
 The weekly dependency cron stays; it is cheap and it is the whole reason CVEs
 surface while the site sits untouched.
+
+**Amended 2026-08-14 — the premise expired.** The repository is **public** (and,
+per the GitHub API, has been since it was created on 2026-01-11 — see
+[NEEDS-REVIEW.md](NEEDS-REVIEW.md) §1). Actions minutes on standard runners are
+free for public repositories, so the cost argument above no longer applies. The
+lean pipeline is still worth keeping on its own merits — fast feedback, less to
+maintain — but "we cannot afford the minutes" is not a reason to decline a gate
+here, and it should not be cited as one.
 
 <a id="q15"></a>
 

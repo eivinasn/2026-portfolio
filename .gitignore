@@ -13,6 +13,10 @@ dist/
 # Env & logs
 .env
 .env.*
+# …except the template. `.env.*` was swallowing it, so three tracked files
+# pointed readers at a file that was not in the repo. It holds comments and
+# three commented-out keys — no values, ever.
+!.env.example
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

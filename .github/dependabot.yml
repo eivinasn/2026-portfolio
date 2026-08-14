@@ -1,0 +1,36 @@
+# Nothing watched dependencies here until 2026-08-14. CI's weekly cron runs
+# `npm audit`, but that only detects advisories — it never proposes an upgrade,
+# and nothing at all watched for non-security drift. The Astro 4 → 7 gap that
+# Q3 recorded went unnoticed for exactly that reason.
+#
+# Patch and minor updates are grouped into one PR so an ordinary week is a
+# single review. Majors open separately, because on this repo a major is a
+# design risk (Astro 4 → 7 forced Tailwind 3 → 4) and deserves its own decision.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+    open-pull-requests-limit: 3
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: 'chore(deps)'
+
+  # The actions in .github/workflows/ are pinned to commit SHAs, deliberately —
+  # a tag is mutable and a compromised action tag is the cheapest supply-chain
+  # attack there is. Dependabot understands SHA pins and updates them with the
+  # version comment intact, which is the only sane way to keep them current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: 'chore(actions)'

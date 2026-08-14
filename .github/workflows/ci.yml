@@ -1,7 +1,10 @@
 name: CI
 
-# Lean by design — this is a private repo, so Actions minutes are metered
-# (QUESTIONS.md Q14). One workflow, one job for the gates, browsers cached.
+# Lean by design. The repo is PUBLIC, so Actions minutes on standard runners are
+# free — the metered-minutes reason recorded in QUESTIONS.md Q14 expired when the
+# repo was published (Q14 amended 2026-08-14). The pipeline stays lean on its own
+# merits: fast feedback, less to maintain. One workflow, one job for the gates,
+# browsers cached.
 #
 # Every action is pinned to a commit SHA, not a tag. A tag is mutable; a SHA is
 # not, and a compromised action tag is the cheapest supply-chain attack there is.
@@ -131,25 +134,11 @@ jobs:
 
       - run: npm ci
 
-      # Hard gate. Anything critical fails the build.
-      - name: Audit (critical)
+      # Hard gate at `high`, tightened from `critical` on 2026-08-14. The reason
+      # it sat at `critical` was Q3's documented exception for the Astro 4
+      # advisories in postcss, rollup, sharp and yaml. That upgrade landed in
+      # 223f308 and `npm audit` now reports 0 vulnerabilities at any level, so
+      # the exception is retired (Q3 amended) and the gate can be strict without
+      # going red on the commit that tightens it.
+      - name: Audit (high)
         run: npm run audit
-
-      # Not a gate, but never silent. Q3 accepts the current high-severity
-      # findings because every one of them is build-time only for a static site
-      # — postcss, rollup, sharp and yaml run on the build machine and ship
-      # nothing to the browser. The remediation npm proposes is a three-major
-      # Astro upgrade, deferred past increment 10.
-      #
-      # This step surfaces them on every run so the exception stays visible and
-      # gets re-examined rather than forgotten. Revisit Q3 if this list grows or
-      # if anything here reaches the browser.
-      - name: Report high-severity advisories (accepted — see QUESTIONS.md Q3)
-        if: always()
-        run: |
-          echo "### Dependency advisories" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          npm audit --audit-level=high || true
-          npm audit --audit-level=high >> "$GITHUB_STEP_SUMMARY" 2>&1 || true
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          echo "Accepted per QUESTIONS.md Q3: build-time only for a static site." >> "$GITHUB_STEP_SUMMARY"

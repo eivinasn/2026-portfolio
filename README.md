@@ -1,7 +1,7 @@
 # eivinasn.com — Portfolio 2026
 
-Personal portfolio for Eivinas Norušaitis. Static Astro site: a landing page and
-four case studies sharing a layout.
+Personal portfolio for Eivinas Norušaitis. Static Astro site: a landing page,
+four case studies sharing a layout, a privacy notice and a custom 404.
 
 **Live:** https://eivinasn.com/
 
@@ -19,10 +19,13 @@ definition of done. Then:
 
 ## Tech stack
 
-- **Astro 4** — static output, no SSR, no adapter
-- **Tailwind CSS 3** via `@astrojs/tailwind`
+- **Astro 7** — static output, no SSR, no adapter ([Q3](QUESTIONS.md#q3), reversed
+  and upgraded in `223f308`)
+- **Tailwind CSS 4** via `@tailwindcss/postcss` — no `tailwind.config.cjs`, no
+  `@astrojs/tailwind`
 - **npm** — not pnpm ([Q4](QUESTIONS.md#q4))
-- **Node** — see `.nvmrc` (22 LTS). `engines` requires ≥20.3.0
+- **Node** — see `.nvmrc` (22). `engines` requires ≥22.12.0, which is Astro 7's
+  own floor
 
 ## Local development
 
