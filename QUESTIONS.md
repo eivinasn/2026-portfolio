@@ -205,9 +205,16 @@ not stubs. 15 of 38 files in `public/` (1.27 MB) are referenced by nothing.
 and not used."_ All seven removed (1,246,431 B), along with the PDF in
 [Q11](#q11).
 
-**Amended 2026-08-14:** they no longer remain in git history either. `3b24b5a`
-purged them from all 34 commits before the repo was published ([Q23](#q23)), so
-recovering them means going back to the founder's originals, not to this repo.
+**Amended 2026-08-14:** they no longer remain in this repository's history —
+`3b24b5a` purged them from all 34 commits.
+
+**Corrected later the same day, and the first amendment was wrong.** It said the
+purge happened "before the repo was published". The repository has been public
+since it was created on 2026-01-11, and the pre-purge objects are **still served
+by GitHub**: an anonymous `git fetch <sha>` returns them today. So these images
+remain publicly retrievable at nine pre-purge SHAs, whatever this repository's
+own history now contains. See [NEEDS-REVIEW.md](NEEDS-REVIEW.md) §1. A removal
+request is with GitHub Support; until it is granted, treat them as public.
 
 <a id="q11"></a>
 
@@ -219,8 +226,15 @@ unlinked direct-share URL (which does not currently work).
 
 **RULED — Founder, 2026-08-13: delete it.** Removed (78,379 B).
 
-**Amended 2026-08-14:** no longer recoverable from git history — `3b24b5a`
-purged it from every commit before publication ([Q23](#q23)).
+**Amended 2026-08-14:** no longer in this repository's history — `3b24b5a`
+purged it from every commit.
+
+**Corrected later the same day:** "before publication" was false, and so is the
+implication that the PDF is gone. The repo has been public since 2026-01-11 and
+the pre-purge objects are still served — the PDF is downloadable today at SHAs
+`58a6e147` and `d89192d6`. Whether it carries client-confidential Dexcom
+material is unassessed and is an open founder item in
+[NEEDS-REVIEW.md](NEEDS-REVIEW.md) §1.
 
 <a id="q12"></a>
 
