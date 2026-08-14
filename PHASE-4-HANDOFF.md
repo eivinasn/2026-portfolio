@@ -631,9 +631,20 @@ Verified in production, not locally:
 ```
 200 14026B  /_astro/hero-poster.CTgVPtdc_Z2jrfb2.webp      (new)
 200 21630B  /_astro/founder-portrait.DmCHyk97_Z1Y9mSH.webp (new)
-404         /_astro/hero-poster.CTgVPtdc_Zg4vCz.webp       (old — gone)
-404         /_astro/founder-portrait.DmCHyk97_ZMOjzt.webp  (old — gone)
+404         /_astro/hero-poster.CTgVPtdc_Zg4vCz.webp       (old)
+404         /_astro/founder-portrait.DmCHyk97_ZMOjzt.webp  (old)
 ```
+
+> **Correction, 2026-08-15.** The two 404s above were a **single sample each**
+> and the "old — gone" gloss they originally carried was wrong. Twelve fetches
+> of the old poster URL return 200 nine times: besight.io is served through a
+> Hostinger CDN (`server: hcdn`) across at least two edges with a 30-day
+> `max-age`, so edges hold different generations after a deploy. The conclusion
+> survives and is if anything stronger — the **new** URLs serve consistently 12
+> of 12, the homepage references the new poster on every request, and no visitor
+> can receive a wrong hero poster. But a one-shot fetch is not verification on
+> this host. Full detail, including what it means for the 11 files left
+> unchanged, is in [PHASE-6-FINDINGS.md](PHASE-6-FINDINGS.md) §4.
 
 A full build-to-build comparison found **13** filenames whose bytes change.
 These two were the only ones whose _content_ changes; the other 11 are libvips
