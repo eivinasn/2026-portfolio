@@ -21,29 +21,30 @@ Eleven Dependabot PRs were open when triage started; the first handoff knew
 about ten. besight #8 opened two minutes after its advisory landed and postdates
 that document.
 
-**blinklab is empty. The portfolio's queue is empty of everything the triage
-covered. besight holds two PRs, and they are one decision, not two.**
+**blinklab and the portfolio are both empty. besight holds two PRs, and they
+are one decision, not two — see §6 and §6a.**
 
-| Repo           | PR   | What                          | Outcome                                                 |
-| -------------- | ---- | ----------------------------- | ------------------------------------------------------- |
-| blinklab       | #236 | upload-pages-artifact v3 → v5 | **MERGED** `cf31cbe1` — restored a broken deploy, §3    |
-| blinklab       | #244 | build-commit meta tag         | **MERGED** `5132cf21` — merged first, deliberately, §3a |
-| blinklab       | #235 | deploy-pages v4 → v5          | **MERGED** `156f946b`                                   |
-| blinklab       | #234 | setup-node v4 → v7            | **MERGED** `1e9fa9f4`                                   |
-| blinklab       | #238 | setup-uv v5 → v9              | **MERGED** `bdd3a1a6`                                   |
-| blinklab       | #237 | checkout v4 → v7              | **MERGED** `4a366e0e` — merged last, as planned, §7     |
-| blinklab       | #239 | minor-and-patch ×3            | **MERGED** `28cc0a14`                                   |
-| blinklab       | #245 | ignore TypeScript 7.x         | **MERGED** `e2438d83` — opened by this phase, §4        |
-| blinklab       | #246 | NEEDS-REVIEW §4 correction    | **MERGED** `b7c361fc` — opened by this phase            |
-| besight.io     | #11  | `contact.php` vs the policy   | **MERGED** `82b238a1` — one SFTP deploy, smoke-tested   |
-| 2026-portfolio | #1   | typescript 5.9.3 → 7.0.2      | **CLOSED** — blocked upstream, §4                       |
-| blinklab       | #240 | typescript 6.0.3 → 7.0.2      | **CLOSED** — blocked upstream twice over, §4            |
-| besight.io     | #8   | sharp 0.34.5 → 0.35.0         | **CLOSED** — superseded by #6, §5                       |
-| besight.io     | #6   | sharp 0.34.5 → 0.35.3         | **OPEN, HELD** — does not fix the advisory alone, §5    |
-| besight.io     | #7   | astro 5.18.2 → 7.2.0          | **OPEN, FOUNDER RULING** — Q29, re-scoped, §6           |
-| 2026-portfolio | #2   | typescript 5.9.3 → 6.0.3      | **OPEN, NEW** — a consequence of #245's twin, below     |
+| Repo           | PR   | What                           | Outcome                                                 |
+| -------------- | ---- | ------------------------------ | ------------------------------------------------------- |
+| blinklab       | #236 | upload-pages-artifact v3 → v5  | **MERGED** `cf31cbe1` — restored a broken deploy, §3    |
+| blinklab       | #244 | build-commit meta tag          | **MERGED** `5132cf21` — merged first, deliberately, §3a |
+| blinklab       | #235 | deploy-pages v4 → v5           | **MERGED** `156f946b`                                   |
+| blinklab       | #234 | setup-node v4 → v7             | **MERGED** `1e9fa9f4`                                   |
+| blinklab       | #238 | setup-uv v5 → v9               | **MERGED** `bdd3a1a6`                                   |
+| blinklab       | #237 | checkout v4 → v7               | **MERGED** `4a366e0e` — merged last, as planned, §7     |
+| blinklab       | #239 | minor-and-patch ×3             | **MERGED** `28cc0a14`                                   |
+| blinklab       | #245 | ignore TypeScript 7.x          | **MERGED** `e2438d83` — opened by this phase, §4        |
+| blinklab       | #246 | NEEDS-REVIEW §4 correction     | **MERGED** `b7c361fc` — opened by this phase            |
+| besight.io     | #11  | `contact.php` vs the policy    | **MERGED** `82b238a1` — one SFTP deploy, smoke-tested   |
+| 2026-portfolio | #1   | typescript 5.9.3 → 7.0.2       | **CLOSED** — blocked upstream, §4                       |
+| blinklab       | #240 | typescript 6.0.3 → 7.0.2       | **CLOSED** — blocked upstream twice over, §4            |
+| besight.io     | #8   | sharp 0.34.5 → 0.35.0          | **CLOSED** — superseded by #6, §5                       |
+| besight.io     | #6   | sharp 0.34.5 → 0.35.3          | **OPEN, HELD** — does not fix the advisory alone, §5    |
+| besight.io     | #7   | astro 5.18.2 → 7.2.0           | **OPEN, FOUNDER RULING** — Q29, re-scoped, §6           |
+| 2026-portfolio | #2   | typescript 5.9.3 → 6.0.3       | **MERGED** `93e47de2` — surfaced by the 7.x ignore, §1a |
+| besight.io     | #12  | record corrections + TS ignore | **MERGED** `33a58851` — opened by this phase, §5/§6     |
 
-### The one new thing, and it is a decision
+### 1a · The one new thing, and it was a decision
 
 Adding the `ignore: 7.x` entry to the portfolio's `dependabot.yml` (`f89a36a`)
 did more than silence noise. Within minutes Dependabot opened **#2, TypeScript
@@ -55,10 +56,12 @@ The 7.x proposal had been masking an upgrade that was available the whole time.
 That is worth knowing as a general lesson: an unsatisfiable major in the queue
 hides the satisfiable one behind it.
 
-**Not merged.** `dependabot.yml`'s own comment says majors "open separately,
-because on this repo a major is a design risk … and deserves its own decision."
-Green CI is the evidence for that decision, not a substitute for it. blinklab is
-still pinned `<6.1.0` and is already on 6.0.3, so this affects the portfolio only.
+Held for a ruling rather than merged on sight, because `dependabot.yml`'s own
+comment says majors "open separately, because on this repo a major is a design
+risk … and deserves its own decision." Green CI is the evidence for that
+decision, not a substitute for it. **Ruled and merged 2026-08-15** (`93e47de2`),
+with all three gates green on the merge commit. blinklab was already on 6.0.3
+and stays pinned `<6.1.0`, so this affected the portfolio only.
 
 ## 2 · Corrections to the first version of this document
 
@@ -276,6 +279,10 @@ ignore rules, and 0.34.5 → 0.35.3 is correctly a semver minor.
 
 ## 6 · besight #7, Astro 5 → 7 — the founder ruling, re-scoped
 
+> **The pixel-parity pass C11 asks for has now been run, 2026-08-15.** Its
+> result is in §6a below, so the ruling no longer needs it repeating. The
+> governance position in this section is unchanged.
+
 **The governance blocker is real and is not mine to clear.** besight's
 `CLAUDE.md` line 22 is `C1 Astro 5, …`, and line 3 calls the file "the standing
 law of the repo." QUESTIONS item 29 is `**Astro 6 upgrade** — OPEN, founder
@@ -325,6 +332,70 @@ merge. Also queued: Astro 7 deprecates the `z` re-export from `astro:content`,
 producing **330** new `ts(6385)` hints against `src/content.config.ts` (0 on
 main). `astro check` exits 0 on hints so no gate fails, but Astro 8 could break
 that file.
+
+## 6a · The pixel-parity result — measured 2026-08-15
+
+Run so the ruling in §6 can be made on evidence rather than on the risk
+estimate. Method: two `git worktree` checkouts off the besight repo — `main`
+(`82b238a`, Astro 5.18.2) and #7 rebased onto it (`c9de782`, Astro 7.2.0) —
+each `pnpm install --frozen-lockfile && pnpm build`, then `scripts/capture.mjs`
+for full-page screenshots at 1440 / 768 / 390 under emulated reduced motion, so
+the frames are deterministic. Compared per-pixel in RGBA. The rebase itself is
+clean and reproducible: #7 touches only `package.json` and `pnpm-lock.yaml`,
+main had moved in seven other files, **zero overlap**.
+
+**Layout is untouched.** Full-page heights match exactly at every width:
+
+| width | Astro 5 | Astro 7 |
+| ----- | ------- | ------- |
+| 1440  | 14337   | 14337   |
+| 768   | 23487   | 23487   |
+| 390   | 27336   | 27336   |
+
+So the `compressHTML` default flip — the item §6 called the single highest-risk
+change — moved nothing structural. C11's 2px desktop tolerance passes at **0px**.
+
+**Rendered difference is small and concentrated.** At 1440: 6.52% of pixels
+differ at all, **0.39% by more than 8/255**, worst channel 60/255. Of that
+visible difference, **86% sits in one 517-row band** (y 10826–11342) which is
+the `refinery-night` photograph — and that image does **not** change dimensions,
+so the band is webp encoder drift, not a design change. The remainder is text
+antialiasing scattered across 133 much smaller bands.
+
+**Two images do drop resolution, exactly as §6 predicted:**
+
+| image              | Astro 5            | Astro 7            |
+| ------------------ | ------------------ | ------------------ |
+| `hero-poster`      | 960×960, 19,514 B  | 720×720, 14,026 B  |
+| `founder-portrait` | 960×1286, 21,212 B | 896×1200, 21,630 B |
+
+Every other emitted asset keeps its dimensions.
+
+**The finding that outranks the pixels: both drops happen behind _unchanged
+URLs_.** Astro derives the asset hash from source plus transform parameters, not
+from output bytes, so `hero-poster.CTgVPtdc_Zg4vCz.webp` is 960×960 in one build
+and 720×720 in the other under a byte-identical filename — verified by md5
+(`0798cd1adf` vs `05c26f9c36`). Same for
+`founder-portrait.DmCHyk97_ZMOjzt.webp` (`6fa674bb91` vs `d26a037961`). The
+deploy's `mirror --reverse --delete` replaces the file on the host, but any
+cache keyed on the URL — browser, or anything in front of Hostinger — keeps the
+old bytes. **Cache-busting silently fails for precisely the two files that
+changed**, and it is the mechanism, not the upgrade, that is at fault. Fix
+before merging: force the hashes to move, or purge those two paths after
+deploying.
+
+**One honest gap.** At 1440 the hero region is byte-identical, because the
+`<video>` carries `hidden` in that context and the poster is never painted — so
+the capture did not exercise the poster drop there. At 390 the hero region does
+differ (763 visible pixels, worst 34/255), which is where the poster actually
+reaches people. The poster is the LCP image for reduced-motion and mobile
+visitors, so the resolution drop is real for them even though the desktop
+capture cannot see it.
+
+**Interpretation, flagged as interpretation:** the drop is arguably _more_
+correct — Astro 5 was generating pixels absent from a 720×720 source. But it is
+still a change to founder-approved, frozen assets, which CLAUDE.md §1 reserves
+to the founder, so it was not merged.
 
 ## 7 · The five blinklab Actions bumps
 
