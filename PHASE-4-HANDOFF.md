@@ -10,33 +10,55 @@ correction, not a silent edit.
 [NEEDS-REVIEW.md](NEEDS-REVIEW.md) here, and the same two files in
 `~/Desktop/BeSight Build` and `~/Desktop/blinklab build/blinklab`.
 
-Phases 1–3 are complete. Phase 4 is **in progress** — see §3.
+Phases 1–3 are complete. **Phase 4 is closed except for one founder ruling** —
+see §1.
 
 ---
 
-## 1 · The queue as it stands
+## 1 · The queue, and where it ended
 
-Eleven Dependabot PRs were open when triage started; the handoff knew about ten.
-besight #8 opened two minutes after its advisory landed and postdates the
-original document.
+Eleven Dependabot PRs were open when triage started; the first handoff knew
+about ten. besight #8 opened two minutes after its advisory landed and postdates
+that document.
 
-| Repo           | PR   | What                          | Disposition                                      |
-| -------------- | ---- | ----------------------------- | ------------------------------------------------ |
-| 2026-portfolio | #1   | typescript 5.9.3 → 7.0.2      | **CLOSED** — blocked upstream, see §4            |
-| blinklab       | #240 | typescript 6.0.3 → 7.0.2      | **CLOSED** — blocked upstream twice over, see §4 |
-| besight.io     | #8   | sharp 0.34.5 → 0.35.0         | **CLOSED** — superseded by #6, see §5            |
-| blinklab       | #236 | upload-pages-artifact v3 → v5 | **MERGE FIRST** — this is an outage fix, see §3  |
-| blinklab       | #235 | deploy-pages v4 → v5          | Open — safe, unexercised by PR checks            |
-| blinklab       | #234 | setup-node v4 → v7            | Open — safe, the best-evidenced of the five      |
-| blinklab       | #238 | setup-uv v5 → v9              | Open — safe, two caveats in §7                   |
-| blinklab       | #237 | checkout v4 → v7              | Open — **merge LAST**, it is the conflict hub    |
-| blinklab       | #239 | minor-and-patch ×3            | Open — safe; changes deployed bytes, §8          |
-| besight.io     | #6   | sharp 0.34.5 → 0.35.3         | **HOLD** — does not fix the advisory alone, §5   |
-| besight.io     | #7   | astro 5.18.2 → 7.2.0          | **FOUNDER RULING** — Q29, re-scoped, §6          |
+**blinklab is empty. The portfolio's queue is empty of everything the triage
+covered. besight holds two PRs, and they are one decision, not two.**
 
-Not Dependabot, already queued for the founder: blinklab **#244**
-(build-commit meta tag, free) and besight **#11** (`contact.php` vs the privacy
-policy, one deploy — the server-side salt file exists, so it is safe to merge).
+| Repo           | PR   | What                          | Outcome                                                 |
+| -------------- | ---- | ----------------------------- | ------------------------------------------------------- |
+| blinklab       | #236 | upload-pages-artifact v3 → v5 | **MERGED** `cf31cbe1` — restored a broken deploy, §3    |
+| blinklab       | #244 | build-commit meta tag         | **MERGED** `5132cf21` — merged first, deliberately, §3a |
+| blinklab       | #235 | deploy-pages v4 → v5          | **MERGED** `156f946b`                                   |
+| blinklab       | #234 | setup-node v4 → v7            | **MERGED** `1e9fa9f4`                                   |
+| blinklab       | #238 | setup-uv v5 → v9              | **MERGED** `bdd3a1a6`                                   |
+| blinklab       | #237 | checkout v4 → v7              | **MERGED** `4a366e0e` — merged last, as planned, §7     |
+| blinklab       | #239 | minor-and-patch ×3            | **MERGED** `28cc0a14`                                   |
+| blinklab       | #245 | ignore TypeScript 7.x         | **MERGED** `e2438d83` — opened by this phase, §4        |
+| blinklab       | #246 | NEEDS-REVIEW §4 correction    | **MERGED** `b7c361fc` — opened by this phase            |
+| besight.io     | #11  | `contact.php` vs the policy   | **MERGED** `82b238a1` — one SFTP deploy, smoke-tested   |
+| 2026-portfolio | #1   | typescript 5.9.3 → 7.0.2      | **CLOSED** — blocked upstream, §4                       |
+| blinklab       | #240 | typescript 6.0.3 → 7.0.2      | **CLOSED** — blocked upstream twice over, §4            |
+| besight.io     | #8   | sharp 0.34.5 → 0.35.0         | **CLOSED** — superseded by #6, §5                       |
+| besight.io     | #6   | sharp 0.34.5 → 0.35.3         | **OPEN, HELD** — does not fix the advisory alone, §5    |
+| besight.io     | #7   | astro 5.18.2 → 7.2.0          | **OPEN, FOUNDER RULING** — Q29, re-scoped, §6           |
+| 2026-portfolio | #2   | typescript 5.9.3 → 6.0.3      | **OPEN, NEW** — a consequence of #245's twin, below     |
+
+### The one new thing, and it is a decision
+
+Adding the `ignore: 7.x` entry to the portfolio's `dependabot.yml` (`f89a36a`)
+did more than silence noise. Within minutes Dependabot opened **#2, TypeScript
+5.9.3 → 6.0.3**, and it is **green** — `Gates`, `Dependencies` and `Secret scan`
+all pass. TypeScript 6 is inside `@astrojs/check`'s `^5.0.0 || ^6.0.0` peer
+range, so it installs where 7 could not.
+
+The 7.x proposal had been masking an upgrade that was available the whole time.
+That is worth knowing as a general lesson: an unsatisfiable major in the queue
+hides the satisfiable one behind it.
+
+**Not merged.** `dependabot.yml`'s own comment says majors "open separately,
+because on this repo a major is a design risk … and deserves its own decision."
+Green CI is the evidence for that decision, not a substitute for it. blinklab is
+still pinned `<6.1.0` and is already on 6.0.3, so this affects the portfolio only.
 
 ## 2 · Corrections to the first version of this document
 
@@ -101,7 +123,7 @@ NEEDS-REVIEW.md §7 and is wrong there too.
 sharp below 0.35). That note is already corrected." Backwards. The note was
 right; the correction is the error.** Full detail in §5.
 
-## 3 · blinklab's Pages deploy is broken, and #236 is the fix
+## 3 · blinklab's Pages deploy was broken, and #236 was the fix
 
 Discovered during triage, not previously recorded. The last two pushes to `main`
 failed:
@@ -135,6 +157,38 @@ from the live site — but the next real change would not have shipped either.
 The original handoff called these five "the safest merges in the queue" and
 separately noted that `sha_pinning_required` is now enforced. It did not connect
 the two.
+
+**Resolved.** #236 merged as `cf31cbe1` and the next Deploy run went green,
+verified at step level rather than by its conclusion: `Set up job: success` —
+the step that had failed twice — then the new artifact SHA, then the deploy job.
+`deploy-pages@d6db9016` (still the **old** v4.0.5 pin at that point) published
+without complaint, which independently confirms #236 alone was the fix and #235
+was not required for it.
+
+**The general lesson is bigger than this incident: a settings change can break a
+workflow with no repository diff.** Nothing in blinklab changed between the last
+green deploy and the first red one. If a pipeline dies at `Set up job`, suspect
+policy before code.
+
+### 3a · Why #244 was merged first
+
+Out of numeric order, deliberately. #244 stamps the built commit into a
+`<meta name="build-commit">` tag, so merging it before the four remaining
+Actions bumps turned every subsequent deploy from "the job reported success"
+into a claim anyone can check from outside. It paid for itself immediately —
+each of the five deploys that followed was confirmed by fetching the live page:
+
+| Merge | main       | live `build-commit` |
+| ----- | ---------- | ------------------- |
+| #244  | `5132cf21` | `5132cf2`           |
+| #235  | `156f946b` | `156f946`           |
+| #237  | `4a366e0e` | `4a366e0`           |
+| #239  | `28cc0a14` | `28cc0a1`           |
+| #246  | `b7c361fc` | `b7c361f`           |
+
+blinklab's own NEEDS-REVIEW §4 had listed this as a nice-to-have. It is better
+than that: it is the instrument that makes deploy verification cheap, and the
+audit that recommended it was the work that most needed it.
 
 ## 4 · The two TypeScript PRs — closed, blocked upstream
 
@@ -300,7 +354,50 @@ _conflict_, not on merely being BEHIND. Every one of these needs a manual
 status checks** (`…/protection/required_status_checks` → 404) and
 `enforce_admins: false`. Neither repo has any ruleset.
 
-**Caveats worth carrying into the merges:**
+**Correction, from actually doing it.** "Every one of these needs a manual
+'Update branch' click" is too strong, and "Dependabot rebases on conflict, not
+on BEHIND" is narrower than the real behaviour. Within two minutes of #236
+merging, Dependabot rebased **all four** remaining Actions PRs onto the new main
+and re-ran CI on each, unprompted — while leaving #239 alone. The distinction
+is ecosystem and file overlap, not conflict: the four `github-actions` PRs share
+the workflow files the merge touched; the `npm` PR did not. #239 stayed BEHIND
+on its original base and did need a manual update, as did #244.
+
+**The predicted conflict was real, and Dependabot resolved it before I could.**
+After #234 and #238 landed, #237 went `DIRTY`/`CONFLICTING` and GitHub's own
+"Update branch" refused it. The conflict was exactly the shape the analysis
+predicted — the region carried **both** actions on **both** sides:
+
+```
+<<<<<<< HEAD
+      - uses: actions/checkout@3d3c42e5… # v7.0.1
+      - uses: astral-sh/setup-uv@d4b2f3b6… # v5
+=======
+      - uses: actions/checkout@11d5960a… # v4
+      - uses: astral-sh/setup-uv@c771a70e… # v9.0.0
+>>>>>>> origin/main
+```
+
+Keeping either side whole reverts the other action; a marker-strip keeps four
+lines where two belong. I resolved it by hand in a scratch clone, and the push
+was rejected because Dependabot had already rebased and resolved it upstream.
+Its resolution is **byte-for-byte identical** to mine — independent
+confirmation in both directions. Only `ci.yml` conflicted; the predicted
+`deploy.yml` collision auto-merged, so it cost one resolution, not two.
+
+Final state verified across both files after all five landed: zero conflict
+markers, both parse as YAML against a control that fails, each pin at exactly
+its real call-site count (checkout 4, setup-node 2, deploy-pages 1,
+upload-pages-artifact 1, setup-uv 1) and **zero** occurrences of any outgoing
+SHA. All five then executed in a real deploy.
+
+**Caveats carried into the merges — and how they landed:**
+
+- The **`DEP0040` punycode noise** predicted for deploy-pages v5 appeared, 3
+  occurrences in the first Deploy log, on a run that succeeded. Exactly as the
+  adversarial verifier said: log noise, not failure.
+
+**Caveats as they stood before merging:**
 
 - **#235 and #236 are not exercised by their own green checks.** All three
   checks come from `ci.yml` on `pull_request`; `deploy.yml` runs only on push to
@@ -364,11 +461,13 @@ Merging #239 does **not** unblock #240 — see §4.
 ## 9 · Constraints that shape execution
 
 - **Hostinger bans the CI runner IP after roughly a dozen SSH deploys a day.**
-  **Six** were spent on 2026-08-14, not five: five besight deploys (09:41,
-  10:31, 17:37, 18:02, 18:23 — the last three via `workflow_run`, the first two
-  via `push`, before the trigger changed) plus the portfolio's 11:53
-  `workflow_dispatch`, the deploy-key rotation dry run. A dry run still opens a
-  session.
+  **Seven** were spent on 2026-08-14: five besight deploys (09:41, 10:31, 17:37,
+  18:02, 18:23 — the last three via `workflow_run`, the first two via `push`,
+  before the trigger changed), the portfolio's 11:53 `workflow_dispatch`
+  deploy-key rotation dry run (a dry run still opens a session), and besight
+  #11's merge at 20:0x. The original handoff said five. Roughly five remain
+  before the threshold. **None of blinklab's nine merges cost anything** —
+  GitHub Pages, no SSH path anywhere in that repo.
 - **besight deploys on every merge to `main`.** `DEPLOY_ENABLED` is `true`,
   `deploy.yml` fires on `workflow_run` after a green CI, and its concurrency
   group is `cancel-in-progress: false` — so N merges produce N real SFTP
