@@ -216,6 +216,12 @@ remain publicly retrievable at nine pre-purge SHAs, whatever this repository's
 own history now contains. See [NEEDS-REVIEW.md](NEEDS-REVIEW.md) §1. A removal
 request is with GitHub Support; until it is granted, treat them as public.
 
+**Closed 2026-08-14.** GitHub Support ran garbage collection; the pre-purge
+objects are gone, verified by an anonymous fetch of seven SHAs (all refused)
+against a control fetch of current `main` (succeeds). The images are no longer
+retrievable from GitHub. Anyone who took a copy during the exposure window
+still has one — that cannot be undone.
+
 <a id="q11"></a>
 
 ## Q11 · What happens to `dexcom case study.pdf`?
@@ -235,6 +241,11 @@ the pre-purge objects are still served — the PDF is downloadable today at SHAs
 `58a6e147` and `d89192d6`. Whether it carries client-confidential Dexcom
 material is unassessed and is an open founder item in
 [NEEDS-REVIEW.md](NEEDS-REVIEW.md) §1.
+
+**Closed 2026-08-14.** The PDF is no longer downloadable — GitHub Support's
+garbage collection removed it along with the rest of the pre-purge objects,
+verified the same day. Assessing its contents is now optional rather than
+urgent: it matters only if someone fetched it during the exposure window.
 
 <a id="q12"></a>
 

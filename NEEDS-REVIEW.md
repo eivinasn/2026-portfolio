@@ -9,6 +9,29 @@ No value of any credential appears in this file.
 
 ---
 
+## 1 · ~~CRITICAL — the history purge never reached GitHub~~ — **RESOLVED 2026-08-14**
+
+> **Closed.** GitHub Support ran cache clearance and garbage collection on the
+> repository. Verified independently the same day, not taken on trust: an
+> anonymous `git fetch` of seven pre-purge SHAs — `da26b7a0`, `12ac6974`,
+> `680a2beb`, `63bd3da0`, `92cd18f9`, `5448f33e`, `d89192d6` — is now refused
+> on every one, and the commits API returns 404. A control fetch of current
+> `main` in the same probe still succeeds, so the refusals are real rather
+> than a broken test.
+>
+> The SSH username, the server IP, the besight planning document and the
+> Dexcom PDF are no longer retrievable from GitHub by anyone.
+>
+> **Two things this does not undo.** The pre-purge SHAs remain published on the
+> repository's public events feed and mirrored by GH Archive, so the fact of
+> what existed is permanent. And anything fetched during the exposure window —
+> 2026-08-13 16:29 UTC until 2026-08-14 — is in whoever's hands took it. That
+> is why the key was rotated first: gc closes future access, never past.
+>
+> The record of the original finding is kept below, unedited.
+
+### The original finding, as filed
+
 ## 1 · CRITICAL — the history purge never reached GitHub, and the repo was public the whole time
 
 **Status: data is already exposed, not merely exposable.** Two independent
