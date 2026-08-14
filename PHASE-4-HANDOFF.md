@@ -10,8 +10,9 @@ correction, not a silent edit.
 [NEEDS-REVIEW.md](NEEDS-REVIEW.md) here, and the same two files in
 `~/Desktop/BeSight Build` and `~/Desktop/blinklab build/blinklab`.
 
-Phases 1–3 are complete. **Phase 4 is closed except for one founder ruling** —
-see §1.
+Phases 1–3 are complete. **Phase 4 is CLOSED, 2026-08-15.** Every item is
+merged, closed or ruled; the outcome is in §1 and the final numbers in §11.
+Phase 5 is deliberately skipped — see §11. Phase 6 is next.
 
 ---
 
@@ -21,8 +22,9 @@ Eleven Dependabot PRs were open when triage started; the first handoff knew
 about ten. besight #8 opened two minutes after its advisory landed and postdates
 that document.
 
-**blinklab and the portfolio are both empty. besight holds two PRs, and they
-are one decision, not two — see §6 and §6a.**
+**All three queues are clear.** The only open PR anywhere is besight #14, an
+Astro 7.2.0 → 7.2.1 patch that opened after the upgrade landed and is
+deliberately held — see §11.
 
 | Repo           | PR   | What                           | Outcome                                                 |
 | -------------- | ---- | ------------------------------ | ------------------------------------------------------- |
@@ -39,8 +41,9 @@ are one decision, not two — see §6 and §6a.**
 | 2026-portfolio | #1   | typescript 5.9.3 → 7.0.2       | **CLOSED** — blocked upstream, §4                       |
 | blinklab       | #240 | typescript 6.0.3 → 7.0.2       | **CLOSED** — blocked upstream twice over, §4            |
 | besight.io     | #8   | sharp 0.34.5 → 0.35.0          | **CLOSED** — superseded by #6, §5                       |
-| besight.io     | #6   | sharp 0.34.5 → 0.35.3          | **OPEN, HELD** — does not fix the advisory alone, §5    |
-| besight.io     | #7   | astro 5.18.2 → 7.2.0           | **OPEN, FOUNDER RULING** — Q29, re-scoped, §6           |
+| besight.io     | #6   | sharp 0.34.5 → 0.35.3          | **CLOSED** — superseded by #13, §11                     |
+| besight.io     | #7   | astro 5.18.2 → 7.2.0           | **CLOSED** — superseded by #13, §11                     |
+| besight.io     | #13  | Astro 7 + sharp, together      | **MERGED** `ddd381e2` — the ruling executed, §11        |
 | 2026-portfolio | #2   | typescript 5.9.3 → 6.0.3       | **MERGED** `93e47de2` — surfaced by the 7.x ignore, §1a |
 | besight.io     | #12  | record corrections + TS ignore | **MERGED** `33a58851` — opened by this phase, §5/§6     |
 
@@ -581,3 +584,107 @@ learned during this phase.
    `deploy-pages` v4→v5 delta was one line by diffing `src/`. The runner loads
    `dist/index.js`, which changed by 266 KB. The conclusion happened to survive;
    the method would not have.
+
+## 11 · Close-out — Phase 4 is done, 2026-08-15
+
+### The Astro ruling, executed
+
+The founder ruled on 2026-08-15: upgrade, and accept the two images. Landed as
+**#13 (`ddd381e2`)**, live and verified. Recorded at QUESTIONS 29; C1 now reads
+Astro 7.
+
+`ddd381e2` deliberately supersedes #7 and #6 instead of merging them, because
+**neither could have delivered the outcome and the pair could not either.** With
+astro at 7.2.0 _and_ sharp at 0.35.3, pnpm still kept `sharp@0.34.5` at lockfile
+line 3458 with `@img/*` at 102 entries — Astro 7's `^0.34.0 || ^0.35.0` permits
+the already-locked 0.34.5, and pnpm does not move a resolution it need not.
+`pnpm update sharp` is the third step. §5 recorded the two-PR theory as "strong
+but UNVERIFIED"; measuring it proved it wrong, which is the fifth reasoning-as-
+measurement error this programme has caught and the reason that label exists.
+
+**Result, measured:**
+
+|                           | before   | after    |
+| ------------------------- | -------- | -------- |
+| `pnpm audit`              | 14       | **4**    |
+| `pnpm audit --prod`       | 10       | **0**    |
+| besight Dependabot alerts | 23       | **4**    |
+| `@img/*` lockfile entries | 50       | 54       |
+| JS, gzip                  | 46.4 KB  | 44.7 KB  |
+| dist weight               | 855.4 KB | 838.5 KB |
+
+The four survivors are all `@lhci/cli@0.15.1` — `extract-zip` (no fix exists),
+`tmp` ×2, `uuid`. **Founder ruled to keep Lighthouse CI and accept them
+permanently.** besight's advisory count can therefore never reach zero; the
+check that means something now is "is the set still exactly those four".
+
+### The cache defect, found and closed
+
+Astro derives an asset filename hash from source plus transform parameters, not
+from output bytes. `hero-poster` and `founder-portrait` would have changed
+content behind byte-identical URLs, so every cache keyed on them would have kept
+the old file forever. `Hero.astro` and `Company.astro` now request 720 and 896,
+the widths their sources actually have, which moves the hashes.
+
+Verified in production, not locally:
+
+```
+200 14026B  /_astro/hero-poster.CTgVPtdc_Z2jrfb2.webp      (new)
+200 21630B  /_astro/founder-portrait.DmCHyk97_Z1Y9mSH.webp (new)
+404         /_astro/hero-poster.CTgVPtdc_Zg4vCz.webp       (old — gone)
+404         /_astro/founder-portrait.DmCHyk97_ZMOjzt.webp  (old — gone)
+```
+
+A full build-to-build comparison found **13** filenames whose bytes change.
+These two were the only ones whose _content_ changes; the other 11 are libvips
+encoder drift where a stale cached copy is visually identical, so they were left
+alone rather than churned. One of the 11 has the same byte size with different
+content, which would defeat a size-only comparison — lftp's mirror default
+compares size and mtime and CI files always carry a fresh mtime, so the upload
+happens. That last point is reasoned from lftp's documented default, **not
+measured against the host**.
+
+The image commit was proven invisible: re-running parity with it gives
+byte-identical numbers to the upgrade without it — 80,623 / 21,988 / 17,423
+pixels above 8/255 at 1440 / 768 / 390, same bounding boxes, same worst
+channels.
+
+### Deliberately not done
+
+- **besight #14** (Astro 7.2.0 → 7.2.1) is **held**, with the reasoning recorded
+  on the PR. Every entry in its release notes is a bug fix for a feature this
+  site does not use — `ClientRouter`, view transitions, `experimental.*`,
+  middleware HMR, `@astrojs/cloudflare` — and the alert count is unchanged at 4.
+  The parity pass behind the ruling was run against 7.2.0, and CI has no
+  visual-regression gate. Merge in the morning; ten minutes of parity re-capture
+  first if you want #13's rigour.
+- **The 330 `z` deprecation hints** from Astro 7. The fix imports `zod`
+  directly, which declares a new dependency, and C10 wants a justification for
+  that. It fails no gate. Follow-up, not a drive-by.
+- **Phase 5 is skipped**, on the founder's instruction and on the evidence.
+  Everything committed since the portfolio's last deploy is documentation and CI
+  config; its built output is unchanged apart from 201 bytes of dead CSS removed
+  in `b0b0ed3`. blinklab is in sync — live, `main` and the last deploy all read
+  `b7c361f`. besight was deployed four times today and its live site is current.
+  There is nothing to re-sync.
+
+### Final state
+
+|                | open PRs      | advisories   | live == main                   |
+| -------------- | ------------- | ------------ | ------------------------------ |
+| 2026-portfolio | 0             | 0            | n/a — deploys by dispatch only |
+| besight.io     | 1 (held, #14) | 4 (accepted) | yes, `ddd381e2`                |
+| blinklab       | 0             | 0            | yes, `b7c361f`                 |
+
+Deploy budget, 2026-08-14 UTC: **9 of ~12** — seven besight, one portfolio, plus
+#13's. Hostinger's window is a UTC day, not a local one; do not assume it resets
+when the local date rolls over.
+
+### What the phase cost, and what it caught
+
+Nine merges and four closes across three repos, plus three PRs this phase opened
+itself. It found one **live outage** nobody had noticed (blinklab's Pages deploy,
+broken by a settings change with no repository diff), one **cache defect** that
+would have shipped silently, and **eight** false statements in its own prior
+records — four in the first version of this document, corrected in §2, and four
+in besight's NEEDS-REVIEW, corrected in #12 and #13.
