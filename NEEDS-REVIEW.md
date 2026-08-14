@@ -204,3 +204,12 @@ especially blinklab's.
   The Q2 ruling chose that address; the later noreply amendment is not
   retroactive. Not worth a rewrite for an address that is already published on
   the site itself by ruling Q12 — but it is a fact that was recorded nowhere.
+
+---
+
+## 7 · Opened by the Dependabot config added tonight
+
+[PR #1](https://github.com/heshipstech/2026-portfolio/pull/1) — **TypeScript
+5.9.3 → 7.0.2**. Two majors, so it is STOP #5 and stays open for you. This is
+the config working as intended: minor and patch updates are grouped into one
+weekly PR, majors open separately so they get a decision rather than a merge.
