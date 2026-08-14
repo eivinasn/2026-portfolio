@@ -154,6 +154,13 @@ Learned the hard way. Do not rediscover these.
   script to an external module, **false under Astro 7, which inlines the small
   ones.** The current build carries 2 script hashes and 2 style hashes. A
   `script-src 'self'` with no hashes leaves ~20 homepage blocks at `opacity: 0`.
+- **Tailwind 4 scans the Markdown too.** Its content detection walks the whole
+  project, so a class name quoted in a `.md` file makes Tailwind emit that class
+  into the production stylesheet. Found on 2026-08-14: `.text-[#52525B]` was
+  shipping in `global.css` and used by zero elements — it existed only because
+  COMPONENTS.md's palette table quoted `text-[#52525B]`. Editing a doc can
+  therefore change the built CSS. If the stylesheet grows for no apparent
+  reason, grep the docs before the components.
 - **Never use an inline `style="…"` attribute.** A CSP cannot hash one, so a
   single inline style forces `style-src-attr 'unsafe-inline'` site-wide. Use a
   class; `.anim-delay-1..6` already exist for animation stagger.

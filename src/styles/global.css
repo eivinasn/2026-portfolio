@@ -44,7 +44,8 @@ body {
      the Tailwind colour palette anywhere in the codebase. Every other colour has
      always been a hardcoded arbitrary value, so the config described a design
      system that did not exist. Inlined to exactly what they resolved to, which
-     leaves tailwind.config.cjs referenced by nothing. */
+     left tailwind.config.cjs referenced by nothing — and the Tailwind 4 upgrade
+     in 248811b then deleted the file entirely. */
   @apply antialiased;
   background: #050505;
   color: #ededed;
@@ -58,14 +59,6 @@ body {
 .font-heading {
   font-family: 'Inter', sans-serif;
   letter-spacing: -0.02em;
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 /* No will-change here or on the reveal classes. It was declared permanently on
@@ -82,7 +75,11 @@ body {
   isolation: isolate;
 }
 
-/* Animations disabled */
+/* Entry animations. These are live — `.animate-fade-up` appears on 11 elements
+   in the built homepage. The heading here read "Animations disabled" until
+   2026-08-14, which described a state that had not been true for some time and
+   read as a label for the block below it. Reduced motion is honoured at the
+   bottom of this file, not by disabling these. */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -116,7 +113,8 @@ body {
   -webkit-transform: translateZ(0);
 }
 
-/* Opacity-only reveal disabled */
+/* Opacity-only reveal. Also live — 14 occurrences in the built HTML, and one of
+   the two selectors RevealScript queries. Previously mislabelled "disabled". */
 .reveal-opacity-only {
   opacity: 0;
   transition: opacity 500ms ease-out;
@@ -124,15 +122,11 @@ body {
 .reveal-opacity-only.is-visible {
   opacity: 1;
 }
-.delay-100 {
-  transition-delay: 100ms;
-}
-.delay-200 {
-  transition-delay: 200ms;
-}
-.delay-300 {
-  transition-delay: 300ms;
-}
+/* .delay-100/200/300 were hand-written here and set exactly what Tailwind 4's
+   own delay utilities set, so the built stylesheet carried each rule twice.
+   Removed 2026-08-14; Tailwind emits them on demand for the classes actually
+   used. Not to be confused with .anim-delay-1..6 below, which stagger
+   `animation-delay` and have no Tailwind equivalent. */
 
 /* Entrance stagger. These replaced inline style="animation-delay: …" attributes
    in increment 5: a CSP cannot hash a style attribute, so keeping them would
@@ -164,8 +158,10 @@ body {
 
 /* ---------------------------------------------------------------- a11y ---
    Added in increment 3. See BACKLOG.md §3 and QUESTIONS.md Q16.
-   These rules sit after @tailwind utilities on purpose: a rule in @layer base
-   loses to any utility class, and several of these must override one. */
+   These rules sit after the Tailwind import on purpose: a rule in @layer base
+   loses to any utility class, and several of these must override one. (Tailwind
+   4 has no @tailwind directives — the whole framework arrives through the
+   single @import at the top of this file.) */
 
 /* Skip link — visually hidden until focused. */
 .skip-link {

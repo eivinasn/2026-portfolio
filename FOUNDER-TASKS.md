@@ -3,14 +3,23 @@
 Everything that needs you rather than Claude, in the order that unblocks the
 most. Written 2026-08-13 at the end of the uplift programme.
 
-**The single most important fact:** every fix in this repo is verified and
-committed, and **none of it is live**. The ladder ran 1→10 in order per
-[Q1](QUESTIONS.md#q1), so `eivinasn.com` still serves the January build —
-including `<link rel="canonical" href="https://example.com">`. Task 2 is what
-changes that.
+**Updated 2026-08-14: this document's premise has been overtaken. It is live.**
+Everything below was written while the deploy was still dormant. The pipeline
+was armed and run on 2026-08-13, and `npm run smoke` against production now
+passes every check — it reported 22 failures when this was written. The
+`example.com` canonical is gone from `eivinasn.com` after seven months.
 
-Run `npm run smoke` at any time to see production's current state. Today it
-reports 22 failures. After task 2 it should report none.
+Task 2 is therefore **done**, and so are the Q10/Q11 asset decisions and the
+`www` → apex redirect in §6. What remains genuinely open is §3 (Search Console
+and Bing, which need your accounts), §4 (analytics, still deliberately inert),
+§5 (uptime monitoring) and the content decisions in §6 that only you can make.
+
+Run `npm run smoke` at any time to see production's current state.
+
+**Read [NEEDS-REVIEW.md](NEEDS-REVIEW.md) before anything in this file.** The
+close-out audit on 2026-08-14 found that the history purge never actually
+removed anything from GitHub, and that the server details it existed to redact
+are still publicly retrievable. That outranks every task here.
 
 ---
 
@@ -25,9 +34,13 @@ Also established: the real document root is
 
 ---
 
-## 2 · Arm the deploy — 15 minutes
+## 2 · ~~Arm the deploy~~ — DONE 2026-08-13
 
-**This is the task that makes the last eight increments real.**
+**This was the task that made the last eight increments real, and it is done.**
+`DEPLOY_ENABLED` is `true`, the secrets are set, the pipeline has run, and
+production is green. The steps below are kept because they are the runbook for
+rotating the deploy key — which [NEEDS-REVIEW.md](NEEDS-REVIEW.md) §1 recommends
+you do.
 
 ### 2a · Get SSH details from Hostinger
 
@@ -149,19 +162,28 @@ not a fix.
 
 ## 6 · Content decisions Claude would not make
 
-These are recorded as open in [QUESTIONS.md](QUESTIONS.md). Nothing has been
-deleted or changed.
+**All three below were settled on 2026-08-13 and are kept here as a record.**
 
-- **[Q10](QUESTIONS.md#q10) — 7 unused case-study images, 1.27 MB.** Dexcom ships
-  5 images and renders 1; NFQ ships 4 and renders 1. Vinted and VMI render all
-  four. The unused Dexcom assets are 446/383/380 KB of finished work, not stubs.
-  Either the two case studies are unfinished, or the files should go.
-- **[Q11](QUESTIONS.md#q11) — `dexcom case study.pdf`.** Committed, built, linked
-  from nothing, and 404s live. Wire it up, delete it, or keep it as a direct
-  share link — but it does not currently work as one.
-- **`www` vs apex.** Both serve 200 with identical content and no redirect. The
-  canonical tag now disambiguates for search engines, but a host-level redirect
-  in hPanel is the real fix.
+- ~~**[Q10](QUESTIONS.md#q10) — 7 unused case-study images, 1.27 MB.**~~ **Ruled:
+  delete.** Removed in `223f308`. Note that they are no longer recoverable from
+  this repo's history either — `3b24b5a` purged them — though they remain
+  publicly retrievable from GitHub's retained objects (NEEDS-REVIEW §1).
+- ~~**[Q11](QUESTIONS.md#q11) — `dexcom case study.pdf`.**~~ **Ruled: delete.**
+  Same caveat.
+- ~~**`www` vs apex.**~~ **Done** in `b14290b`; `npm run smoke` asserts the 301
+  preserves the path.
+
+Still open, and genuinely yours — the full detail is in
+[NEEDS-REVIEW.md](NEEDS-REVIEW.md):
+
+- **The licence.** No LICENSE file and no `license` field, so the repo is
+  all-rights-reserved by omission rather than by decision.
+- **Consent for the case-study photography**, including the Open Graph cards
+  added in `0622399`, which re-published two of the team photographs as share
+  images after the Q23 acceptance was given.
+- **Seven unreferenced files still in `public/`** (`favicon.svg` and six
+  `logo-*.png`), 5,709 B, live on the server. They match Q10's ruling but were
+  not part of that sweep; deleting them was blocked by tooling on 2026-08-14.
 
 ---
 
